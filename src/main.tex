@@ -5,15 +5,15 @@
 \usepackage{babel,textcomp,csquotes,duomasterforside,varioref,graphicx}
 \usepackage[backend=biber,style=numeric-comp]{biblatex}
 
-\title{The title of my thesis}        %% ... or whatever
-\subtitle{Any short subtitle}         %% ... if any
-\author{My Name}                      %% ... or whoever 
+\title{Making PT accessible}        %% ... or whatever
+\subtitle{Implementing PT in TypeScript}         %% ... if any
+\author{Petter Sæther Moen}                      %% ... or whoever 
 
 \addbibresource{sources.bib}            %% ... or whatever
 
 \begin{document}
 \duoforside[dept={Department of Informatics},   %% ... or your department
-  program={Network and system administration},  %% ... or your programme
+  program={Informatics: Programming and System Architecture},  %% ... or your programme
   long]                                        %% ... or long
 
 \frontmatter{}
@@ -30,11 +30,27 @@
 
 \chapter{Background}                  %% ... or Bakgrunn
 
+\section{PT}
+
+\section{TypeScript}
 
 \part{The project}                    %% ... or ??
 
 \chapter{Planning the project}        %% ... or ??
 
+\section{TS compiler fork vs Babel Plugin vs ...?}
+
+\subsection{TypeScript Compiler Plugin}
+
+Not possible at the time as the TypeScript compiler wiki specifies "TypeScript Language Service Plugins ("plugins") are for changing the editing experience only." \cite{tscplugin}. This might be possible in the future...
+
+\subsection{TypeScript Compiler Fork}
+
+Possible, however not as accessible as other alternatives and will make upkeep expensive.
+
+\subsection{Babel plugin}
+
+Babel isn't strictly for TypeScript, but for JavaScript as a whole. Will however make it very accessible as most web-projects use Babel, and the upkeep is cheap, as plugins are pretty independent from the core.
 
 \part{Conclusion}                     %% ... or Konklusjon
 
