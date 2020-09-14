@@ -1,0 +1,46 @@
+\documentclass[UKenglish]{ifimaster}  %% ... or USenglish or norsk or nynorsk
+\usepackage[utf8]{inputenc}           %% ... or latin1
+\usepackage[T1]{fontenc,url}
+\urlstyle{sf}
+\usepackage{babel,textcomp,csquotes,duomasterforside,varioref,graphicx}
+\usepackage[backend=biber,style=numeric-comp]{biblatex}
+
+\title{The title of my thesis}        %% ... or whatever
+\subtitle{Any short subtitle}         %% ... if any
+\author{My Name}                      %% ... or whoever 
+
+\addbibresource{sources.bib}            %% ... or whatever
+
+\begin{document}
+\duoforside[dept={Department of Informatics},   %% ... or your department
+  program={Network and system administration},  %% ... or your programme
+  long]                                        %% ... or long
+
+\frontmatter{}
+\chapter*{Abstract}                   %% ... or Sammendrag or Samandrag
+
+\tableofcontents{}
+\listoffigures{}
+\listoftables{}
+
+\chapter*{Preface}                    %% ... or Forord
+
+\mainmatter{}
+\part{Introduction}                   %% ... or Innledning or Innleiing
+
+\chapter{Background}                  %% ... or Bakgrunn
+
+
+\part{The project}                    %% ... or ??
+
+\chapter{Planning the project}        %% ... or ??
+
+
+\part{Conclusion}                     %% ... or Konklusjon
+
+\chapter{Results}                     %% ... or ??
+
+
+\backmatter{}
+\printbibliography
+\end{document}
