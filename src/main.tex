@@ -1,43 +1,47 @@
-\documentclass[UKenglish]{ifimaster}  %% ... or USenglish or norsk or nynorsk
-\usepackage[utf8]{inputenc}           %% ... or latin1
+\documentclass[UKenglish]{ifimaster}
+\usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc,url}
 \urlstyle{sf}
 \usepackage{babel,textcomp,csquotes,duomasterforside,varioref,graphicx}
 \usepackage[backend=biber,style=numeric-comp]{biblatex}
 
-\title{Making PT accessible}        %% ... or whatever
-\subtitle{Implementing PT in TypeScript}         %% ... if any
-\author{Petter Sæther Moen}                      %% ... or whoever 
+\title{Making PT accessible}
+\subtitle{Implementing PT in TypeScript}
+\author{Petter Sæther Moen}
 
-\addbibresource{sources.bib}            %% ... or whatever
+\addbibresource{sources.bib}
 
 \begin{document}
-\duoforside[dept={Department of Informatics},   %% ... or your department
-  program={Informatics: Programming and System Architecture},  %% ... or your programme
-  long]                                        %% ... or long
+\duoforside[dept={Department of Informatics},
+  program={Informatics: Programming and System Architecture},
+  long]
 
 \frontmatter{}
-\chapter*{Abstract}                   %% ... or Sammendrag or Samandrag
+\chapter*{Abstract}
+
+\chapter*{Acknowledgements}
 
 \tableofcontents{}
 \listoffigures{}
 \listoftables{}
 
-\chapter*{Preface}                    %% ... or Forord
+\chapter*{Preface}
 
 \mainmatter{}
 
-\part{Introduction}
+\part{Introduction}\label{part:introduction}
+
+\include{parts/introduction/introduction}
 
 \include{parts/introduction/background}
 
-\part{The project}                    %% ... or ??
+\part{The project}\label{part:the-project}
 
 \include{parts/the-project/planning-the-project}
 
-\part{Conclusion}                     %% ... or Konklusjon
+\part{Conclusion}\label{part:conclusion}
 
-\chapter{Results}                     %% ... or ??
+\chapter{Results}
 
 
 \backmatter{}
