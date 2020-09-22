@@ -1,19 +1,34 @@
 %! Author = Petter
 %! Date = 9/22/2020
 
-\chapter{Planning the project}        %% ... or ??
+\chapter{Planning the project}\label{ch:planning-the-project}
 
-\section{TS compiler fork vs Babel Plugin vs ...?}
+\section{Choosing the right approach}\label{sec:choosing-the-right-approach}
 
-\subsection{TypeScript Compiler Plugin}
+Before jumping into a project of this size it is important to find out what approach to use.
+The end goal of this project is to extend TypeScript with the Package Templates language mechanism,
+this can be achieved as following:
 
-Not possible at the time as the TypeScript compiler wiki specifies "TypeScript Language Service Plugins ("plugins") are for changing the editing experience only." \cite{tscplugin}. This might be possible in the future...
+\begin{itemize}
+    \item Making a fork of the TypeScript compiler
+    \item Making a preprocessor for the TypeScript compiler
+    \item Making a Babel plugin
+\end{itemize}
+
+To get a better understanding for which approach to use we will be implementing a small language feature with each of the approaches named above.
+
+
 
 \subsection{TypeScript Compiler Fork}
 
 Possible, however not as accessible as other alternatives and will make upkeep expensive.
 
 \subsection{Preprocessor for the TypeScript Compiler}
+
+\subsection{TypeScript Compiler Plugin}
+
+Not possible at the time as the TypeScript compiler wiki specifies "TypeScript Language Service Plugins ("plugins") are for changing the editing experience only." \cite{tscplugin}. This might be possible in the future...
+
 
 \subsection{Babel plugin}
 
