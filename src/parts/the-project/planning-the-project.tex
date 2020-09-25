@@ -17,18 +17,24 @@ this can be achieved as following:
 
 To get a better understanding for which approach to use we will be implementing a small language feature with each of the approaches named above.
 
-\subsection{TypeScript Compiler Fork}
+\subsection{TypeScript Compiler Fork}\label{subsec:typescript-compiler-fork}
 
 Possible, however not as accessible as other alternatives and will make upkeep expensive.
 
-\subsection{Preprocessor for the TypeScript Compiler}
+\subsection{Preprocessor for the TypeScript Compiler}\label{subsec:preprocessor-for-the-typescript-compiler}
 
-\subsection{TypeScript Compiler Plugin}
+\subsection{TypeScript Compiler Plugin}\label{subsec:typescript-compiler-plugin}
 
 Not possible at the time as the TypeScript compiler wiki specifies "TypeScript Language Service Plugins ("plugins") are for changing the editing experience only." \cite{tscplugin}.
 This might be possible in the future...
 
-\subsection{Babel plugin}
+\subsection{Babel plugin}\label{subsec:babel-plugin}
 
 Babel isn't strictly for TypeScript, but for JavaScript as a whole.
 Will however make it very accessible as most web-projects use Babel, and the upkeep is cheap, as plugins are pretty independent from the core.
+
+Saying that this is strictly a Babel plugin wouldn't be entirely true, as we would have to fork the Babel parser in order to include our custom syntax\cite{babelparserdocs}.
+However this is all hidden away from the user, as this custom parser is a dependency of our Babel plugin.
+
+TODO: Does it support having multiple custom parser?
+E.g. babel-plugin-typescript + our custom babel plugin?
