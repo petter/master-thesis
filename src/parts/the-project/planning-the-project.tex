@@ -13,23 +13,46 @@ this can be achieved as following:
     \item Making a fork of the TypeScript compiler
     \item Making a preprocessor for the TypeScript compiler
     \item Making a Babel plugin
+    \item Making a TypeScript compiler plugin / transformer
 \end{itemize}
 
 To get a better understanding for which approach to use we will be implementing a small language feature with each of the approaches named above.
 
-
-
-\subsection{TypeScript Compiler Fork}
+\subsection{TypeScript Compiler Fork}\label{subsec:typescript-compiler-fork}
 
 Possible, however not as accessible as other alternatives and will make upkeep expensive.
 
-\subsection{Preprocessor for the TypeScript Compiler}
+\subsection{Preprocessor for the TypeScript Compiler}\label{subsec:preprocessor-for-the-typescript-compiler}
 
-\subsection{TypeScript Compiler Plugin}
+A lot more work than ex plugin / transformer.
 
-Not possible at the time as the TypeScript compiler wiki specifies "TypeScript Language Service Plugins ("plugins") are for changing the editing experience only." \cite{tscplugin}. This might be possible in the future...
+\subsection{TypeScript Compiler Plugin / Transform}\label{subsec:typescript-compiler-plugin}
+
+%Not possible at the time as the TypeScript compiler wiki specifies "TypeScript Language Service Plugins ("plugins") are for changing the editing experience only."\cite{tscplugin}.
+%This might be possible in the future...
+
+As of the time of writing this the official TypeScript compiler does not support compile time plugins, the plugins for the TypeScript compiler is, as the TypeScript compiler wiki specifies, "for changing the editing experience only"\cite{tscplugin}.
+However there are alternatives that do enable compile time plugins / transformers;
+
+\begin{itemize}
+    \item ts-loader\cite{tsloadergithub}, for the webpack ecosystem
+    \item Awesome Typescript Loader\cite{awesometypescriptloadergithub}, for the webpack ecosystem. Deprecated
+    \item ts-node\cite{tsnodegithub}, REPL / runtime
+    \item ttypescript\cite{ttypescriptgithub}, TypeScript tool TODO: Les mer på dette
+    \item A compiler wrapper
+\end{itemize}
 
 
-\subsection{Babel plugin}
+\subsection{Babel plugin}\label{subsec:babel-plugin}
 
-Babel isn't strictly for TypeScript, but for JavaScript as a whole. Will however make it very accessible as most web-projects use Babel, and the upkeep is cheap, as plugins are pretty independent from the core.
+Babel isn't strictly for TypeScript, but for JavaScript as a whole.
+Will however make it very accessible as most web-projects use Babel, and the upkeep is cheap, as plugins are pretty independent from the core.
+
+Saying that this is strictly a Babel plugin wouldn't be entirely true, as we would have to fork the Babel parser in order to include our custom syntax\cite{babelparserdocs}.
+However this is all hidden away from the user, as this custom parser is a dependency of our Babel plugin.
+
+Babel Plugin is not as nice as I first thought, it seems to be pretty hard to write third-party plugins as you have to make a parser fork for custom syntax, and there is a severe lack of documentation.
+Most examples of Babel plugins mostly use internal helpers and utils, which are hard to use for third-party plugins.
+
+TODO: Does it support having multiple custom parser?
+E.g. babel-plugin-typescript + our custom babel plugin?
