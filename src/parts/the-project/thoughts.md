@@ -5,6 +5,7 @@ There is in general three approaches we can take:
 - TypeScript preprocessor
 - TypeScript fork
 - "Typescript Compiler plugin / Transform"
+- Implementing it like Groovy did, through Decorators, etc.?
 
 **Hypothesis:**
 Writing a plugin / transform seems to be the correct way to go, as this will enable us to add our language extension without depending too much on the implementation of the language. 
@@ -14,6 +15,9 @@ Will make it easier to keep the language up-to-date as the compiler is separate 
 ## TypeScript Compiler Preprocessor
 
 ## Forking the TypeScript Compiler
+
+Large codebase, hard to extend.
+Hard to get updates.
 
 ## Writing a custom transformer / plugin
 
