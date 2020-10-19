@@ -3,22 +3,50 @@
 
 \chapter{Planning the project}\label{ch:planning-the-project}
 
+\section{What Do We Need?}\label{sec:what-do-we-need}
+
+\begin{itemize}
+    \item The ability to add custom syntax (access to the tokenizer / parser)
+    \item Some semantic analysis.
+\end{itemize}
+
+\section{Syntax}\label{sec:syntax}
+
+For the implementation of PT we need some syntax for the following:
+
+\begin{itemize}
+    \item Defining packages (\codeword{package} in PTj)
+    \item Defining templates (\codeword{template} in PTj)
+    \item Instantiating templates (\codeword{inst} in PTj)
+    \item Renaming classes (\codeword{=>} in PTj)
+    \item Renaming methods (\codeword{->} in PTj)
+\end{itemize}
+
+\codeword{template} and \codeword{inst} are both not used or reserved in the ECMAScript standard or in TypeScript, and can therefore be used in \languagename without any issues.
+
+The keyword \codeword{package} in TS / ES is as of yet not in use, however the ECMAScript standard has reserved it for future use.
+In order to "future proof" our implementation we should avoid using this reserved keyword, as it could have some conflicts with a potential future implementation of packages in ECMAScript.
+It could also be beneficial to not share the keyword in order to not create confusion between ES packages and PT Packages.
+\codeword{module} is also a keyword that could be used to describe a PT package, however this is also reserved in the ES standard, and should therefore also be avoided for similar reasons to \codeword{package}, to avoid confusion. We will therefore use (\codeword{pack} or \codeword{bundle}?) instead. % TODO: find a proper name for package.
+
+For renaming classes PTj uses \codeword{=>}, however in ES this is used in arrow-functions\cite{arrowfunction}.
+To avoid confusion and a potentially ambiguous grammar we will have to choose a different syntax for renaming classes.
+In 
+
 \input{parts/the-project/jsvssts.tex}
 
 \section{Choosing the right approach}\label{sec:choosing-the-right-approach}
 
-Before jumping into a project of this size it is important to find out what approach to use.
+Before jumping into a project of this magnitude it is important to find out what approach to use. 
 The end goal of this project is to extend TypeScript with the Package Templates language mechanism,
 this can be achieved as following:
 
 \begin{itemize}
     \item Making a fork of the TypeScript compiler
     \item Making a preprocessor for the TypeScript compiler
-    \item Making a Babel plugin
-    \item Making a TypeScript compiler plugin / transformer
+    \item Making a compiler plugin / transform
+    \item Making a custom compiler from scratch
 \end{itemize}
-
-To get a better understanding for which approach to use we will be implementing a small language feature with each of the approaches named above.
 
 \subsection{TypeScript Compiler Fork}\label{subsec:typescript-compiler-fork}
 
@@ -33,7 +61,7 @@ A lot more work than ex plugin / transformer.
 %Not possible at the time as the TypeScript compiler wiki specifies "TypeScript Language Service Plugins ("plugins") are for changing the editing experience only."\cite{tscplugin}.
 %This might be possible in the future...
 
-As of the time of writing this the official TypeScript compiler does not support compile time plugins, the plugins for the TypeScript compiler is, as the TypeScript compiler wiki specifies, "for changing the editing experience only"\cite{tscplugin}.
+As of the time of writing this the official TypeScript compiler does not support compile time plugins. The plugins for the TypeScript compiler is, as the TypeScript compiler wiki specifies, "for changing the editing experience only"\cite{tscplugin}.
 However there are alternatives that do enable compile time plugins / transformers;
 
 \begin{itemize}
@@ -43,6 +71,8 @@ However there are alternatives that do enable compile time plugins / transformer
     \item ttypescript\cite{ttypescriptgithub}, TypeScript tool TODO: Les mer på dette
     \item A compiler wrapper
 \end{itemize}
+
+Unfortunately most of these don't support custom syntax, which is one of the requirements we have in order to properly implement PT.
 
 
 \subsection{Babel plugin}\label{subsec:babel-plugin}

@@ -3,13 +3,21 @@
 \usepackage[T1]{fontenc,url}
 \urlstyle{sf}
 \usepackage{babel,textcomp,csquotes,duomasterforside,varioref,graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
 \usepackage[backend=biber,style=numeric-comp]{biblatex}
 
 \title{Making PT accessible}
 \subtitle{Implementing PT in TypeScript}
 \author{Petter Sæther Moen}
 
-\addbibresource{sources.bib}
+\addbibresource{library.bib}
+
+
+\newcommand{\codeword}[1]{\texttt{\blue{#1}}}
+\newcommand{\languagename}[0]{TemplateScript}
+
+
 
 \begin{document}
 \duoforside[dept={Department of Informatics},
