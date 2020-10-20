@@ -27,11 +27,15 @@ For the implementation of PT we need some syntax for the following:
 The keyword \codeword{package} in TS / ES is as of yet not in use, however the ECMAScript standard has reserved it for future use.
 In order to "future proof" our implementation we should avoid using this reserved keyword, as it could have some conflicts with a potential future implementation of packages in ECMAScript.
 It could also be beneficial to not share the keyword in order to not create confusion between ES packages and PT Packages.
-\codeword{module} is also a keyword that could be used to describe a PT package, however this is also reserved in the ES standard, and should therefore also be avoided for similar reasons to \codeword{package}, to avoid confusion. We will therefore use (\codeword{pack} or \codeword{bundle}?) instead. % TODO: find a proper name for package.
+\codeword{module} is also a keyword that could be used to describe a PT package, however this is also reserved in the ES standard, and should therefore also be avoided for similar reasons to \codeword{package}, to avoid confusion.
+We will therefore use (\codeword{pack} or \codeword{bundle}?) instead. % TODO: find a proper name for package.
 
 For renaming classes PTj uses \codeword{=>}, however in ES this is used in arrow-functions\cite{arrowfunction}.
 To avoid confusion and a potentially ambiguous grammar we will have to choose a different syntax for renaming classes.
-In 
+PTj, for historical purposes, uses a different operator (\codeword{->}) for renaming class methods, however for keeping \languagename simple we will stick to only having one common operator for renaming.
+
+ECMAScript currently supports renaming of destructured fields using the \codeword{:}(colon) operator and aliasing imports using the keyword \codeword{as}.
+Even though we opted to choose a different keyword for packages, we will here re-use the already existing \codeword{as} keyword for renaming 
 
 \input{parts/the-project/jsvssts.tex}
 
