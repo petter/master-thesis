@@ -12,7 +12,7 @@
 
 \section{Syntax}\label{sec:syntax}
 
-For the implementation of PT we need some syntax for the following:
+For the implementation of PT we need syntax for the following:
 
 \begin{itemize}
     \item Defining packages (\codeword{package} in PTj)
@@ -22,7 +22,7 @@ For the implementation of PT we need some syntax for the following:
     \item Renaming methods (\codeword{->} in PTj)
 \end{itemize}
 
-\codeword{template} and \codeword{inst} are both not used or reserved in the ECMAScript standard or in TypeScript, and can therefore be used in \languagename without any issues.
+\codeword{template} and \codeword{inst} are both not in used or reserved in the ECMAScript standard or in TypeScript, and can therefore be used in \plname{} without any issues.
 
 The keyword \codeword{package} in TS / ES is as of yet not in use, however the ECMAScript standard has reserved it for future use.
 In order to "future proof" our implementation we should avoid using this reserved keyword, as it could have some conflicts with a potential future implementation of packages in ECMAScript.
@@ -32,10 +32,10 @@ We will therefore use (\codeword{pack} or \codeword{bundle}?) instead. % TODO: f
 
 For renaming classes PTj uses \codeword{=>}, however in ES this is used in arrow-functions\cite{arrowfunction}.
 To avoid confusion and a potentially ambiguous grammar we will have to choose a different syntax for renaming classes.
-PTj, for historical purposes, uses a different operator (\codeword{->}) for renaming class methods, however for keeping \languagename simple we will stick to only having one common operator for renaming.
+PTj, for historical purposes, uses a different operator (\codeword{->}) for renaming class methods, however for keeping \plname{} simple we will stick to only having one common operator for renaming.
 
 ECMAScript currently supports renaming of destructured fields using the \codeword{:}(colon) operator and aliasing imports using the keyword \codeword{as}.
-Even though we opted to choose a different keyword for packages, we will here re-use the already existing \codeword{as} keyword for renaming 
+Even though we opted to choose a different keyword for packages, we will here re-use the already existing \codeword{as} keyword for renaming as the concepts are so closely related.
 
 \input{parts/the-project/jsvssts.tex}
 
@@ -52,13 +52,10 @@ this can be achieved as following:
     \item Making a custom compiler from scratch
 \end{itemize}
 
-\subsection{TypeScript Compiler Fork}\label{subsec:typescript-compiler-fork}
-
-Possible, however not as accessible as other alternatives and will make upkeep expensive.
 
 \subsection{Preprocessor for the TypeScript Compiler}\label{subsec:preprocessor-for-the-typescript-compiler}
 
-A lot more work than ex plugin / transformer.
+More work than ex plugin / transformer.
 
 \subsection{TypeScript Compiler Plugin / Transform}\label{subsec:typescript-compiler-plugin}
 
@@ -73,22 +70,35 @@ However there are alternatives that do enable compile time plugins / transformer
     \item Awesome Typescript Loader\cite{awesometypescriptloadergithub}, for the webpack ecosystem. Deprecated
     \item ts-node\cite{tsnodegithub}, REPL / runtime
     \item ttypescript\cite{ttypescriptgithub}, TypeScript tool TODO: Les mer på dette
-    \item A compiler wrapper
 \end{itemize}
 
-Unfortunately most of these don't support custom syntax, which is one of the requirements we have in order to properly implement PT.
-
+Unfortunately ts-loader, Awesome Typescript Loader and ts-node does not support adding custom syntax, as it only transforms the AST produced by the TypeScript compiler.
+Because of this they are not a viable option for our use-case and will therefore be discarded.
 
 \subsection{Babel plugin}\label{subsec:babel-plugin}
 
-Babel isn't strictly for TypeScript, but for JavaScript as a whole.
-Will however make it very accessible as most web-projects use Babel, and the upkeep is cheap, as plugins are pretty independent from the core.
+Babel isn't strictly for TypeScript, but for JavaScript as a whole, however we could write our plugin to be dependent on the TypeScript transformation plugin.
 
-Saying that this is strictly a Babel plugin wouldn't be entirely true, as we would have to fork the Babel parser in order to include our custom syntax\cite{babelparserdocs}.
-However this is all hidden away from the user, as this custom parser is a dependency of our Babel plugin.
+Making a Babel plugin will make it very accessible as most web-projects use Babel, and the upkeep is cheap, as plugins are loosely coupled with the core.
+
+Unfortunately Babel plugins does not have any way of extending the tokenizer / parser and can not on its own supply a custom syntax, however it is possible to give a custom parser\cite{babelparserdocs}, a fork of the Babel-parser, in which the plugin should use. 
+Through this we can extend the TypeScript syntax with our syntax for PT.
+This is all hidden away from the user, as this custom parser is a dependency of our Babel plugin.
+
+Seeing as we have to make a fork of the parser in order to solve our problem, the upkeep will not be as cheap as first anticipated, however being able to have most of the logic loosely coupled with the compiler core will still make it easier to keep updated than through a fork of the TypeScript compiler.
 
 Babel Plugin is not as nice as I first thought, it seems to be pretty hard to write third-party plugins as you have to make a parser fork for custom syntax, and there is a severe lack of documentation.
 Most examples of Babel plugins mostly use internal helpers and utils, which are hard to use for third-party plugins.
 
 TODO: Does it support having multiple custom parser?
 E.g. babel-plugin-typescript + our custom babel plugin?
+
+\subsection{TypeScript Compiler Fork}\label{subsec:typescript-compiler-fork}
+
+Possible, however not as accessible as other alternatives and will make upkeep expensive.
+
+The TypeScript compiler is a monolith.
+It has about 2.5 million lines of code, and therefore has a quite steep learning curve to get into.
+If we were to go with this route it would be quite hard to get updates, as updates to the compiler might break our implementation.
+However as we have seen, going the plugin / transform route also requires us to fork the underlying compiler and make changes to it, however with the majority of the implementation being loosely coupled it would still make it easier to keep up-to-date.
+That being said it will probably be a lot easier to do semantic analysis in a fork of the TypeScript compiler vs in a plugin / transform.
