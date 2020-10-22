@@ -20,6 +20,7 @@ For the implementation of PT we need syntax for the following:
     \item Instantiating templates (\codeword{inst} in PTj)
     \item Renaming classes (\codeword{=>} in PTj)
     \item Renaming methods (\codeword{->} in PTj)
+    \item Additions to classes (\codeword{addto} in PTj)
 \end{itemize}
 
 \codeword{template} and \codeword{inst} are both not in use nor reserved in the ECMAScript standard or in TypeScript, and can therefore be used in \plname{} without any issues.
@@ -37,7 +38,45 @@ PTj, for historical purposes, uses a different operator (\codeword{->}) for rena
 ECMAScript currently supports renaming of destructured fields using the \codeword{:}(colon) operator and aliasing imports using the keyword \codeword{as}.
 Even though we opted to choose a different keyword for packages, we will here re-use the already existing \codeword{as} keyword for renaming as the concepts are so closely related.
 
-\input{parts/the-project/jsvssts.tex}
+\plname{}:
+\begin{listing}
+    template T {
+        class A {
+            function f() : String {
+                ...
+            }
+        }
+    }
+
+    pack P {
+        inst T with A as A (f as g); // Function overloading not supported, so don't need to give signature.
+        addto A {
+            i : number = 0;
+        }
+    }
+\end{listing}
+
+PTj:
+\begin{listing}
+    template T {
+        class A {
+            String f() {
+                ...
+            }
+        }
+    }
+
+    package P {
+        inst T with A => A (f() -> g()); 
+        addto A {
+            int i = 0;
+        }
+    }
+\end{listing}
+
+
+
+\section{TypeScript vs JavaScript / ECMAScript}
 
 \section{Choosing the right approach}\label{sec:choosing-the-right-approach}
 
