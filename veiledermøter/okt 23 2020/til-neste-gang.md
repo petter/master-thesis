@@ -1,0 +1,2 @@
+- Se på muligheter for å ikke bruke custom syntax (Slik som i GroovyPT gjennom decorators osv.)
+- Se dypere på hvordan det kan gjøres i Babel (semantisk analyse osv.)
