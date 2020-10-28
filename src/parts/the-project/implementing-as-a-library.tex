@@ -1,0 +1,42 @@
+\section{Implementing PT as a TS library}%
+\label{sec:implementing_pt_as_a_ts_library}
+
+In order to implement PT we need to be able to handle the following:
+
+\begin{itemize}
+    \item Defining templates
+    \item Instantiating templates
+    \item Renaming classes
+    \item Renaming class attributes
+    \item Merging classes
+\end{itemize}
+
+\subsection{Defining templates}%
+\label{sub:defining_templates}
+
+Templates could be defined as an ECMAScript class, where each member of the template is a static attribute. 
+
+\subsection{Instantiating templates}%
+\label{sub:instantiating_templates}
+
+\subsection{Renaming classes}%
+\label{sub:renaming_classes}
+
+Since each class in a template is just a static member, we could create a new template where we use the new name for our class as the attribute name, and point to the class from the "old" template.
+
+TODO: Because of ES having open classes this could lead to unwanted side-effects. Might need to look into a different solution for this.
+
+\subsection{Renaming class attribtues}%
+\label{sub:renaming_class_attribtues}
+
+Maybe impossible?
+
+\subsection{Merging classes}%
+\label{sub:merging_classes}
+
+For merging of the types you would use the built-in decleration merging\cite{declerationmerging}. Implementation merging is also possible because ECMAScript has open classes. For implementation merging you would create an empty class which has the type of the merged declerations, and then assign the fields and methods from the merging classes to this class.
+
+
+
+
+
