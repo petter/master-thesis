@@ -2,11 +2,11 @@ import { template } from "./common";
 
 @template
 class T1 {
-  static A = class {
+  A = class {
     i = 2;
   };
 
-  static B = class extends T1.A {
+  B = class extends this.A {
     j = this.i;
   };
 }
