@@ -1,5 +1,5 @@
 
-Her er et utkast til en BNF-gramatikk for PT i TS.
+Her er et utkast til en BNF-grammatikk for PT i TS.
 
 ```
 <template_declaration> ::= "template" <identifier> <package_template_body> ;
@@ -17,10 +17,10 @@ Her er et utkast til en BNF-gramatikk for PT i TS.
 <addto_statement> ::= "addto" <identifier> <class_body> ";" ;
 ```
 
-Ikke-terminalene `<identifier>`, `<class_declaration>`, `<class_body>` og `<interface_declaration>` er ikke-terminaler fra JS(ESTree) og TS([typescript 1.8](https://javascript.xgqfrms.xyz/pdfs/TypeScript%20Language%20Specification.pdf), ikke lenger oppdatert) gramatikkene.
+Ikke-terminalene `<identifier>`, `<class_declaration>`, `<class_body>` og `<interface_declaration>` er ikke-terminaler fra JS(ESTree) og TS([typescript 1.8](https://javascript.xgqfrms.xyz/pdfs/TypeScript%20Language%20Specification.pdf), ikke lenger oppdatert) grammatikkene.
 
-Tenker å bruke [tree-sitter](https://tree-sitter.github.io/tree-sitter/) da det virker som at det er det enkleste, med tanke på å utvide typescript-gramatikken.
-Ser at det er mulig å utvide en gramatikk ved å spesifisere den som base grammar ved definisjon av gramatikk;
+Tenker å bruke [tree-sitter](https://tree-sitter.github.io/tree-sitter/) da det virker som at det er det enkleste, med tanke på å utvide typescript-grammatikken.
+Ser at det er mulig å utvide en grammatikk ved å spesifisere den som base grammar ved definisjon av grammatikk;
 
 ```javascript
 grammar(require('tree-sitter-typescript/typescript/grammar'), {
