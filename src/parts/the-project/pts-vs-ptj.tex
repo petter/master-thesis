@@ -1,0 +1,47 @@
+%! Author = petter
+%! Date = 04.01.2021
+
+\chapter{Difference between PTS and PTj}\label{ch:difference-between-pts-and-ptj}
+
+
+\section{Structural vs. Nominal Typing}\label{sec:structural-vs-nominal-typing}
+
+\begin{lstlisting}[label={lst:nominal-typing-example}, language=Java]
+    // Given the following class definitions for A, B and C:
+    class A {
+        void f() {
+            ...
+        }
+    }
+
+    class B extends A {
+        ...
+    }
+
+    class C {
+        void f() {
+            ...
+        }
+    }
+
+    // And a consumer with the following type:
+    void g(A a) { ... }
+
+    // Would result in the following
+    g(new A()); // Ok
+    g(new B()); // Ok
+    g(new C()); // Error, C not of type A
+\end{lstlisting}
+
+\subsection{What is structural typing?}\label{subsec:what-is-structural-typing?}
+
+\begin{lstlisting}[label={lst:structural-typing-example2}, language=Java]
+    // Given the same class definitions and the same consumer as in the example above.
+    // Would result in the following
+    g(new A()); // Ok
+    g(new B()); // Ok
+    g(new C()); // Ok, because C is structurally equal to A
+\end{lstlisting}
+
+\subsection{What is nominal typing?}\label{subsec:what-is-nominal-typing?}
+
