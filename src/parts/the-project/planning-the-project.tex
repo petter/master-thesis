@@ -76,7 +76,19 @@ PTj:
 
 
 
-\section{TypeScript vs JavaScript / ECMAScript}
+\section{TypeScript vs JavaScript}\label{sec:typescript-vs-javascript}
+
+\subsection{Verifying templates}\label{subsec:why-typescript-verifying-templates}
+
+One of the requirements for PT is that each template should be verifiable.
+There is no easy way to verify if some JavaScript code is verifiable without executing it.
+With TypeScript on the other hand, with the language being statically typed, we can, at least to a much larger extent, verify if some piece of code is valid.
+And thus we can also use this to validate each separate template in PT.
+
+Now it should be noted that due to TypeScripts type system being unsound one could argue that this requirement of PT is not met.
+While this is true it still outperforms JavaScript on this remark, and we will later in section\vref{subsec:pt-requirements-verifying-templates} discuss more in-depth to what extent this requirement is met.
+
+
 
 \section{Choosing the right approach}\label{sec:choosing-the-right-approach}
 

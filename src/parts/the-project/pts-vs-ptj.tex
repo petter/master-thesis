@@ -4,7 +4,21 @@
 \chapter{Difference between PTS and PTj}\label{ch:difference-between-pts-and-ptj}
 
 
-\section{Structural vs. Nominal Typing}\label{sec:structural-vs-nominal-typing}
+\section{Nominal vs. Structural Typing}\label{sec:nominal-vs-structural-typing}
+
+Nominal and structural are two major categories of type systems.
+In nominal typing a type is
+
+Write about pros and cons of both nominal and structural typing
+
+nominal pros:
+Trivial to check if a type is a subtype of another
+Natural and intuitive recursive types (Structural typing also has recursive types, check if java and typescript support it)
+Often runtime-objects are tagged with the types, which are useful for multiple things like doing runtime instanceof checks. (This can also be used in structural typing)
+
+\subsection{What is nominal typing?}\label{subsec:what-is-nominal-typing?}
+
+
 
 \begin{lstlisting}[label={lst:nominal-typing-example}, language=Java]
     // Given the following class definitions for A, B and C:
@@ -43,5 +57,4 @@
     g(new C()); // Ok, because C is structurally equal to A
 \end{lstlisting}
 
-\subsection{What is nominal typing?}\label{subsec:what-is-nominal-typing?}
 

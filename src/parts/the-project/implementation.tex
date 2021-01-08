@@ -3,21 +3,29 @@
 
 \chapter{Implementation}\label{ch:implementation}
 
-\section{Architecture / Parts of the compiler / PP}
+\section{Architecture / Parts of the compiler / PP}\label{sec:architecture}
 
 Lexer, parser, instantiation and renaming,
 
-\section{Lexer and Parser}
+\subsection{Lexer and Parser}\label{sec:lexer-and-parser}
 
 tree-sitter grammar extending tree-sitter-typescript
 
-\section{Instantiation and renaming}
+\subsection{Instantiation and renaming}\label{sec:instantiation-and-renaming}
 
-\section{Verification of templates}
+
+\subsection{Verification of templates}\label{sec:verification-of-templates}
 
 ts api
 
-\section{Code generation}
+\subsection{Code generation}\label{sec:code-generation}
 
 generate ts and compile ts to js through ts api.
 
+\section{Does PTS fulfill the requirements of PT?}\label{sec:does-pts-fulfill-the-requirements-of-pt?}
+
+\subsection{Verifying templates}\label{subsec:pt-requirements-verifying-templates}
+
+Talk about unsoudness of TypeScript.
+Talk about unsoudness of Java \cite{java-unsound}
+Talk about since the requirement is met with Java we assume it is adequately met with TypeScript as well.
