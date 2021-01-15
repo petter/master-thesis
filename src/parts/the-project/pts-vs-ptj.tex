@@ -6,33 +6,59 @@
 
 \section{Nominal vs. Structural Typing}\label{sec:nominal-vs-structural-typing}
 
-Much taken from TAPL.
+%Much taken from TAPL.
+
+One of the most notable differences between PTS and PTj are the underlying languages type systems.
+PTS, as an extension of TypeScript, has structural typing, while PTj on the other hand, an extension of Java, has nominal typing.
 
 Nominal and structural are two major categories of type systems.
-Nominal type systems are the norm in mainstream PLs, while in research literature is for the most part concerned with structural typing.
+Nominal is defined as "being something in name only, and not in reality" in the Oxford dictionary.
+Nominal types area as the name suggest, types in name only, and not in the structure of the object.
+They are the norm in mainstream programming languages, such as Java, C, and C++.
+A type could be \codeword{A} or \codeword{BinTree}, and checking whether an object conforms to a type restriction, is to check that the type restriction is referring to the same named type, or a subtype.
+Structural types on the other hand is not tied to the name of the type, but to the structure of the object.
+These are not as common in mainstream programming languages, but are very prominent in research literature.
+However, in more recent (mainstream) programming languages, such as Go, TypeScript and Julia(at least for implicit typing), structural typing is becoming more and more common.
+A type in a structurally typed programming language, are often defined as records, and could for example be \codeword{{ name: string }}.
 
-Write about pros and cons of both nominal and structural typing
+\subsection{Advantages of Nominal Types}\label{subsec:advantages-of-nominal-types}
 
-nominal pros:
-Trivial to check if a type is a subtype of another
-Natural and intuitive recursive types (Structural typing also has recursive types, check if java and typescript support it).
-    Recursive types are types that mention itself, like in lists and trees.
-    They are just as easy to use in structural languages, however for calculi such as proofs recursive types come for free in nominal type systems while it is a bit more of a hassle in structurally typed systems, especially with mutually recursive types.
+\subsubsection{Subtypes}\label{subsubsec:subtypes}
+
+In nominal type systems it is trivial to check if a type is a subtype of another, as this has to be explicitly stated, while in structural type systems this has to be structurally checked, by checking that all members of the super type, are also present in the subtype.
+Because of this each subtype relation only has to be checked once for each type, which makes it easier to make a more performant type checker for nominal type systems.
+However, it is also possible to achieve similar performance in structurally typed languages through some clever representation techniques. % TODO: Maybe find an article describing this
+We can see an example of subtype relations in both nominal and structural type systems, in a Java-like language, in listing~\vref{lst:subtype}.
+It is important to note that even though \codeword{C} is a \emph{subtype} of \codeword{A} in a structural language, it is not a \emph{subclass} of \codeword{A}.
+
+\begin{lstlisting}[label={lst:subtype}, caption={Example of subtype relations in nominal and structural typing, with a Java-like language.}, language=Java]
+    // Given the class A
+    class A {
+        void f() { ... }
+     }
+
+    // A subtype, B, in nominal typing
+    class B extends A { ... }
+
+    // A subtype, C, in structural typing
+    class C {
+        void f() { ... }
+        int g() { ... }
+    }
+\end{lstlisting}
+
+\subsubsection{Recursive types}\label{subsubsec:recursive-types}
+
+Recursive types are types that mention itself in its definition, and are widely used in datastructures, such as lists and trees.
+Another advantage in nominal typing is how natural and intuitive recursive types are in the type system.
+Referring to itself in a type definition is as easy as referring to any other type.
+It is however just as easy to do this in structural type systems as well, however for calculi such as proofs, recursive types come for free in nominal type systems, while it is a bit more cumbersome in structurally typed systems, especially with mutually recursive types.\cite{tapl}
+Listings~\vref{lst:ts-recursive-type} and~\vref{lst:java-recursive-type} shows the use of recursive types in TypeScript(structurally typed) and Java(nominally typed), respectively.
 
 \begin{lstlisting}[label={lst:ts-recursive-type}, language=TypeScript]
-    // Simple recursive type
     interface BinTree<T> {
-        data: T;
-        children: [BinTree<T>, BinTree<T>];
-    }
-
-    // Cyclic recursive type
-    interface A {
-        b : B;
-    }
-
-    interface B {
-        a: A;
+        getData(): T;
+        getChildren(): [BinTree<T> | null, BinTree<T> | null];
     }
 \end{lstlisting}
 
@@ -43,24 +69,35 @@ Natural and intuitive recursive types (Structural typing also has recursive type
     }
 \end{lstlisting}
 
-Often runtime-objects are tagged with the types, which are useful for multiple things like doing runtime instanceof checks. (This can also be used in structural typing)
-It is "easier" to check sub-type relations in nominal type systems, even though you will still have to do a structural comparison, you only have to do this calculation once per type.
-    Even though it is easier to achieve better performance for nominal vs structural types, it is still possible to achieve close to if not equal performance in structural type systems, through some representation techniques(Consider finding a article on this).
-A questionable advantage for nominal typing is that they prevent "spurious subsumption", that is using a structurally equal type in a place where it should not be used.
-    I would argue that there are more cases where this is a compromise than a benefit, and there are better ways to prevent this from happening, such as single-constructor datatypes or ADTs.
+\subsubsection{Runtime Type Checking}
 
-nominal cons:
+Often runtime-objects in nominally typed languages are tagged with the types(a pointer to the "type") of the object.
+This makes it cheap and easy to do runtime type checks, like in upcasting or doing a \codeword{instanceof} check in Java.
+% TODO: Skriv mere
 
-structural pros:
-Structural types are "tidier and more elegant".
-    They carry all the information to understand the meaning of the type.
-    In nominal systems we are working with some global collection of names, which can make it hard to understand some types.
+\subsection{Advantages of Structural Types}\label{subsec:advantages-of-structural-types}
+
+\subsection{What Difference Does This Make For PT?}\label{subsec:what-difference-does-this-make-for-pt?}
 
 
-structural cons:
+%Often runtime-objects are tagged with the types, which are useful for multiple things like doing runtime instanceof checks. (This can also be used in structural typing)
+%It is "easier" to check sub-type relations in nominal type systems, even though you will still have to do a structural comparison, you only have to do this calculation once per type.
+%    Even though it is easier to achieve better performance for nominal vs structural types, it is still possible to achieve close to if not equal performance in structural type systems, through some representation techniques(Consider finding a article on this).
+%A questionable advantage for nominal typing is that they prevent "spurious subsumption", that is using a structurally equal type in a place where it should not be used.
+%    I would argue that there are more cases where this is a compromise than a benefit, and there are better ways to prevent this from happening, such as single-constructor datatypes or ADTs.
+%
+%nominal cons:
+%
+%structural pros:
+%Structural types are "tidier and more elegant".
+%    They carry all the information to understand the meaning of the type.
+%    In nominal systems we are working with some global collection of names, which can make it hard to understand some types.
+% Structural types can help to make a method more general, reduce code duplication. See is structural subtyping useful.
+%
+%
+%structural cons:
+%
 
-
-\subsection{What is nominal typing?}\label{subsec:what-is-nominal-typing?}
 
 
 
@@ -103,7 +140,7 @@ structural cons:
 
 \subsection{Which Better Fits PT?}\label{subsec:which-better-fits-pt?}
 
-In PTj there are elements of structural typing for the implementation of required types.
-This is because PT doesn't allow externally declared classes, interfaces, etc., so in order to be able to have constraints on generic types structural typing was needed.
-I would therefore argue that a structurally typed language is a better fit for PT, because Ockhams razor / keeping it tidier.
+%In PTj there are elements of structural typing for the implementation of required types.
+%This is because PT doesn't allow externally declared classes, interfaces, etc., so in order to be able to have constraints on generic types structural typing was needed.
+%I would therefore argue that a structurally typed language is a better fit for PT, because Ockhams razor / keeping it tidier.
 
