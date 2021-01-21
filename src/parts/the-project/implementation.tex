@@ -3,28 +3,29 @@
 
 \chapter{Implementation}\label{ch:implementation}
 
-In this chapter we are going to look at the implementation for PT in TypeScript.
+In this chapter we are going to look at the implementation of PT in TypeScript.
 
 \section{Architecture / Parts of the compiler / PP}\label{sec:architecture}
 
 
 
-\subsection{Lexer and Parser}\label{sec:lexer-and-parser}
+\subsection{Lexer and Parser}\label{subsec:lexer-and-parser}
 
 tree-sitter grammar extending tree-sitter-typescript
 
-\subsection{Instantiation and Renaming}\label{sec:instantiation-and-renaming}
+\subsection{Instantiation and Renaming}\label{subsec:instantiation-and-renaming}
 
 
-\subsection{Verification of Templates}\label{sec:verification-of-templates}
+\subsection{Verification of Templates}\label{subsec:verification-of-templates}
 
 ts api
 
-\subsection{Code Generation}\label{sec:code-generation}
+\subsection{Code Generation}\label{subsec:code-generation}
 
 generate ts and compile ts to js through ts api.
 
-\section{Notes on Performance}
+\section{Notes on Performance}\label{sec:notes-on-performance}
 
 Very slow compiler/PP because of the chosen implementation, with tree traverser for every step.
+
 

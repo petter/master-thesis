@@ -52,7 +52,7 @@ It is important to note that even though \codeword{C} is a \emph{subtype} of \co
 Recursive types are types that mention itself in its definition, and are widely used in datastructures, such as lists and trees.
 Another advantage in nominal typing is how natural and intuitive recursive types are in the type system.
 Referring to itself in a type definition is as easy as referring to any other type.
-It is however just as easy to do this in structural type systems as well, however for calculi such as proofs, recursive types come for free in nominal type systems, while it is a bit more cumbersome in structurally typed systems, especially with mutually recursive types.\cite{tapl}
+It is however just as easy to do this in structural type systems as well, however for calculi such as type safety proofs, recursive types come for free in nominal type systems, while it is a bit more cumbersome in structurally typed systems, especially with mutually recursive types\cite{tapl}.
 Listings~\vref{lst:ts-recursive-type} and~\vref{lst:java-recursive-type} shows the use of recursive types in TypeScript(structurally typed) and Java(nominally typed), respectively.
 
 \begin{lstlisting}[label={lst:ts-recursive-type}, language=TypeScript]
@@ -69,7 +69,7 @@ Listings~\vref{lst:ts-recursive-type} and~\vref{lst:java-recursive-type} shows t
     }
 \end{lstlisting}
 
-\subsubsection{Runtime Type Checking}
+\subsubsection{Runtime Type Checking}\label{subsubsec:runtime-type-checking}
 
 Often runtime-objects in nominally typed languages are tagged with the types(a pointer to the "type") of the object.
 This makes it cheap and easy to do runtime type checks, like in upcasting or doing a \codeword{instanceof} check in Java.
@@ -77,8 +77,22 @@ This makes it cheap and easy to do runtime type checks, like in upcasting or doi
 
 \subsection{Advantages of Structural Types}\label{subsec:advantages-of-structural-types}
 
+\subsubsection{Tidier and More Elegant}\label{subsubsec:tidier-and-more-elegant}
+
+Structural types carry with it all the information needed to understand its meaning.
+
+\subsubsection{Advanced Features}\label{subsubsec:advanced-type-features}
+
+Type abstractions(parametric polymorphism, ADTs, user-defined type operators, functors, etc), these do not fit nice into nominal type systems.
+
+\subsubsection{More General Functions/Classes}\label{subsubsec:more-general-functions}
+
+See~\cite{malayeri}.
+
 \subsection{What Difference Does This Make For PT?}\label{subsec:what-difference-does-this-make-for-pt?}
 
+We are not going to go further into comparing nominal and structural type systems and "crown a winner", as there are a lot useful scenarios for both.
+We will instead look more closely into how a structural type system fits into PT, and what differences this makes to the features, and constraints, of this language mechanism.
 
 %Often runtime-objects are tagged with the types, which are useful for multiple things like doing runtime instanceof checks. (This can also be used in structural typing)
 %It is "easier" to check sub-type relations in nominal type systems, even though you will still have to do a structural comparison, you only have to do this calculation once per type.
@@ -128,7 +142,6 @@ This makes it cheap and easy to do runtime type checks, like in upcasting or doi
     g(new C()); // Error, C not of type A
 \end{lstlisting}
 
-\subsection{What is structural typing?}\label{subsec:what-is-structural-typing?}
 
 \begin{lstlisting}[label={lst:structural-typing-example2}, language=Java]
     // Given the same class definitions and the same consumer as in the example above.
@@ -140,7 +153,7 @@ This makes it cheap and easy to do runtime type checks, like in upcasting or doi
 
 \subsection{Which Better Fits PT?}\label{subsec:which-better-fits-pt?}
 
-%In PTj there are elements of structural typing for the implementation of required types.
+%In PTj(specifically the version with required types) there are elements of structural typing for the implementation of required types.
 %This is because PT doesn't allow externally declared classes, interfaces, etc., so in order to be able to have constraints on generic types structural typing was needed.
 %I would therefore argue that a structurally typed language is a better fit for PT, because Ockhams razor / keeping it tidier.
 
