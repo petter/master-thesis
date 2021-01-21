@@ -4,6 +4,53 @@
 
 What are the requirements of PT?
 
+As described in~\cite{jot}
+
+From~\cite{jot}
+
+\begin{quotation}
+    The  following  is  a  list  of  properties  that  such  a  mechanism  should  have.
+    For  each  property  we  first  state  it  for  a  collection  C  containing  classes  A  and  B  (and  in  the  last  property  also  a  collection  D  with  a  class  E),  and  we  then  illustrate  it  with  one  of  the  examples above.
+
+    - \textbf{Parallel  extension:}  When  using  the  collection  C  in  a  certain  setting  we  can  add  attributes  to  A  and  B.
+    These  additions  should  also  have  effect  for  the  code  of  C,  e.g.  so  that  we  by  means  of  an  A-variable  defined  in  C  can  directly  (without  casting) access the attributes added to A.
+
+    - - In the graph example, assume that we have added the int variable length to Edge, and  that  n  is  a  Node-reference.
+    With  this  property  we  can  conveniently  specify  directly: “n.firstEdge().length = 5;”, as firstEdge is typed with the extended Edge class.
+
+    - \textbf{Hierarchy  preservation:}  The  mechanism  should  allow  B  to  be  a  subclass  of  A,  and  if  additional  attributes  are  given  to  A  and  to  B,  then  the  B  with  additions  should be a subclass of the A with additions.
+    Note that this will not be the case if we just use the collection C with the classes A and B and then define subclasses A’  and  B’  to  A  and  B,  respectively,  with  the  additions  we  want  in  these  subclasses.
+    B’ will then not be a subclass of A’.
+
+    - - In  the  compiler  example  this  is  exactly  what we need in order to be able to add attributes as explained in the example.
+
+    - \textbf{Renaming:}  When  C  is  used,  we  should  be  able  to  change  the  name  of  A  and  B,  and of their attributes, so that they fit with the specific use situation.
+
+    - - For  the  graph  example,  the  renaming  property  makes  it  possible  to  rename  the  nodes and edges to cities and roads.
+
+    - \textbf{Multiple  uses:}  It  should  be  possible  to  use  the  classes  of  C  for  different  and  independent  purposes  in  the  same  program,  and  so  that  each  purpose  have  different additions and renamings.
+    The compiler should be able to check that each use implies a different set of classes as if they are defined in separate hierarchies.
+
+    - - In  a  program  we  may  need  the  basic  graph  structure  for  different  purposes.
+    In  addition  to  using  it  for  cities  and  roads,  we  could  in  the  same  program  use  it  to  form the structure of pipes and joints in a water distribution system.
+
+    - \textbf{Type parameterization:} It should be possible to write a collection of classes that assumes the existence of classes that have some required attributes, but are not yet completely defined.
+    In each use of this collection, one can provide specific classes that have at least the required attributes.
+
+    - - In the compiler example we assume that the front end shall always produce Java Bytecode,  and  we  use  some  readymade  mechanism  for  packing  the  code  to  a  correctly  formatted  class  file.
+    However,  a  number  of  such  packers  may  be  available,  and  we  do  not  want  to  choose  which  to  use  while  implementing  the  front end class collection.
+
+    - \textbf{Class  merging:}  Assume  we  have  the  two  collections  C  (with  classes  A  and  B)  and D (with class E).
+    When they are both used in the same program, we should be able to merge e.g. the classes A and E so that the resulting class gets the union of the attributes, and so that we via an E-variable defined within D can also directly see the A attributes (and similarly for an A-variable in C).
+
+    - - Assume that we in addition to the graph collection have a collection Persons with a class Person.
+    In a program handling personal relations we then want to use both collections together so that we obtain a new class, say PersonNode, which has all the  attributes  of  Node  and  Person,  and  where  a  Person-variable  p  defined  in  Persons gives access directly to the Node attributes, e.g. “p.firstEdge”.
+
+    In  addition  to  these  properties,  it  is  important  that  such  collections  of  classes  can  be  separately type-checked.
+    We also prefer a mechanism that allows only single inheritance, as  the  merge  property  described  above  to  a  large  extent  will  take  care  of  the  need  for  combining  code  from  different  sources  (for  which  purpose  multiple  inheritance  is  often  used).
+    Finally, the type system should be as simple and intuitive as possible.
+\end{quotation}
+
 \section{Verifying Templates}\label{sec:pt-requirements-verifying-templates}
 
 Talk about unsoudness of TypeScript.

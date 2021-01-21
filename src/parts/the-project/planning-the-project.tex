@@ -32,7 +32,7 @@ It could also be beneficial to not share the keyword in order avoid creating con
 We will therefore use (\codeword{pack} eller \codeword{bundle}? Må nok se litt mer på dette) instead. % TODO: find a proper name for package.
 
 For renaming classes PTj uses \codeword{=>}, however in ES this is used in arrow-functions\cite{arrowfunction}.
-To avoid confusion and a potentially ambiguous grammar we will have to choose a different syntax for renaming classes.
+To avoid confusion, and a potentially ambiguous grammar we will have to choose a different syntax for renaming classes.
 PTj, for historical purposes, uses a different operator (\codeword{->}) for renaming class methods, however for keeping \plname{} simple we will stick to only having one common operator for renaming.
 
 ECMAScript currently supports renaming of destructured fields using the \codeword{:}(colon) operator and aliasing imports using the keyword \codeword{as}.
@@ -133,10 +133,10 @@ Through this we can extend the TypeScript syntax with our syntax for PT.
 This is all hidden away from the user, as this custom parser is a dependency of our Babel plugin.
 
 Seeing as we have to make a fork of the parser in order to solve our problem, the upkeep will not be as cheap as first anticipated.
-However being able to have most of the logic loosely coupled with the compiler core it will still make it easier to keep updated than through a fork of the TypeScript compiler.
+However, being able to have most of the logic loosely coupled with the compiler core it will still make it easier to keep updated than through a fork of the TypeScript compiler.
 
-TODO: Er det støttet å bruke flere plugins med forskjellige parsere?
-E.g. babel-plugin-typescript + vårt babel plugin?
+% TODO: Er det støttet å bruke flere plugins med forskjellige parsere?
+% E.g. babel-plugin-typescript + vårt babel plugin?
 
 \subsection{TypeScript Compiler Fork}\label{subsec:typescript-compiler-fork}
 
