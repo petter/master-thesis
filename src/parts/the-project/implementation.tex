@@ -29,3 +29,37 @@ generate ts and compile ts to js through ts api.
 Very slow compiler/PP because of the chosen implementation, with tree traverser for every step.
 
 
+\section{Testing}\label{sec:testing}
+
+\subsection{Lexer and Parser}\label{subsec:testing-lexer-and-parser}
+
+Tree-sitter tests are simple \codeword{.txt} files split up into three sections, the name of the test, the code that should be parsed, and the expected parse tree in S-expressions\cite{sexprs}.
+
+\begin{code}{typescript}{Example of tree-sitter grammar test}{lst:tree-sitter-grammar-test}
+    ===========================
+    Closed template declaration
+    ===========================
+
+    template T {
+        class A {
+            i = 0;
+        }
+    }
+
+    ---
+    (program
+        (template_declaration
+            name: (identifier)
+            body: (package_template_body
+                    (class_declaration
+                        name: (type_identifier)
+                        body: (class_body
+                            (public_field_definition
+                                name: (property_identifier)
+                                value: (number)))))))
+
+\end{code}
+
+\subsection{Transpiler}\label{subsec:testing-transpiler}
+
+jest

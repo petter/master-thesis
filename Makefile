@@ -5,7 +5,7 @@ SRCFILE=main
 SHELL=/bin/zsh   # for the while loop below
 
 all:  ## Compile paper
-	cd "$(SRCDIR)" && rubber --pdf "$(SRCFILE).tex"
+	cd "$(SRCDIR)" && rubber --unsafe --pdf "$(SRCFILE).tex"
 
 clean:  ## Clean output files
 	cd "$(SRCDIR)" && rubber --clean "$(SRCFILE).tex"

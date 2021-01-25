@@ -8,6 +8,7 @@
 \usepackage[backend=biber,style=numeric-comp]{biblatex}
 \usepackage{color}
 \usepackage{hyperref}
+\usepackage{minted}
 
 \hypersetup{
     colorlinks=true,
@@ -22,9 +23,20 @@
 \addbibresource{library.bib}
 
 
+% Custom macros
 \newcommand{\codeword}[1]{\texttt{#1}}
 \newcommand{\plname}{PTScript(Midlertidlig navn)}
 
+% Custom environments
+% \begin{code}{programming language}{Caption}{label}
+\newenvironment{code}[4][]
+{\VerbatimEnvironment
+    \begin{listing}
+        \caption{#3}\label{#4}
+    \begin{minted}[
+        frame=lines,
+        #1]{#2}}
+ {\end{minted}\end{listing}}
 
 
 

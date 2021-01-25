@@ -39,7 +39,7 @@ ECMAScript currently supports renaming of destructured fields using the \codewor
 Even though we opted to choose a different keyword for packages, we will here re-use the already existing \codeword{as} keyword for renaming as the concepts are so closely related.
 
 \plname{}:
-\begin{lstlisting}
+\begin{code}{typescript}{}{lst:pts-renaming}
     template T {
         class A {
             function f() : String {
@@ -49,15 +49,15 @@ Even though we opted to choose a different keyword for packages, we will here re
     }
 
     pack P {
-        inst T with A as A (f as g); // Function overloading not supported, so don't need to give signature.
+        inst T with A -> A (f -> g); // Function overloading not supported, so don't need to give signature.
         addto A {
             i : number = 0;
         }
     }
-\end{lstlisting}
+\end{code}
 
 PTj:
-\begin{lstlisting}
+\begin{code}{java}{}{lst:ptj-renaming}
     template T {
         class A {
             String f() {
@@ -72,7 +72,7 @@ PTj:
             int i = 0;
         }
     }
-\end{lstlisting}
+\end{code}
 
 
 
@@ -93,7 +93,7 @@ While this is true it still outperforms JavaScript on this remark, and we will l
 \section{Choosing the right approach}\label{sec:choosing-the-right-approach}
 
 Before jumping into a project of this magnitude it is important to find out what approach to use. 
-The goal of this project is to extend TypeScript with the Package Templates language mechanism, this can be achieved as following:
+The goal of this project is to extend TypeScript with the Package Templates language mechanism, this could be achieved by one of the following methods:
 
 \begin{itemize}
     \item Making a fork of the TypeScript compiler
@@ -109,8 +109,9 @@ More work than ex plugin / transformer.
 
 \subsection{TypeScript Compiler Plugin / Transform}\label{subsec:typescript-compiler-plugin}
 
-As of the time of writing this the official TypeScript compiler does not support compile time plugins. The plugins for the TypeScript compiler is, as the TypeScript compiler wiki specifies, "for changing the editing experience only"\cite{tscplugin}.
-However there are alternatives that do enable compile time plugins / transformers;
+At the time of writing the official TypeScript compiler does not support compile time plugins.
+The plugins for the TypeScript compiler is, as the TypeScript compiler wiki specifies, "for changing the editing experience only"\cite{tscplugin}.
+However, there are alternatives that do enable compile time plugins / transformers;
 
 \begin{itemize}
     \item ts-loader\cite{tsloadergithub}, for the webpack ecosystem
@@ -145,5 +146,5 @@ Possible, however not as accessible as other alternatives and will make upkeep e
 The TypeScript compiler is a monolith.
 It has about 2.5 million lines of code, and therefore has a quite steep learning curve to get into.
 If we were to go with this route it would be quite hard to keep up with the TypeScript updates, as updates to the compiler might break our implementation.
-However as we have seen, going the plugin / transform route also requires us to fork the underlying compiler and make changes to it, however with the majority of the implementation being loosely coupled it would still make it easier to keep up-to-date.
+However, as we have seen, going the plugin / transform route also requires us to fork the underlying compiler and make changes to it, however with the majority of the implementation being loosely coupled it would still make it easier to keep up-to-date.
 That being said it will probably be a lot easier to do semantic analysis in a fork of the TypeScript compiler vs in a plugin / transform.

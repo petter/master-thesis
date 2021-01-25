@@ -31,7 +31,7 @@ However, it is also possible to achieve similar performance in structurally type
 We can see an example of subtype relations in both nominal and structural type systems, in a Java-like language, in listing~\vref{lst:subtype}.
 It is important to note that even though \codeword{C} is a \emph{subtype} of \codeword{A} in a structural language, it is not a \emph{subclass} of \codeword{A}.
 
-\begin{lstlisting}[label={lst:subtype}, caption={Example of subtype relations in nominal and structural typing, with a Java-like language.}, language=Java]
+\begin{code}{Java}[label={lst:subtype}, caption={Example of subtype relations in nominal and structural typing, with a Java-like language.}, language=Java]
     // Given the class A
     class A {
         void f() { ... }
@@ -45,7 +45,7 @@ It is important to note that even though \codeword{C} is a \emph{subtype} of \co
         void f() { ... }
         int g() { ... }
     }
-\end{lstlisting}
+\end{code}
 
 \subsubsection{Recursive types}\label{subsubsec:recursive-types}
 
