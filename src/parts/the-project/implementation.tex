@@ -15,6 +15,25 @@ tree-sitter grammar extending tree-sitter-typescript
 
 \subsection{Instantiation and Renaming}\label{subsec:instantiation-and-renaming}
 
+\subsubsection{Scoping}\label{subsubsec:inst-scoping}
+
+For creating scopes I chose the following node types for "making new scopes".
+
+\begin{itemize}
+    \item \codeword{class_body}
+    \item \codeword{statement_block}
+    \item \codeword{enum_body}
+    \item \codeword{if_statement}
+    \item \codeword{else_statement}
+    \item \codeword{for_statement}
+    \item \codeword{for_in_statement}
+    \item \codeword{while_statement}
+    \item \codeword{do_statement}
+    \item \codeword{try_statement}
+    \item \codeword{with_statement}
+\end{itemize}
+
+\subsubsection{Transforming Nodes to Variable References}\label{subsubsec:transforming-nodes-to-variable-references}
 
 \subsection{Verification of Templates}\label{subsec:verification-of-templates}
 
@@ -62,4 +81,5 @@ Tree-sitter tests are simple \codeword{.txt} files split up into three sections,
 
 \subsection{Transpiler}\label{subsec:testing-transpiler}
 
-jest
+Started with jest, and used some time to get it to work with typescript files, however had to switch because jest doesn't handle native libraries (tree-sitter) too well.
+It \codeword{require}s the same native library several times, making the wrapping around the native program to break.
