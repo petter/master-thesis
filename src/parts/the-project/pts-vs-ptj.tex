@@ -31,7 +31,7 @@ However, it is also possible to achieve similar performance in structurally type
 We can see an example of subtype relations in both nominal and structural type systems, in a Java-like language, in listing~\vref{lst:subtype}.
 It is important to note that even though \codeword{C} is a \emph{subtype} of \codeword{A} in a structural language, it is not a \emph{subclass} of \codeword{A}.
 
-\begin{code}{Java}[label={lst:subtype}, caption={Example of subtype relations in nominal and structural typing, with a Java-like language.}, language=Java]
+\begin{code}{Java}{Example of subtype relations in nominal and structural typing, with a Java-like language.}{lst:subtype}
     // Given the class A
     class A {
         void f() { ... }
@@ -55,19 +55,19 @@ Referring to itself in a type definition is as easy as referring to any other ty
 It is however just as easy to do this in structural type systems as well, however for calculi such as type safety proofs, recursive types come for free in nominal type systems, while it is a bit more cumbersome in structurally typed systems, especially with mutually recursive types\cite{tapl}.
 Listings~\vref{lst:ts-recursive-type} and~\vref{lst:java-recursive-type} shows the use of recursive types in TypeScript(structurally typed) and Java(nominally typed), respectively.
 
-\begin{lstlisting}[label={lst:ts-recursive-type}, language=TypeScript]
+\begin{code}{TypeScript}{Usage of a recursive type, BinTree, in TypeScript}{lst:ts-recursive-type}
     interface BinTree<T> {
         getData(): T;
         getChildren(): [BinTree<T> | null, BinTree<T> | null];
     }
-\end{lstlisting}
+\end{code}
 
-\begin{lstlisting}[label={lst:java-recursive-type}, language=Java]
+\begin{code}{Java}{Usage of a recursive type, BinTree, in Java}{lst:java-recursive-type}
     interface BinTree<T> {
         T getData();
         Pair<BinTree<T>, BinTree<T>> getChildren();
     }
-\end{lstlisting}
+\end{code}
 
 \subsubsection{Runtime Type Checking}\label{subsubsec:runtime-type-checking}
 
@@ -115,7 +115,7 @@ We will instead look more closely into how a structural type system fits into PT
 
 
 
-\begin{lstlisting}[label={lst:nominal-typing-example}, language=Java]
+\begin{code}{Java}{Example of a nominally typed program in Java}{lst:nominal-typing-example}
     // Given the following class definitions for A, B and C:
     class A {
         void f() {
@@ -140,16 +140,16 @@ We will instead look more closely into how a structural type system fits into PT
     g(new A()); // Ok
     g(new B()); // Ok
     g(new C()); // Error, C not of type A
-\end{lstlisting}
+\end{code}
 
 
-\begin{lstlisting}[label={lst:structural-typing-example2}, language=Java]
+\begin{code}{Java}{Example of a structurally typed program in a Java-like language}{lst:structural-typing-example}
     // Given the same class definitions and the same consumer as in the example above.
     // Would result in the following
     g(new A()); // Ok
     g(new B()); // Ok
     g(new C()); // Ok, because C is structurally equal to A
-\end{lstlisting}
+\end{code}
 
 \subsection{Which Better Fits PT?}\label{subsec:which-better-fits-pt?}
 
