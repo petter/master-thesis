@@ -3,15 +3,97 @@
 
 \chapter{Implementation}\label{ch:implementation}
 
-In this chapter we are going to look at the implementation of PT in TypeScript.
+In this chapter we are going to look at the implementation of PTS.
 
-\section{Architecture / Parts of the compiler / PP}\label{sec:architecture}
+\section{Compiler Architecture}\label{sec:architecture}
 
 
 
 \subsection{Lexer and Parser}\label{subsec:lexer-and-parser}
 
-tree-sitter grammar extending tree-sitter-typescript
+\subsubsection{The PTS Grammar}
+
+\begin{figure}
+    \begin{bnf*}
+        \bnfprod{declaration}
+            { \bnfsk \bnfor \bnfpn{package declaration} \bnfor \bnfpn{template declaration} }\\
+        \bnfprod{package declaration}
+            { \bnfts{package} \bnfsp \bnfpn{id} \bnfsp \bnfpn{PT body} }\\
+        \bnfprod{template declaration}
+            { \bnfts{template} \bnfsp \bnfpn{id} \bnfsp \bnfpn{PT body} }\\
+        \bnfprod{PT body}
+            { \bnfts{\{} \bnfsp \bnfpn{PT body decls} \bnfsp \bnfts{\}} }\\
+        \bnfprod{PT body decls}
+            { \bnfpn{PT body decls} \bnfsp \bnfpn{PT body decl} \bnfor \bnfes}\\
+        \bnfprod{PT body decl}
+            { \bnfpn{inst statement} \bnfor \bnfpn{addto statement} \bnfor }\\
+        \bnfmore{ \bnfpn{class declaration} \bnfor \bnfpn{interface declaration} }\\
+        \bnfprod{inst statement}
+            { \bnfts{inst} \bnfsp \bnfpn{id} \bnfsp \bnfpn{inst rename block} }\\
+        \bnfprod{inst rename block}
+            { \bnfts{\{} \bnfsp \bnfpn{class renamings} \bnfsp \bnfts{\}} \bnfor \bnfes }\\
+        \bnfprod{class renamings}
+            { \bnfpn{class rename} \bnfor \bnfpn{class rename} \bnfts{,} \bnfsp \bnfpn{class renamings} }\\
+        \bnfprod{class rename}
+            { \bnfpn{rename} \bnfsp \bnfpn{field rename block} }\\
+        \bnfprod{field rename block}
+            { \bnfts{(} \bnfsp \bnfpn{field renamings} \bnfsp \bnfts{)} \bnfor \bnfes }\\
+        \bnfprod{field renamings}
+            { \bnfpn{rename} \bnfor \bnfpn{rename} \bnfts{,} \bnfsp \bnfpn{field renamings} }\\
+        \bnfprod{rename}
+            { \bnfpn{id} \bnfsp \bnfts{->} \bnfsp \bnfpn{id} }\\
+        \bnfprod{addto statement}
+            { \bnfts{addto} \bnfsp \bnfpn{id} \bnfsp \bnfpn{addto heritage} \bnfsp \bnfpn{class body} }\\
+        \bnfprod{addto heritage}
+            { \bnfpn{class heritage} \bnfor \bnfes }\\
+    \end{bnf*}
+    \caption{BNF grammar for PTS. The non-terminals $\bnfpn{declaration}$, $\bnfpn{id}$, $\bnfpn{class declaration}$, $\bnfpn{interface declaration}$, and $\bnfpn{class body}$ are productions from the TypeScript grammar.
+    The ellipsis in the declaration production means that we extend the TypeScript production with some extra choices.}
+    \label{fig:pts-grammar}
+\end{figure}
+
+
+\subsubsection{Parser Generator}\label{subsubsec:parser-generator}
+
+TypeScript is a language that is constantly updated, and is getting new features fairly often.
+
+
+\begin{itemize}
+    \item Preferably should allow us to change an existing grammar, without interfering with the original grammar, giving us the possibility to update the original grammar.
+\end{itemize}
+
+For our implementation of the grammar I choose to go with \href{https://tree-sitter.github.io/tree-sitter/}{Tree-sitter}.
+
+Because
+\begin{itemize}
+    \item Lets you extend grammars
+    \item Has JavaScript/Node API
+    \item Makes it possible to use the grammar for syntax highlighting
+\end{itemize}
+
+
+As we talked about in section~\vref{sec:what-do-we-need}, we set ourselves the goal to find an approach that would allow us to create an implementation that was loosely coupled with TypeScript.
+While a fork of the TypeScript compiler or the Babel parser would not allow this, Tree-sitter on the other hand allows extending existing grammars.
+Extending a grammar works much like extending a class in an object-oriented language.
+A "sub grammar" inherits all the rules from the "super grammar", so an empty ruleset would effectively work the same as the super grammar.
+Just like most object-oriented languages have access to the super class, we also have access to the super grammar in Tree-sitter.
+All of this enables us to add, override, and extend rules in an existing grammar, all while staying loosely coupled with the super grammar.
+By extending the grammar, and not forking it, we are able to simply update our dependency on the TypeScript grammar, minimizing the possibility for conflicts.
+
+where we have the ability to override rules from the super grammar with our own rules.
+Not only are we able to override rules, but we can combine the old rules with the new.
+
+A good example of overriding and combining rules can be found in the grammar of PTS, see listing~\vref{lst:overriding-combining-rule}, where we override the \codeword{\_declaration} rule from the TypeScript grammar, to include the possibility for package and template declarations.
+
+\begin{code}{javascript}{Snippet from the PTS grammar, where we override the \codeword{\_declaration} rule from the TypeScript grammar, and adding two additional declarations.}{lst:overriding-combining-rule}
+    _declaration: ($, previous) =>
+        choice(
+            previous,
+            $.template_declaration,
+            $.package_declaration
+        )
+\end{code}
+
 
 \subsection{Instantiation and Renaming}\label{subsec:instantiation-and-renaming}
 
