@@ -45,26 +45,25 @@ PTj, for historical purposes, uses a different operator (\codeword{->}) for rena
 ECMAScript currently supports renaming of destructured fields using the \codeword{:}(colon) operator and aliasing imports using the keyword \codeword{as}.
 Even though we opted to choose a different keyword for packages, we will here re-use the already existing \codeword{as} keyword for renaming as the concepts are so closely related.
 
-\plname{}:
-\begin{code}{typescript}{}{lst:pts-renaming}
+\begin{code}{typescript}{Renaming in PTS}{lst:pts-renaming}
     template T {
         class A {
-            function f() : String {
+            function f() : string {
                 ...
             }
         }
     }
 
     pack P {
-        inst T with A -> A (f -> g); // Function overloading not supported, so don't need to give signature.
+        // Function overloading not supported, so don't need to give signature for field renaming.
+        inst T { A -> A (f -> g) };
         addto A {
             i : number = 0;
         }
     }
 \end{code}
 
-PTj:
-\begin{code}{java}{}{lst:ptj-renaming}
+\begin{code}{java}{Renaming in PTj}{lst:ptj-renaming}
     template T {
         class A {
             String f() {
@@ -74,13 +73,12 @@ PTj:
     }
 
     package P {
-        inst T with A => A (f() -> g()); 
+        inst T with A => A (f() -> g());
         addto A {
             int i = 0;
         }
     }
 \end{code}
-
 
 
 \section{TypeScript vs JavaScript}\label{sec:typescript-vs-javascript}
