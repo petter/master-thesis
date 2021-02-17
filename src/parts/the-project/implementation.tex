@@ -7,11 +7,29 @@ In this chapter we are going to look at the implementation of PTS.
 
 \section{Compiler Architecture}\label{sec:architecture}
 
+\begin{figure}
+           \centering
+           \includegraphics[scale=.75]{images/Compiler overview.png}
+           \caption{Overview of the compiler}
+           \label{fig:compiler-overview}
+\end{figure}
+
+\section{Lexer and Parser}\label{sec:lexer-and-parser}
+
+\subsection{The PTS Grammar}\label{subsec:the-pts-grammar}
+
+PTS is an extension of TypeScript, and the grammar is also therefore an extension of the TypeScript grammar.
+There is no published official TypeScript grammar (other than interpreting it from the implementation of the TypeScript compiler), however up until recently there used to be a TypeScript specification\cite{tsspec}.
+This TypeScript specification was deprecated as it proved a to great a task to keep updated, with the ever-changing nature of the language.
+However, most of the essential parts are still the same.
+The PTS grammar is therefore based on the TypeScript specification, and on the ESTree Specification\cite{estreespec}.
+
+In figure~\vref{fig:pts-grammar} we can see the PTS BNF grammar.
+This is not the full grammar for PTS, as I have only included any additions or changes to the original TypeScript/JavaScript grammars.
+More specifically the non-terminal $\bnfpn{declaration}$ is an extension of the original grammar, where we also include package and template declarations as legal declarations.
+The productions for non-terminals $\bnfpn{id}$, $\bnfpn{class declaration}$, $\bnfpn{interface declaration}$, and $\bnfpn{class body}$ are also from the original grammar.
 
 
-\subsection{Lexer and Parser}\label{subsec:lexer-and-parser}
-
-\subsubsection{The PTS Grammar}
 
 \begin{figure}
     \begin{bnf*}
@@ -49,11 +67,15 @@ In this chapter we are going to look at the implementation of PTS.
     \end{bnf*}
     \caption{BNF grammar for PTS. The non-terminals $\bnfpn{declaration}$, $\bnfpn{id}$, $\bnfpn{class declaration}$, $\bnfpn{interface declaration}$, and $\bnfpn{class body}$ are productions from the TypeScript grammar.
     The ellipsis in the declaration production means that we extend the TypeScript production with some extra choices.}
+
+    \textit{Legend:} Non-terminals are surrounded by $\bnfpn{angle brackets}$.
+    Terminals are in $\bnfts{typewriter font}$.
+    Meta-symbols are in regular font.
     \label{fig:pts-grammar}
 \end{figure}
 
 
-\subsubsection{Parser Generator}\label{subsubsec:parser-generator}
+\subsection{Parser Generator}\label{subsec:parser-generator}
 
 TypeScript is a language that is constantly updated, and is getting new features fairly often.
 
