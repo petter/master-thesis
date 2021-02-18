@@ -36,14 +36,14 @@ The keyword \codeword{package} in TS / ES is as of yet not in use, however the E
 In order to "future proof" our implementation we should avoid using this reserved keyword, as it could have some conflicts with a potential future implementation of packages in ECMAScript.
 It could also be beneficial to not share the keyword in order avoid creating confusion between the future ES packages and PT Packages.
 \codeword{module} is also a keyword that could be used to describe a PT package, however this is already used in the ES standard, and should therefore also be avoided for similar reasons to \codeword{package}, to avoid confusion.
-We will therefore use (\codeword{pack} eller \codeword{bundle}? Må nok se litt mer på dette) instead. % TODO: find a proper name for package.
+We will therefore use \codeword{pack} instead. % TODO: find a proper name for package.
 
-For renaming classes PTj uses \codeword{=>}, however in ES this is used in arrow-functions\cite{arrowfunction}.
+For renaming classes PTj uses \codeword{=>}, however in JavaScript this is used in arrow-functions\cite{arrowfunction}.
 To avoid confusion, and a potentially ambiguous grammar we will have to choose a different syntax for renaming classes.
-PTj, for historical purposes, uses a different operator (\codeword{->}) for renaming class methods, however for keeping \plname{} simple we will stick to only having one common operator for renaming.
+PTj, for historical purposes, uses a different operator (\codeword{->}) for renaming class methods, however for keeping our language simple we will stick to only having one common operator for renaming.
 
-ECMAScript currently supports renaming of destructured fields using the \codeword{:}(colon) operator and aliasing imports using the keyword \codeword{as}.
-Even though we opted to choose a different keyword for packages, we will here re-use the already existing \codeword{as} keyword for renaming as the concepts are so closely related.
+JavaScript currently supports renaming of destructured fields using the \codeword{:}(colon) operator and aliasing imports using the keyword \codeword{as}.
+We could opt to choose one of these for renaming in PTS as well, however in order to keep the concepts separated, as well as making the syntax more familiar for Package Template users, we will go for the \codeword{->}(thin arrow) syntax.
 
 \begin{code}{typescript}{Renaming in PTS}{lst:pts-renaming}
     template T {
@@ -87,11 +87,11 @@ Even though we opted to choose a different keyword for packages, we will here re
 
 One of the requirements for PT is that each template should be verifiable.
 There is no easy way to verify if some JavaScript code is verifiable without executing it.
-With TypeScript on the other hand, with the language being statically typed, we can, at least to a much larger extent, verify if some piece of code is valid.
+With TypeScript on the other hand, with the language being statically typed, we can, at least to a much larger extent, verify if some piece of code is type secure.
 And thus we can also use this to validate each separate template in PT.
 
 Now it should be noted that due to TypeScripts type system being unsound one could argue that this requirement of PT is not met.
-While this is true it still outperforms JavaScript on this remark, and we will later in section\vref{subsec:pt-requirements-verifying-templates} discuss more in-depth to what extent this requirement is met.
+While this is true it still outperforms JavaScript on this remark, and we will later in section~\vref{subsec:pt-requirements-verifying-templates} discuss more in-depth to what extent this requirement is met.
 
 
 
