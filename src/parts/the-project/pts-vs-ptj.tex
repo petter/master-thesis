@@ -31,7 +31,7 @@ However, it is also possible to achieve similar performance in structurally type
 We can see an example of subtype relations in both nominal and structural type systems, in a Java-like language, in listing~\vref{lst:subtype}.
 It is important to note that even though \codeword{C} is a \emph{subtype} of \codeword{A} in a structural language, it is not a \emph{subclass} of \codeword{A}.
 
-\begin{code}{Java}{Example of subtype relations in nominal and structural typing, with a Java-like language.}{lst:subtype}
+\begin{code}{Java}{Example of subtype relations in nominal and structural typing, in a Java-like language.}{lst:subtype}
     // Given the class A
     class A {
         void f() { ... }
@@ -115,7 +115,7 @@ We will instead look more closely into how a structural type system fits into PT
 
 
 
-\begin{code}{Java}{Example of a nominally typed program in Java}{lst:nominal-typing-example}
+\begin{code}{Java}{Example of a nominally typed program in a Java-like language}{lst:nominal-typing-example}
     // Given the following class definitions for A, B and C:
     class A {
         void f() {
@@ -144,7 +144,8 @@ We will instead look more closely into how a structural type system fits into PT
 
 
 \begin{code}{Java}{Example of a structurally typed program in a Java-like language}{lst:structural-typing-example}
-    // Given the same class definitions and the same consumer as in the example above.
+    // Given the same class definitions and
+    // the same consumer as in the example above.
     // Would result in the following
     g(new A()); // Ok
     g(new B()); // Ok
