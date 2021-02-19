@@ -62,12 +62,14 @@ The productions for non-terminals $\bnfpn{id}$, $\bnfpn{class declaration}$, $\b
 There are a lot of parser generators out there, but there is no one-size-fits-all solution.
 In order to navigate through the sea of options we need to set some requirements in functionality, so that we can more easily find the right tool for the task.
 
+As we talked about in section~\vref{sec:what-do-we-need}, we set ourselves the goal to find an approach that would allow us to create an implementation that was loosely coupled with TypeScript.
 TypeScript is a large language that is constantly updated, and is getting new features fairly often.
 Because of this one of the requirements for our choice of parser generator is the possibility for extending grammars.
-This is important because we don't want to be forced to rewrite the entire TypeScript grammar, as well as keeping it up-to-date.
+This is important because we want to keep our grammar loosely coupled with the TypeScript grammar, and don't want to be forced to rewrite the entire TypeScript grammar, as well as keeping it up-to-date.
 
-Another desired attribute is a runtime library in TypeScript.
-We will be working with the TypeScript API, which only
+We will be working with the TypeScript API, which only has a runtime library in JavaScript/TypeScript.
+Therefore, another desired attribute is a runtime library in TypeScript.
+This is not as essential as the requirement above, as we can get around using the TypeScript API and instead use the TypeScript CLI, or create a CLI in the language of the parser generator tools runtime library.
 
 
 \subsubsection{ANTLR4}\label{subsubsec:antlr}
@@ -93,30 +95,33 @@ Overall ANTLR seems like a good option for our project, but the lack of a runtim
 
 \subsubsection{Tree-sitter}\label{subsubsec:tree-sitter}
 
-Tree-sitter is mainly used in language servers and syntax highlighting, and I see no examples of it being used in the context of a compiler.
-However, it does produce a parse tree, so I see no reason to why it would not work for our implementation.
+\href{https://tree-sitter.github.io/tree-sitter/}{Tree-sitter} is a fairly new parser generator tool, compared to the others in this list.
+It aims to be general, fast, robust and dependency-free\cite{tree-sitter}.
+The tool has been garnering a lot of traction the last couple of years, and is being used by Github, VS Code and Atom to name a few.
+It has mainly been used in language servers and syntax highlighting, however it should still work fine for our compiler since it does produce a parse tree.
 
-For our implementation of the grammar I choose to go with \href{https://tree-sitter.github.io/tree-sitter/}{Tree-sitter}.
+Although it isn't a documented feature, Tree-sitter does allow for extending grammars.
+Extending a grammar works much like in ANTLR, where you get almost a superclass relation to the grammar.
+One difference from ANTLR though is that it does allow for referencing the grammar we are extending during rule overriding.
+This makes it easier and more robust to extend rules than in ANTLR.
 
-Because
-\begin{itemize}
-    \item Lets you extend grammars
-    \item Has JavaScript/Node API
-    \item Makes it possible to use the grammar for syntax highlighting
-\end{itemize}
+Tree-sitter also has a runtime library for TypeScript, which makes it easier for us to use it in our implementation than the previous candidates.
 
+Another cherry on top is that Tree-sitter is becoming one of the mainstream ways of syntax highlighting in modern editors and IDEs, which means that we could utilize the same grammar to get syntax highlighting for our language.
 
-As we talked about in section~\vref{sec:what-do-we-need}, we set ourselves the goal to find an approach that would allow us to create an implementation that was loosely coupled with TypeScript.
-While a fork of the TypeScript compiler or the Babel parser would not allow this, Tree-sitter on the other hand allows extending existing grammars.
-Extending a grammar works much like extending a class in an object-oriented language.
+All this makes Tree-sitter stand out as the best candidate for our project.
+
+\subsubsection{Implementing Our Grammar in Tree-sitter}
+
+Tree-sitter uses the term rule instead of production, and I will therefore also refer to productions as rules here.
+
+Extending a grammar in Tree-sitter works much like extending a class in an object-oriented language.
 A "sub grammar" inherits all the rules from the "super grammar", so an empty ruleset would effectively work the same as the super grammar.
 Just like most object-oriented languages have access to the super class, we also have access to the super grammar in Tree-sitter.
 All of this enables us to add, override, and extend rules in an existing grammar, all while staying loosely coupled with the super grammar.
 By extending the grammar, and not forking it, we are able to simply update our dependency on the TypeScript grammar, minimizing the possibility for conflicts.
 
-where we have the ability to override rules from the super grammar with our own rules.
-Not only are we able to override rules, but we can combine the old rules with the new.
-
+As mentioned, Tree-sitter allows for referencing the super grammar during rule overriding, effectively making it possible to combine the old rule and the new.
 A good example of overriding and combining rules can be found in the grammar of PTS, see listing~\vref{lst:overriding-combining-rule}, where we override the \codeword{\_declaration} rule from the TypeScript grammar, to include the possibility for package and template declarations.
 
 \begin{code}{javascript}{Snippet from the PTS grammar, where we override the \codeword{\_declaration} rule from the TypeScript grammar, and adding two additional declarations.}{lst:overriding-combining-rule}
@@ -127,6 +132,7 @@ A good example of overriding and combining rules can be found in the grammar of 
             $.package_declaration
         )
 \end{code}
+
 
 
 \subsection{Instantiation and Renaming}\label{subsec:instantiation-and-renaming}
