@@ -17,68 +17,6 @@ In addition to these we would also like to look for some other desirable traits 
     \item Mer?
 \end{itemize}
 
-\section{Syntax}\label{sec:syntax}
-
-For the implementation of PT we need syntax for the following:
-
-\begin{itemize}
-    \item Defining packages (\codeword{package} in PTj)
-    \item Defining templates (\codeword{template} in PTj)
-    \item Instantiating templates (\codeword{inst} in PTj)
-    \item Renaming classes (\codeword{=>} in PTj)
-    \item Renaming methods (\codeword{->} in PTj)
-    \item Additions to classes (\codeword{addto} in PTj)
-\end{itemize}
-
-\codeword{template} and \codeword{inst} are both not in use nor reserved in the ECMAScript standard or in TypeScript, and can therefore be used in \plname{} without any issues.
-
-The keyword \codeword{package} in TS / ES is as of yet not in use, however the ECMAScript standard has reserved it for future use.
-In order to "future proof" our implementation we should avoid using this reserved keyword, as it could have some conflicts with a potential future implementation of packages in ECMAScript.
-It could also be beneficial to not share the keyword in order avoid creating confusion between the future ES packages and PT Packages.
-\codeword{module} is also a keyword that could be used to describe a PT package, however this is already used in the ES standard, and should therefore also be avoided for similar reasons to \codeword{package}, to avoid confusion.
-We will therefore use \codeword{pack} instead. % TODO: find a proper name for package.
-
-For renaming classes PTj uses \codeword{=>}, however in JavaScript this is used in arrow-functions\cite{arrowfunction}.
-To avoid confusion, and a potentially ambiguous grammar we will have to choose a different syntax for renaming classes.
-PTj, for historical purposes, uses a different operator (\codeword{->}) for renaming class methods, however for keeping our language simple we will stick to only having one common operator for renaming.
-
-JavaScript currently supports renaming of destructured fields using the \codeword{:}(colon) operator and aliasing imports using the keyword \codeword{as}.
-We could opt to choose one of these for renaming in PTS as well, however in order to keep the concepts separated, as well as making the syntax more familiar for Package Template users, we will go for the \codeword{->}(thin arrow) syntax.
-
-\begin{code}{typescript}{Renaming in PTS}{lst:pts-renaming}
-    template T {
-        class A {
-            function f() : string {
-                ...
-            }
-        }
-    }
-
-    pack P {
-        // Function overloading not supported, so don't need to give signature for field renaming.
-        inst T { A -> A (f -> g) };
-        addto A {
-            i : number = 0;
-        }
-    }
-\end{code}
-
-\begin{code}{java}{Renaming in PTj}{lst:ptj-renaming}
-    template T {
-        class A {
-            String f() {
-                ...
-            }
-        }
-    }
-
-    package P {
-        inst T with A => A (f() -> g());
-        addto A {
-            int i = 0;
-        }
-    }
-\end{code}
 
 
 \section{TypeScript vs JavaScript}\label{sec:typescript-vs-javascript}
