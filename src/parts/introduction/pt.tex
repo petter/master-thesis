@@ -1,0 +1,204 @@
+\section{Package Templates}\label{sec:package-templates}
+
+% When modelling complex concepts like a system of cities and roads or water pipes and switches,
+% it would be helpful if we had a language mechanism which could gather in a module the shared
+% aspects of these problems
+% e.g.\ as the concept of a graph with nodes and edges, so that this module later can be used
+% to form (or could make up the kernel of) an implementation of either cities/roads or
+% switches/pipes. For this language mechanism to be really helpful this requires that,
+% when such a module is used (or "instantiated") in a program, we must be able to add new
+% declarations at any subclass levels of the module classes, and to change names on declarations.
+
+Krogdahl proposed Generic Packages in 2001, which is a language mechanism aimed at "large scale code reuse in object oriented languages"\cite{krogdahl:GP}.
+The idea behind this mechanism was to make modules of classes, called \textit{packages}, that could later be imported and instantiated.
+This would make "textual copies" of the package body, and would also allow for further expanding the classes of the packages.
+Modularizing through Generic Packages made the programming more flexible as you would easily be able to write modules with a certain functionality and be able to later import it several times when there is a need for the functionality.
+
+Generic Packages was later extended \red{(nevne SWAT-project?)} and the mechanism is now called Package Templates (while the textual program modules themselves are simply called templates).
+Of special interest in this essay is that the system allows a special type of multiple inheritance (by "merging" classes from different templates), and templates may build upon other templates to any depth).
+The system is not fully implemented and there exists a number of proposals for extending it.
+
+\subsection{Syntax}\label{subsec:syntax}
+
+In this section we will look at the syntax of Package Templates (further referred to as \emph{PT}) in a Java-like language as proposed in~\cite{jot}.
+
+\subsubsection{Defining packages and package templates}
+
+\emph{Packages} are defined by a set of classes similar to a normal Java package.
+Package templates(later just templates for short), are defined similar except for using the keyword \emph{template}.
+Listing~\vref{code:basicPT} shows an example of defining packages and templates.
+The contents of a package can be used as you would with a normal Java package.
+
+\begin{code}{java}{Defining a package P and a template T. \red{Merk at dette ikke er syntaksen til en vanlig pakke i Java. Dette må beskrives.}}{code:basicPT}
+    package P {
+        interface I { ... }
+        class A extends I { ... }
+    }
+
+    template T {
+        class B { ... }
+    }
+\end{code}
+
+\subsubsection{Instantiating templates}\label{sec:inst}
+Instantiating is what really makes PT useful.
+When defining packages, PT allows for including already defined templates through instantiating.
+Instantiation is done inside the body of a package with the use of a \verb|inst|-clause.
+Instantiating a template will make "textual copies" of the  classes, interfaces and enums from the instantiated template and insert them replacing the instantiation statement at compile time.
+Note that the template itself still exist and that it can be instantiated again in the same program.
+%Instantiating a template will effectively copy classes, interfaces and enums from the template into the body of the new package or template at compile time.
+Listing~\vref{code:inst} shows an example of instantiating a template inside a package.
+The resulting package \verb|P| will then have the classes \verb|A| and \verb|B| from template \verb|T| and its own class \verb|C|.
+
+\begin{code}{java}{Instantiating template T in package P}{code:inst}
+// Before compile time instantiation of T
+template T {
+    class A { ... }
+    class B { ... }
+}
+
+package P {
+    inst T;
+    class C { ... }
+}
+
+// After compile time instantiation of T
+package P {
+    class A { ... }
+    class B { ... }
+    class C { ... }
+}
+\end{code}
+
+\subsubsection{Renaming}
+
+During instantiations it is possible to rename classes (as well as interfaces and enums) and class methods. Renaming is a part of the instantiation of templates, and will only affect the copy made for this instantiation, and it is done for this copy before it replaces the \verb|inst|-statement.
+Renaming is denoted by a \verb|with|-clause.
+In the \verb|with|-clause one can rename classes using the following fat arrow syntax, \verb|A => B|, where class \verb|A| is renamed to \verb|B|, and you can rename class attributes with a similar arrow syntax, \verb|i -> j|, where the attribute \verb|i| is renamed to \verb|j|.
+For method renaming you have to give the signature of the method so that it is possible to distinguish between overloaded versions, i.e. \verb|m1(int) -> m2(int)|\footnote{On a more technical level the compiler will find the class or attribute declaration that is gonna be renamed, and then find all name occurrences bound to this declaration and rename these.}.
+
+\red{Det var vel altså egentlig noe historisk tull at vi skilte mellom "=>" og "->". Må gjerne bruke are en, f.eks. "->", så har man "=>" helt fri til andre formål. Sparer dette til masteroppgaven, da essayet fokuserer på hvordan PT er nå, mens masteroppgaven vil fokusere mer på "min versjon" av PT.}
+
+Attribute renaming comes after the class renaming surrounded by a set of parentheses.
+Renaming classes will also affect the signatures of any methods using this class.
+Listing \vref{code:rename} shows an often used example of renaming, where a graph template is renamed to better fit a domain, in this case a road map.
+When renaming the class Node the signature of the methods in Edge using this Node was also changed to reflect this, i.e. the method \verb|Node getNodeFrom()| would become \verb|City getNodeFrom()| with the class rename, and \verb|City getCityFrom()| with the method renaming.
+
+\begin{code}{java}{Example of renaming classes during instantiation. This could be used to make the classes fit the domain of the project better.}{code:rename}
+template Graph {
+    class Node {
+        ...
+    }
+
+    class Edge {
+        Node getNodeFrom() { ... }
+        Node getNodeTo() { ... }
+    }
+
+    class Graph {
+        ...
+    }
+}
+
+package RoadMap {
+    ...
+    inst Graph with
+        Node => City,
+        Edge => Road
+            (getNodeFrom() -> getStartingCity(),
+            getNodeTo() -> getDestinationCity()),
+        Graph => RoadSystem;
+    ...
+}
+
+\end{code}
+
+Renaming makes it possible to instantiate templates with conflicting names of classes, or even instantiate the same templates multiple times.
+Listing~\vref{code:renamingdoubleinst} shows an example of this where we instantiate the same template T twice without any issues.
+
+\begin{code}{java}{Example of instantiating the same template twice solved by renaming.}{code:renamingdoubleinst}
+template T {
+    class A {
+        void m() { ... }
+    }
+}
+
+package P {
+    inst T;
+    inst T with A => B;
+}
+
+// package P after compile time instantiation and renaming
+package P {
+    class A {
+        void m() { ... }
+    }
+
+    class B {
+        void m() { ... }
+    }
+}
+\end{code}
+
+\subsubsection{Additions to a template}\label{sec:additions}
+
+When instantiating a template you can also add attributes to the classes of the template, as well as extending the classes implemented interfaces and this will only apply to the current copy.
+These additions are written inside an \verb|addto|-clause. Extending the class with additional attributes is done in the body of the clause, like you would in a normal Java class.
+If an addition has the same signature as an already existing attribute from the instantiated template class, then the addition will override the already existing attribute, like in traditional inheritance.
+Extending the list of implemented interfaces for a class can be done by suffixing the \verb|addto|-clause with \verb|implements| and the list of interfaces.
+Listing~\vref{code:addition} shows an example of adding attributes and implemented interfaces to an instantiated class.
+The resulting class \verb|A| in package \verb|P| would have the attribute \verb|i|, methods \verb|someMethod|, \verb|someOtherMethod| and \verb|run|, as well as implementing the interface \verb|Runnable|.
+
+The extension of classes using the \verb|addto|-clause is done independently for each class, ignoring any inheritance-patterns. If there is a class \verb|A| with a subclass \verb|B|, they can both get extensions independently from each other. Any extensions made to class \verb|A| would of course still be inherited to class \verb|B|, as with normal Java inheritance.
+
+
+\begin{code}{java}{Adding new attributes and extending the implemented interface for the instantiated class A in package P}{code:addition}
+template T {
+    class A {
+        void someMethod() { ... }
+    }
+}
+
+package P {
+    inst T;
+        addto A implements Runnable {
+        int i;
+        void someOtherMethod() { ... }
+        void run() { ... }
+    }
+}
+\end{code}
+
+
+\subsection{Merging classes}
+
+Since this is the mechanism of PT that gives rise to the theme of this essay, a sort of multiple inheritance (namely "static multiple inheritance"), we will be going a bit more in-depth in this section.
+
+If two or more classes in the same or in different instantiations share the same name they will be merged into one class.
+Through this mechanism PT achieves a form of static multiple inheritance.
+If two classes don't share the same name, it is still possible to merge them by first using renaming.
+Through renaming it is possible to force merging by giving the classes the same name.
+In listing~\vref{code:renameclassmerging} we see an example of renaming class \verb|B| to \verb|A| to force these classes to be merged under the class name \verb|A|.
+Merging the classes would simply lead to having a single class \verb|A| with the attributes from both classes.
+The two classes \verb|A| and \verb|B|, from templates \verb|T1| and \verb|T2| respectively, no longer exists in package \verb|P|, but have formed the new class \verb|A|, which is a union of both.
+Any pointers typed with the old \verb|A| or \verb|B| will now be pointing ot the new merged class \verb|A|.
+
+\begin{code}{java}{Instantiation with class merging through renaming}{code:renameclassmerging}
+template T1 {
+    class A {
+        ...
+    }
+}
+
+template T2 {
+    class B {
+        ...
+    }
+}
+
+package P {
+    inst T1 with A;
+    inst T2 with B => A;
+}
+\end{code}
+

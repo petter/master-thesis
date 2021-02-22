@@ -27,6 +27,7 @@
 % Custom macros
 \newcommand{\codeword}[1]{\texttt{#1}}
 \newcommand{\plname}{Package Template Script}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
 
 % Custom environments
 % \begin{code}{programming language}{Caption}{label}
@@ -47,17 +48,24 @@
   long]
 
 \frontmatter{}
-\chapter*{Abstract}
-
-\chapter*{Acknowledgements}
 
 \tableofcontents{}
-\listoffigures{}
-\listoftables{}
+%\listoffigures{}
+%\listoftables{}
 
-%\chapter*{Preface}
+\clearpage
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+
+\cleardoublepage
+
+\section*{Acknowledgements}
+\addcontentsline{toc}{section}{Acknowledgments}
+
+\cleardoublepage
 
 \mainmatter{}
+
 
 %\part{Introduction}\label{part:introduction}
 
