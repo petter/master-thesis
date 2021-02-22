@@ -1,1 +1,0 @@
-Dynamiske språk gjør det vanskelig å rename, se groovy pt
