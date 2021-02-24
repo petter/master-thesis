@@ -1,0 +1,57 @@
+The task of closing open packages and templates is what most of the implementation is focused around.
+Closing packages/templates can be summarized up into these tasks:
+
+% templates & program -> close template/package -> close instantiation -> scope instantiated template body -> rename classes and fields
+%                                                                       <- closed template
+%                                                   <- replace inst with closed template
+%                       <- closed template/package
+
+\begin{enumerate}
+    \item Gather template declarations
+    \item Replace instantiation statements with the body of the referenced template
+    \item 
+\end{enumerate}
+
+Step 2 however
+
+\begin{code}{}{Pseudocode for closing a template. The same code could also be used to close a package, as they are essentially equal in this regard.}{lst:pseudo-close-pacakge}
+    templates <- map from template name to body
+    FUNCTION close_template(template_body)
+        new_program <-
+            MAP syntax_node IN template_body
+                IF syntax_node IS instantiation statement THEN
+                    instantiated_template_body <- LOOKUP referenced template from instantiation statement IN templates
+                    closed_template_body <- close_template(instantiated_template_body)
+                    scoped_body <- add_scope(closed_template_body)
+
+                    renamings <- get renamings from instantiation statement
+                    FOR renaming IN
+                ELSE
+                    syntax_node
+                END IF
+            END MAP
+        RETURN new_program
+    END FUNCTION
+
+    FUNCTION
+\end{code}
+
+\subsection{Scoping}\label{subsec:inst-scoping}
+
+For creating scopes I chose the following node types for "making new scopes".
+
+\begin{itemize}
+    \item \codeword{class\_body}
+    \item \codeword{statement\_block}
+    \item \codeword{enum\_body}
+    \item \codeword{if\_statement}
+    \item \codeword{else\_statement}
+    \item \codeword{for\_statement}
+    \item \codeword{for\_in\_statement}
+    \item \codeword{while\_statement}
+    \item \codeword{do\_statement}
+    \item \codeword{try\_statement}
+    \item \codeword{with\_statement}
+\end{itemize}
+
+\subsection{Transforming Nodes to References}\label{subsec:transforming-nodes-to-references}
