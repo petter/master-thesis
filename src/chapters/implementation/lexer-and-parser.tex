@@ -31,10 +31,19 @@ This does not mean that you won't be able to use it in any other language, as yo
 
 Overall ANTLR seems like a good option for our project, but the lack of a runtime library in TypeScript is a hurdle we would rather get a round if we can.
 
-\subsubsection{GNU Bison}\label{subsubsec:bison}
+\subsubsection{Bison}\label{subsubsec:bison}
 
+Bison is a general-purpose parser generator.
+It is one of many successors to Yacc, and is upwards compatible with Yacc\cite{bison}.
 
+Bison does not support extending grammars.
+The tool works on a single grammar file and produces a C/C++ program.
+There is a possibility to include files, like with any other C/C++ program, in the grammar files prologue, however this will not allow us to include another grammar, as it only inserts the prologue into the generated parser.
+In order to extend a grammar we would have to change the produced parser to include some extra rules.
+Although this could possibly be automated by a script, it seems too hacky of a solution to consider.
 
+On top of this Bison does not have a runtime library in JavaScript/TypeScript.
+There does exist some ports/clones of Bison for JavaScript, such as \href{http://zaa.ch/jison/}{Jison} and \href{http://canna71.github.io/Jacob/}{Jacob}, however to my knowledge these also lack the functionality of extending grammars.
 
 \subsubsection{Tree-sitter}\label{subsubsec:tree-sitter}
 
