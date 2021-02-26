@@ -1,39 +1,49 @@
+A closed template is a template that comprises only class, interface or enum declarations.
+An open template on the other hand is a template that contains at least one instantiation statement.
+
 The task of closing open packages and templates is what most of the implementation is focused around.
+It is the task of performing the instantiations declared in the body of a package/template.
 
-% templates & program -> close template/package -> close instantiation -> scope instantiated template body -> rename classes and fields
-%                                                                       <- closed template
-%                                                   <- replace inst with closed template
-%                       <- closed template/package
+For instantiations without renaming the task is fairly simple.
+We merely have to find the referenced template, and replace the instantiation statement with the body of said template.
+Renaming on the other hand requires a bit more work.
 
+In order to perform renaming on an instantiation we will have to perform the following tasks.
 \begin{enumerate}
-    \item Gather template declarations
-    \item Replace instantiation statements with the body of the referenced template
-    \item 
+    \item Create a scope for the template body, and give all nodes of the body access to this scope
+    \item Find all identifiers, member expressions, class declarations, etc., and replace them with a reference node
+    \item Perform the rename on the scope
+    \item Transform the scoped AST with reference nodes back to the original AST.
 \end{enumerate}
 
-Step 2 however
+If the template body is also open we would have to close it as well.
+We want to close the nested templates before closing the upper templates, as renaming at the top level should affect all members from the nested instantiations.
 
-\begin{code}{}{Pseudocode for closing a template. The same code could also be used to close a package, as they are essentially equal in this regard.}{lst:pseudo-close-pacakge}
-    templates <- map from template name to body
-    FUNCTION close_template(template_body)
-        new_program <-
-            MAP syntax_node IN template_body
-                IF syntax_node IS instantiation statement THEN
-                    instantiated_template_body <- LOOKUP referenced template from instantiation statement IN templates
-                    closed_template_body <- close_template(instantiated_template_body)
-                    scoped_body <- add_scope(closed_template_body)
+Finally, once all templates have been closed we will have to perform class merging and apply any additions to classes.
 
-                    renamings <- get renamings from instantiation statement
-                    FOR renaming IN
-                ELSE
-                    syntax_node
-                END IF
-            END MAP
-        RETURN new_program
-    END FUNCTION
+In order to get a better understanding of this we will go through each step of closing a template in more detail.
 
-    FUNCTION
-\end{code}
+%\begin{code}{}{Pseudocode for closing a template. The same code could also be used to close a package, as they are essentially equal in this regard.}{lst:pseudo-close-pacakge}
+%    templates <- map from template name to body
+%    FUNCTION close_template(template_body)
+%        new_program <-
+%            MAP syntax_node IN template_body
+%                IF syntax_node IS instantiation statement THEN
+%                    instantiated_template_body <- LOOKUP referenced template from instantiation statement IN templates
+%                    closed_template_body <- close_template(instantiated_template_body)
+%                    scoped_body <- add_scope(closed_template_body)
+%
+%                    renamings <- get renamings from instantiation statement
+%                    FOR renaming IN
+%                ELSE
+%                    syntax_node
+%                END IF
+%            END MAP
+%        RETURN new_program
+%    END FUNCTION
+%
+%    FUNCTION
+%\end{code}
 
 \subsection{Scoping}\label{subsec:inst-scoping}
 
