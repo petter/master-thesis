@@ -44,7 +44,7 @@ Method overloading is not supported in JavaScript/TypeScript, and we do therefor
 
 Now that we have made our choices for keywords and operators we can look at the grammar of the language.
 
-PTS is an extension of TypeScript, and the grammar is also therefore an extension of the TypeScript grammar.
+PTS is an extension of TypeScript, and the grammar is therefore also an extension of the TypeScript grammar.
 There is no published official TypeScript grammar (other than interpreting it from the implementation of the TypeScript compiler), however up until recently there used to be a TypeScript specification\cite{tsspec}.
 This TypeScript specification was deprecated as it proved a to great a task to keep updated with the ever-changing nature of the language.
 However, most of the essential parts are still the same.
@@ -98,7 +98,9 @@ The productions for non-terminals $\bnfpn{id}$, $\bnfpn{class declaration}$, $\b
     \label{fig:pts-grammar}
 \end{figure}
 
-\section{Example programs}
+\section{Example programs}\label{sec:example-programs}
+
+Figure~\vref{lst:pts-renaming}.
 
 \begin{code}{typescript}{An example program with instantiation, renaming, and addition-classes in PTS vs. PTj}{lst:pts-renaming}
     // PTS

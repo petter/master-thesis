@@ -15,7 +15,7 @@ Nominal and structural are two major categories of type systems.
 Nominal is defined as "being something in name only, and not in reality" in the Oxford dictionary.
 Nominal types area as the name suggest, types in name only, and not in the structure of the object.
 They are the norm in mainstream programming languages, such as Java, C, and C++.
-A type could be \codeword{A} or \codeword{BinTree}, and checking whether an object conforms to a type restriction, is to check that the type restriction is referring to the same named type, or a subtype.
+A type could be \codeword{A} or \codeword{Tree}, and checking whether an object conforms to a type restriction, is to check that the type restriction is referring to the same named type, or a subtype.
 Structural types on the other hand is not tied to the name of the type, but to the structure of the object.
 These are not as common in mainstream programming languages, but are very prominent in research literature.
 However, in more recent (mainstream) programming languages, such as Go, TypeScript and Julia(at least for implicit typing), structural typing is becoming more and more common.
@@ -27,12 +27,12 @@ A type in a structurally typed programming language, are often defined as record
 
 In nominal type systems it is trivial to check if a type is a subtype of another, as this has to be explicitly stated, while in structural type systems this has to be structurally checked, by checking that all members of the super type, are also present in the subtype.
 Because of this each subtype relation only has to be checked once for each type, which makes it easier to make a more performant type checker for nominal type systems.
-However, it is also possible to achieve similar performance in structurally typed languages through some clever representation techniques. % TODO: Maybe find an article describing this
+However, it is also possible to achieve similar performance in structurally typed languages through some clever representation techniques\cite{tapl}. % TODO: Maybe find an article describing this
 We can see an example of subtype relations in both nominal and structural type systems, in a Java-like language, in listing~\vref{lst:subtype}.
 It is important to note that even though \codeword{C} is a \emph{subtype} of \codeword{A} in a structural language, it is not a \emph{subclass} of \codeword{A}.
 
 \begin{code}{Java}{Example of subtype relations in nominal and structural typing, in a Java-like language.}{lst:subtype}
-    // Given the class A
+    // Given class A
     class A {
         void f() { ... }
      }
@@ -50,22 +50,22 @@ It is important to note that even though \codeword{C} is a \emph{subtype} of \co
 \subsubsection{Recursive types}\label{subsubsec:recursive-types}
 
 Recursive types are types that mention itself in its definition, and are widely used in datastructures, such as lists and trees.
-Another advantage in nominal typing is how natural and intuitive recursive types are in the type system.
+An advantage in nominal typing is how natural and intuitive recursive types are in the type system.
 Referring to itself in a type definition is as easy as referring to any other type.
 It is however just as easy to do this in structural type systems as well, however for calculi such as type safety proofs, recursive types come for free in nominal type systems, while it is a bit more cumbersome in structurally typed systems, especially with mutually recursive types\cite{tapl}.
 Listings~\vref{lst:ts-recursive-type} and~\vref{lst:java-recursive-type} shows the use of recursive types in TypeScript(structurally typed) and Java(nominally typed), respectively.
 
-\begin{code}{TypeScript}{Usage of a recursive type, BinTree, in TypeScript}{lst:ts-recursive-type}
-    interface BinTree<T> {
+\begin{code}{TypeScript}{Usage of a recursive type, \codeword{Tree}, in TypeScript}{lst:ts-recursive-type}
+    interface Tree<T> {
         getData(): T;
-        getChildren(): [BinTree<T> | null, BinTree<T> | null];
+        getChildren(): Tree<T>[];
     }
 \end{code}
 
-\begin{code}{Java}{Usage of a recursive type, BinTree, in Java}{lst:java-recursive-type}
-    interface BinTree<T> {
+\begin{code}{Java}{Usage of a recursive type, \codeword{Tree}, in Java}{lst:java-recursive-type}
+    interface Tree<T> {
         T getData();
-        Pair<BinTree<T>, BinTree<T>> getChildren();
+        List<Tree<T>> getChildren();
     }
 \end{code}
 
