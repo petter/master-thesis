@@ -84,6 +84,26 @@ For creating scopes I chose the following node types for "making new scopes".
 
 \subsection{Transforming Nodes to References}\label{subsec:transforming-nodes-to-references}
 
+Transforming nodes into references mainly consists of two steps.
+
+\begin{itemize}
+    \item Transform declarations
+    \item Transform references
+\end{itemize}
+
+\subsubsection{Transform declarations}
+
+The task of transforming declarations requires several passes through the AST.
+This is because in order to register som declarations we need to have others registered.
+To understand this we can look at the difference between the first and second pass.
+
+During the first pass through the AST we register and transform all class declarations.
+Now for the second pass we register class heritage.
+The second pass needs to update the \codeword{Class} instances from the first pass with what class they are extending.
+If we try to do this in a single pass we would have to register classes
+
+\subsubsection{Transform references}
+
 \subsection{Performing the rename}\label{subsec:performing-the-rename}
 
 \subsection{Going back to the original AST}\label{subsec:going-back-to-the-original-ast}

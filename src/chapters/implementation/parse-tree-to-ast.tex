@@ -1,10 +1,6 @@
 %! Author = Petter
 %! Date = 2/26/2021
 
-\subsection{What Does the Parse Tree Look Like}\label{subsec:what-does-the-parse-tree-look-like}
-
-The tree-sitter API produces a parse tree.
-
 \subsection{The AST Nodes}\label{subsec:the-ast-nodes}
 
 Tree-sitter is a parser-generator written in Rust.
@@ -40,4 +36,7 @@ This was however not a priority in this thesis.
 
 \subsection{Transforming}\label{subsec:transforming}
 
-Walk DFS
+I chose to do the transforming immutable, and in order to do this we have to traverse the parse tree depth first and create nodes postfix.
+Tree-sitter provides pretty nice functionality for traversing the parse tree through cursors.
+With a tree cursor we are able to go to the parent, siblings, and children easily.
+Using this we visit each node and produce an AST node as described in the section above.
