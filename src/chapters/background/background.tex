@@ -7,6 +7,49 @@
 
 \section{TypeScript}\label{sec:typescript}
 
-\subsection{JavaScript  / ECMAScript}\label{subsec:javascript}
+\subsection{JavaScript}\label{subsec:javascript}
 
-When I talk about JavaScript in this thesis I will be refering to the ECMAScript standard (More precisely ES6(Kanskje ikke så viktig å spesifisere dette?)).
+\red{Kanskje vi også skal nevne hvorfor JavaScript er her? Snakke om verden før JavaScript med usikre Java Applets og Flash?}
+
+Before we look at what TypeScript is we first need to look at JavaScript.
+JavaScript is a programming language that conforms to the ECMAScript specification, and is one of the core technologies of the World Wide Web\cite{jswikipedia}.
+
+A web page generally consists of three layers of technologies.
+The first layer is HTML, which is the markup language that is used to structure the web page.
+Second is CSS which gives our structured documents styling such as background colors and positioning.
+The third and final layer is JavaScript which enables you to create dynamic content for your website.
+Whenever you visit a website that isn't just static information, but instead might have timely content updates, interactive maps, etc, then JavaScript is most likely involved\cite{whatisjs}.
+
+When we create a JavaScript program/script for a web page we don't compile it and transfer a binary for the web page to execute, instead the browser takes the source code and interprets it\footnote{On a more technical level, JavaScript is generally just-in-time compiled in the browser.}.
+Because of this each browser has its own implementation of the JavaScript interpreter.
+Each browsers implementation of JavaScript should conform to the latest ECMAScript specification.
+
+\subsubsection{ECMAScript Versions}
+
+Talk about
+
+\subsubsection{Backwards Compatibility}
+
+With new ECMAScript versions comes new features, and it is up to each browser to implement these changes.
+As we mentioned earlier, we do not transfer a binary to the client browser, we transfer the source code.
+So when a JavaScript script uses a new ECMAScript feature it is not guaranteed to work with every client browser, since a lot of people might have an old browser installed, or the team behind the browser has not implemented the feature yet.
+To deal with this a common practice in JavaScript development is to first transpile your source code before using it in a production environment.
+This transpilation step takes your source code and transpiles it into an older ECMAScript version.
+In doing this you ensure yourself that more client browser will be able to run your script.
+
+Some popular transpilers for JS to JS transpilation are Webpack and Babel, but you could also use the TypeScript compiler.
+
+\subsubsection{Node.js}
+
+Node.js(hereby simply referred to as Node) is a JavaScript runtime built on the JavaScript engine, V8, used by Chrome.
+It enables developers to utilize JavaScript elsewhere than in the browser.
+Node is designed to build network applications
+
+We will be using Node for our compiler.
+
+\subsection{What is TypeScript?}\label{subsec:what-is-typescript}
+
+TypeScript is a superset of JavaScript.
+The language builds on JavaScript with the additions of static type definitions\cite{tswebsite}.
+
+All valid JavaScript programs are also valid TypeScript programs.
