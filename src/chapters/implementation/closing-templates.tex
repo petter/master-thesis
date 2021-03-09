@@ -91,9 +91,9 @@ Transforming nodes into references mainly consists of two steps.
     \item Transform references
 \end{itemize}
 
-\subsubsection{Transform declarations}
+\subsubsection{Transform Declarations}
 
-The task of transforming declarations requires several passes through the AST.
+The task of transforming declarations requires several passes through the AST\@.
 This is because in order to register som declarations we need to have others registered.
 To understand this we can look at the difference between the first and second pass.
 
@@ -102,8 +102,12 @@ Now for the second pass we register class heritage.
 The second pass needs to update the \codeword{Class} instances from the first pass with what class they are extending.
 If we try to do this in a single pass we would have to register classes
 
-\subsubsection{Transform references}
+\subsubsection{Transform References}
 
-\subsection{Performing the rename}\label{subsec:performing-the-rename}
+\subsection{Performing the Rename}\label{subsec:performing-the-rename}
+
+With all declarations and references transformed into reference nodes we can now perform the rename.
+For each class rename we can simply lookup the old class name in the root scope and change the reference to the new class name.
+For class field renames we do the same just for the enclosing classes scope.
 
 \subsection{Going back to the original AST}\label{subsec:going-back-to-the-original-ast}
