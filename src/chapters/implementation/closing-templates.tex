@@ -14,6 +14,7 @@ In order to perform renaming on an instantiation we will have to perform the fol
     \item Find all identifiers, member expressions, class declarations, etc., and replace them with \textit{reference nodes}\footnote{Reference nodes are AST nodes that contain a pointer to the class or field they are supposed to represent. This makes the task of renaming easier as we only have to worry about changing the name in one place. We will go into more detail about this in section~\vref{subsec:transforming-nodes-to-references}.}
     \item Perform the rename.
     \item Transform the scoped AST with reference nodes back to the original AST\@.
+    \item Merge class declarations and apply \codeword{addto} statements.
 \end{enumerate}
 
 If the template body is also open we would have to close it as well.
@@ -111,3 +112,11 @@ For each class rename we can simply lookup the old class name in the root scope 
 For class field renames we do the same just for the enclosing classes scope.
 
 \subsection{Going back to the original AST}\label{subsec:going-back-to-the-original-ast}
+
+reference -> original with new names
+remove scope
+
+\subsection{Merging Class Declarations}\label{subsec:merging-class-declarations}
+
+Check if can be merged, non overlapping members.
+Override and merge addto
