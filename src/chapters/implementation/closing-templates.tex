@@ -11,7 +11,7 @@ Renaming on the other hand requires a bit more work.
 In order to perform renaming on an instantiation we will have to perform the following tasks.
 \begin{enumerate}
     \item Create a scope for the template body, and give all nodes of the body access to this scope
-    \item Find all identifiers, member expressions, class declarations, etc., and replace them with \textit{reference nodes}\footnote{Reference nodes are AST nodes that contain a pointer to the class or field they are supposed to represent. This makes the task of renaming easier as we only have to worry about changing the name in one place. We will go into more detail about this in section~\vref{subsec:transforming-nodes-to-references}.}
+    \item Find all identifiers, member expressions, class declarations, etc., and replace them with \textit{reference nodes}\footnote{Reference nodes are AST nodes that contain a pointer to the class or attribute they are supposed to represent. This makes the task of renaming easier as we only have to worry about changing the name in one place. We will go into more detail about this in section~\vref{subsec:transforming-nodes-to-references}.}
     \item Perform the rename.
     \item Transform the scoped AST with reference nodes back to the original AST\@.
     \item Merge class declarations and apply \codeword{addto} statements.
@@ -49,7 +49,7 @@ In order to get a better understanding of this we will go through each step of c
 \subsection{Scoping}\label{subsec:inst-scoping}
 
 This step of closing templates works on the body of a copy of the instantiated template.
-In order to be able to rename classes and class fields we first need to create correct scopes in which the renaming can be applied to.
+In order to be able to rename classes and class attributes we first need to create correct scopes in which the renaming can be applied to.
 We start of with a list of normal AST nodes and will transform these nodes into nodes that has a reference to the scope they are part of.
 
 Scopes in the compiler mainly consists of three different classes.
@@ -57,12 +57,12 @@ The \codeword{Scope}, \codeword{Variable}, and \codeword{Class} classes.
 
 The \codeword{Scope} class is essentially a symbol table that optionally extends a parent scope.
 A scope without a reference to a parent scope is the root scope.
-The symbol table is implemented as a map from the original field or class name, to a reference to either \codeword{Variable} or \codeword{Class} instance.
+The symbol table is implemented as a map from the original attribute or class name, to a reference to either \codeword{Variable} or \codeword{Class} instance.
 Looking up symbols in the symbol table will always start in the called scope, and work its way upwards until we reach the root scope.
 This allows us to correctly handle shadowed variables.
 
-The \codeword{Variable} class is a representation for class fields.
-The class contains the name of the field.
+The \codeword{Variable} class is a representation for class attributes.
+The class contains the name of the attribute.
 
 
 For creating scopes I chose the following node types for "making new scopes".
@@ -109,7 +109,7 @@ If we try to do this in a single pass we would have to register classes
 
 With all declarations and references transformed into reference nodes we can now perform the rename.
 For each class rename we can simply lookup the old class name in the root scope and change the reference to the new class name.
-For class field renames we do the same just for the enclosing classes scope.
+For class attribute renames we do the same just for the enclosing classes scope.
 
 \subsection{Going back to the original AST}\label{subsec:going-back-to-the-original-ast}
 

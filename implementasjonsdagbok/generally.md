@@ -1,6 +1,6 @@
 # Generally PTS
 
-## Class fields
+## Class attributes
 
 For å holde språket og implementasjon vil jeg ikke tillate annet en "identifiers" som gyldige class fields.
 Tillater ikke computed_propery_names, da vi ikke kan evaluere navnet ved kompileringstid, og vi kan derfor ikke rename de.

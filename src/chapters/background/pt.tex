@@ -42,7 +42,7 @@ The contents of a package can be used as you would with a normal Java package.
 \subsubsection{Instantiating templates}\label{subsubsec:inst}
 Instantiating is what really makes PT useful.
 When defining packages and templates, PT allows for including already defined templates through instantiating.
-Instantiation is done inside the body of a package (or a template) with the use of a \codeword{inst}-clause.
+Instantiation is done inside the body of a package (or a template) with the use of an \codeword{inst}-clause.
 Instantiating a template will make "textual copies" of the  classes, interfaces and enums from the instantiated template and insert them replacing the instantiation statement at compile time.
 Note that the template itself still exists and that it can be instantiated again in the same program.
 Listing~\vref{code:inst} shows an example of instantiating a template inside a package.
@@ -75,11 +75,11 @@ package P {
 
 \subsubsection{Renaming}\label{subsubsec:renaming}
 
-During instantiation it is possible to rename classes (as well as interfaces and enums) and class fields.
+During instantiation it is possible to rename classes (as well as interfaces and enums) and class attributes.
 Renaming is a part of the instantiation of templates, and will only affect the copy made for this instantiation, and it is done for the copy before it replaces the \codeword{inst}-statement.
 Renaming is denoted by an optional \codeword{with}-clause at the end of the \codeword{inst}-statement.
-In the \codeword{with}-clause one can rename classes using the following fat arrow syntax, \codeword{A => B}, where class \codeword{A} is renamed to \codeword{B}, and you can rename class fields with a similar arrow syntax, \codeword{i -> j}, where the field \codeword{i} is renamed to \codeword{j}.
-For method renaming you have to give the signature of the method so that it is possible to distinguish between overloaded versions, i.e. \codeword{m1(int) -> m2(int)}\footnote{On a more technical level the compiler will find the class or field declaration that is gonna be renamed, and then find all name occurrences bound to this declaration and rename these.}.
+In the \codeword{with}-clause one can rename classes using the following fat arrow syntax, \codeword{A => B}, where class \codeword{A} is renamed to \codeword{B}, and you can rename class attributes with a similar arrow syntax, \codeword{i -> j}, where the attribute \codeword{i} is renamed to \codeword{j}.
+For method renaming you have to give the signature of the method so that it is possible to distinguish between overloaded versions, i.e. \codeword{m1(int) -> m2(int)}\footnote{On a more technical level the compiler will find the class or attribute declaration that is gonna be renamed, and then find all name occurrences bound to this declaration and rename these.}.
 
 Field renaming comes after the class renaming enclosed by a set of parentheses.
 Renaming classes will also affect the signatures of any methods using this class.
@@ -144,13 +144,13 @@ package P {
 
 \subsubsection{Additions to a template}\label{subsubsec:additions}
 
-When instantiating a template you can also add fields to the classes of the template, as well as extending the classes implemented interfaces and this will only apply to the current copy.
+When instantiating a template you can also add attributes to the classes of the template, as well as extending the classes implemented interfaces and this will only apply to the current copy.
 These additions are written inside an \codeword{addto}-clause.
-Extending the class with additional fields is done in the body of the clause, like you would in a normal Java class.
+Extending the class with additional attributes is done in the body of the clause, like you would in a normal Java class.
 If an addition has the same signature as an already existing method from the instantiated template class, then the addition will override the existing method, similarly to traditional inheritance.
 Extending the list of implemented interfaces for a class can be done by suffixing the \codeword{addto}-clause with \codeword{implements} and the list of interfaces.
 \red{Snakk om hvorfor dette er veldig viktig/nyttig.}
-Listing~\vref{code:addition} shows an example of adding fields and implemented interfaces to an instantiated class.
+Listing~\vref{code:addition} shows an example of adding attributes and implemented interfaces to an instantiated class.
 The resulting class \codeword{A} in package \codeword{P} would have the field \codeword{i}, methods \codeword{someMethod}, \codeword{someOtherMethod} and \codeword{run}, as well as implementing the interface \codeword{Runnable}.
 
 The extension of classes using the \codeword{addto}-clause is done independently for each class, ignoring any inheritance-patterns.
@@ -158,7 +158,7 @@ If there is a class \codeword{A} with a subclass \codeword{B}, they can both get
 Any extensions made to class \codeword{A} would of course still be inherited to class \codeword{B}, as with normal Java inheritance.
 
 
-\begin{code}{java}{Adding new field and extending the implemented interface for the instantiated class A in package P}{code:addition}
+\begin{code}{java}{Adding new attribute and extending the implemented interface for the instantiated class A in package P}{code:addition}
 template T {
     class A {
         void someMethod() { ... }
@@ -182,7 +182,7 @@ If two or more classes in the same or in different instantiations share the same
 Through this mechanism PT achieves a form of static multiple inheritance.
 If two classes don't share the same name, it is still possible to force a merge through renaming them to the same name.
 In listing~\vref{code:renameclassmerging} we see an example of renaming class \codeword{B} to \codeword{A} in order to merge them under the class name \codeword{A}.
-Merging the classes would simply lead to having a single class \codeword{A} with the fields from both classes.
+Merging the classes would simply lead to having a single class \codeword{A} with the attributes from both classes.
 The two classes \codeword{A} and \codeword{B}, from templates \codeword{T1} and \codeword{T2} respectively, no longer exists in package \codeword{P}, but have formed the new class \codeword{A}, which is a union of both.
 Any pointers typed with the old \codeword{A} or \codeword{B} will now be pointing to the new merged class \codeword{A}.
 

@@ -12,7 +12,7 @@ For the implementation of PT we need syntax for the following:
     \item Instantiating templates (\codeword{inst} in PTj)
     \item Specifying renaming for an instantiation (\codeword{with} in PTj)
     \item Renaming classes (\codeword{=>} in PTj)
-    \item Renaming class fields (\codeword{->} in PTj)
+    \item Renaming class attributes (\codeword{->} in PTj)
     \item Additions to classes (\codeword{addto} in PTj)
 \end{itemize}
 
@@ -24,11 +24,11 @@ It could also be beneficial to not share the keyword in order to avoid creating 
 \codeword{module} is also a keyword that could be used to describe a PT package, however this is already used in the ES standard, and should therefore also be avoided in order to avoid confusion.
 We will therefore use \codeword{pack} instead.
 
-Renaming in PTj uses \codeword{=>}(fat-arrow) for renaming classes, and \codeword{->}(thin-arrow) for renaming class fields.
+Renaming in PTj uses \codeword{=>}(fat-arrow) for renaming classes, and \codeword{->}(thin-arrow) for renaming class attributes.
 PTj, for historical purposes, used two different operators for renaming classes and methods, however in more recent PT implementations, such as~\cite{Isene2018}, a single common operator is used for both.
 We will do as the latter, and only use a single common operator for renaming.
 Another reason for rethinking the renaming syntax is the fact that the \codeword{=>}(fat-arrow) operator is already in use in arrow functions~\cite{arrowfunction}, and reusing it for renaming could potentially produce an ambiguous grammar, or the very least be confusing to the programmer.
-JavaScript currently supports renaming of destructured fields using the \codeword{:}(colon) operator and aliasing imports using the keyword \codeword{as}.
+JavaScript currently supports renaming of destructured attributes using the \codeword{:}(colon) operator and aliasing imports using the keyword \codeword{as}.
 We could opt to choose one of these for renaming in PTS as well, however in order to keep the concepts separated, as well as making the syntax more familiar for Package Template users, we will go for the \codeword{->}(thin-arrow) operator.
 
 The \codeword{with} keyword is currently in use in JavaScript for \codeword{with}-statements~\cite{with-statement}.
@@ -77,11 +77,11 @@ The productions for non-terminals $\bnfpn{id}$, $\bnfpn{class declaration}$, $\b
         \bnfprod{class renamings}
         { \bnfpn{class rename} \bnfor \bnfpn{class rename} \bnfts{,} \bnfsp \bnfpn{class renamings} }\\
         \bnfprod{class rename}
-        { \bnfpn{rename} \bnfsp \bnfpn{field rename block} }\\
-        \bnfprod{field rename block}
-        { \bnfts{(} \bnfsp \bnfpn{field renamings} \bnfsp \bnfts{)} \bnfor \bnfes }\\
-        \bnfprod{field renamings}
-        { \bnfpn{rename} \bnfor \bnfpn{rename} \bnfts{,} \bnfsp \bnfpn{field renamings} }\\
+        { \bnfpn{rename} \bnfsp \bnfpn{attribute rename block} }\\
+        \bnfprod{attribute rename block}
+        { \bnfts{(} \bnfsp \bnfpn{attribute renamings} \bnfsp \bnfts{)} \bnfor \bnfes }\\
+        \bnfprod{attribute renamings}
+        { \bnfpn{rename} \bnfor \bnfpn{rename} \bnfts{,} \bnfsp \bnfpn{attribute renamings} }\\
         \bnfprod{rename}
         { \bnfpn{id} \bnfsp \bnfts{->} \bnfsp \bnfpn{id} }\\
         \bnfprod{addto statement}
