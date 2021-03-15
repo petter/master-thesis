@@ -17,13 +17,13 @@ This is not as essential as the requirement above, as we can get around using th
 
 \subsubsection{ANTLR4}\label{subsubsec:antlr}
 
-ANTLR, ANother Tool for Language Recognition, is a very powerful and versatile tool, used by many, such as Twitter for query parsing in their search engine\cite{Terence2012}.
+ANTLR, ANother Tool for Language Recognition, is a very powerful and versatile tool, used by many, such as Twitter for query parsing in their search engine~\cite{Terence2012}.
 
 ANTLR supports extending grammars, or more specifically importing them.
 Importing a grammar works much like a "smart include".
 It will include all rules that are not already defined in the grammar.
 Through this you can extend a grammar with new rules or replacing them.
-It does not however support extending rules, as in referencing the imported rule while overriding\cite{Terence2012}.
+It does not however support extending rules, as in referencing the imported rule while overriding~\cite{Terence2012}.
 This isn't a major issue however as you could easily rewrite the rule with the additions.
 
 The only supported runtime library in ANTLR is in Java.
@@ -34,7 +34,7 @@ Overall ANTLR seems like a good option for our project, but the lack of a runtim
 \subsubsection{Bison}\label{subsubsec:bison}
 
 Bison is a general-purpose parser generator.
-It is one of many successors to Yacc, and is upwards compatible with Yacc\cite{bison}.
+It is one of many successors to Yacc, and is upwards compatible with Yacc~\cite{bison}.
 
 Bison does not support extending grammars.
 The tool works on a single grammar file and produces a C/C++ program.
@@ -48,7 +48,7 @@ There does exist some ports/clones of Bison for JavaScript, such as \href{http:/
 \subsubsection{Tree-sitter}\label{subsubsec:tree-sitter}
 
 \href{https://tree-sitter.github.io/tree-sitter/}{Tree-sitter} is a fairly new parser generator tool, compared to the others in this list.
-It aims to be general, fast, robust and dependency-free\cite{tree-sitter}.
+It aims to be general, fast, robust and dependency-free~\cite{tree-sitter}.
 The tool has been garnering a lot of traction the last couple of years, and is being used by Github, VS Code and Atom to name a few.
 It has mainly been used in language servers and syntax highlighting, however it should still work fine for our compiler since it does produce a parse tree.
 

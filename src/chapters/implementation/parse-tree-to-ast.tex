@@ -4,10 +4,10 @@
 \subsection{The AST Nodes}\label{subsec:the-ast-nodes}
 
 Tree-sitter is a parser-generator written in Rust.
-Fortunately for us we can still use tree-sitter in Node, due to Node supporting native addons\footnote{Node native addons are dynamically-linked shared objects written in C++\cite{nodenativeaddons}.}.
+Fortunately for us we can still use tree-sitter in Node, due to Node supporting native addons\footnote{Node native addons are dynamically-linked shared objects written in C++~\cite{nodenativeaddons}.}.
 Native addons in Node are fairly new, and at the time of writing the tree-sitter Node bindings are still using the older unstable \hyperref[https://github.com/nodejs/nan]{NAN} instead of the newer and more stable \hyperref[https://nodejs.org/api/n-api.html]{napi}.
 For the most part it does work, however I did meet some difficulties with the produced parse tree, more specifically the spread operator was not behaving properly on the native produced objects.
-To get around this we will be walking through the parse tree and produce an AST.
+To get around this we will be walking through the parse tree and produce an AST\@.
 What this means in practice is that we are going to be ignoring some parsing specific properties.
 One of the changes we are going to make is that we are going to ignore if a node is named or unnamed, we will be keeping all nodes.
 This will help us later in code generation.
@@ -24,7 +24,7 @@ The node type is a string representing the rule which produced the node.
 An AST node with a node type value of \codeword{"class\_declaration"} for instance is a class declaration node.
 
 The text field of an AST node contains the textual representation/code for the node and its children.
-A class declaration node for instance would of course contain the class declaration("\codeword{class A extend B \{}"), but also the entire body of the class.
+A class declaration node for instance would of course contain the class declaration ("\codeword{class A extend B \{}"), but also the entire body of the class.
 This text field is really only useful for leaf nodes, as this would for instance contain the value of a number, string, etc.
 
 Finally, the children field is, as the name would suggest, a list of all the children of the node.

@@ -27,14 +27,14 @@ We will therefore use \codeword{pack} instead.
 Renaming in PTj uses \codeword{=>}(fat-arrow) for renaming classes, and \codeword{->}(thin-arrow) for renaming class fields.
 PTj, for historical purposes, used two different operators for renaming classes and methods, however in more recent PT implementations, such as~\cite{Isene2018}, a single common operator is used for both.
 We will do as the latter, and only use a single common operator for renaming.
-Another reason for rethinking the renaming syntax is the fact that the \codeword{=>}(fat-arrow) operator is already in use in arrow functions\cite{arrowfunction}, and reusing it for renaming could potentially produce an ambiguous grammar, or the very least be confusing to the programmer.
+Another reason for rethinking the renaming syntax is the fact that the \codeword{=>}(fat-arrow) operator is already in use in arrow functions~\cite{arrowfunction}, and reusing it for renaming could potentially produce an ambiguous grammar, or the very least be confusing to the programmer.
 JavaScript currently supports renaming of destructured fields using the \codeword{:}(colon) operator and aliasing imports using the keyword \codeword{as}.
 We could opt to choose one of these for renaming in PTS as well, however in order to keep the concepts separated, as well as making the syntax more familiar for Package Template users, we will go for the \codeword{->}(thin-arrow) operator.
 
-The \codeword{with} keyword is currently in use in JavaScript for \codeword{with}-statements\cite{with-statement}.
+The \codeword{with} keyword is currently in use in JavaScript for \codeword{with}-statements~\cite{with-statement}.
 With it being a statement, we could still use it and not end up with an ambiguous grammar, however as with previous keywords, we will avoid using it in order to minimize concept confusion.
-Instead of this we will contain our instantiation renamings inside a block-scope(\codeword{\{ \}}).
-Field renamings for a class will remain the same as in PTj, being enclosed in parentheses(\codeword{( )}).
+Instead of this we will contain our instantiation renamings inside a block-scope (\codeword{\{ \}}).
+Field renamings for a class will remain the same as in PTj, being enclosed in parentheses (\codeword{( )}).
 
 Another change we will make to renaming is to remove the requirement of having to specify the signature of the method being renamed.
 This was necessary in PTj as Java supports overloading, which means that several methods could have the same name, or a method and a field.
@@ -45,10 +45,10 @@ Method overloading is not supported in JavaScript/TypeScript, and we do therefor
 Now that we have made our choices for keywords and operators we can look at the grammar of the language.
 
 PTS is an extension of TypeScript, and the grammar is therefore also an extension of the TypeScript grammar.
-There is no published official TypeScript grammar (other than interpreting it from the implementation of the TypeScript compiler), however up until recently there used to be a TypeScript specification\cite{tsspec}.
+There is no published official TypeScript grammar (other than interpreting it from the implementation of the TypeScript compiler), however up until recently there used to be a TypeScript specification~\cite{tsspec}.
 This TypeScript specification was deprecated as it proved a to great a task to keep updated with the ever-changing nature of the language.
 However, most of the essential parts are still the same.
-The PTS grammar is therefore based on the TypeScript specification, and on the ESTree Specification\cite{estreespec}.
+The PTS grammar is therefore based on the TypeScript specification, and on the ESTree Specification~\cite{estreespec}.
 
 In figure~\vref{fig:pts-grammar} we can see the PTS BNF grammar.
 This is not the full grammar for PTS, as I have only included any additions or changes to the original TypeScript/JavaScript grammars.

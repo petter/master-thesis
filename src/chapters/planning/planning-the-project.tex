@@ -55,14 +55,14 @@ More work than ex plugin / transformer.
 \subsection{TypeScript Compiler Plugin / Transform}\label{subsec:typescript-compiler-plugin}
 
 At the time of writing the official TypeScript compiler does not support compile time plugins.
-The plugins for the TypeScript compiler is, as the TypeScript compiler wiki specifies, "for changing the editing experience only"\cite{tscplugin}.
+The plugins for the TypeScript compiler is, as the TypeScript compiler wiki specifies, "for changing the editing experience only"~\cite{tscplugin}.
 However, there are alternatives that do enable compile time plugins / transformers;
 
 \begin{itemize}
-    \item ts-loader\cite{tsloadergithub}, for the webpack ecosystem
-    \item Awesome Typescript Loader\cite{awesometypescriptloadergithub}, for the webpack ecosystem. Deprecated
-    \item ts-node\cite{tsnodegithub}, REPL / runtime
-    \item ttypescript\cite{ttypescriptgithub}, TypeScript tool TODO: Les mer på dette
+    \item ts-loader~\cite{tsloadergithub}, for the webpack ecosystem
+    \item Awesome Typescript Loader~\cite{awesometypescriptloadergithub}, for the webpack ecosystem. Deprecated
+    \item ts-node~\cite{tsnodegithub}, REPL / runtime
+    \item ttypescript~\cite{ttypescriptgithub}, TypeScript tool TODO: Les mer på dette
 \end{itemize}
 
 Unfortunately ts-loader, Awesome Typescript Loader and ts-node does not support adding custom syntax, as it only transforms the AST produced by the TypeScript compiler.
