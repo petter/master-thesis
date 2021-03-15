@@ -41,9 +41,9 @@ Because of this lack of control over the runtime environment it is crucial that 
 With new ECMAScript versions comes new features, and it is up to each browser to implement these changes.
 As we mentioned earlier, we do not transfer a binary to the client browser, we transfer the source code.
 So when a JavaScript script uses a new ECMAScript feature it is not guaranteed to work with every client browser, since a lot of users might have older browsers installed, or the team behind the browser has not implemented the language feature yet.
-To deal with this a common practice in JavaScript development is to first transpile your source code before using it in a production environment.
-This transpilation step takes your source code and transpiles it into an older ECMAScript version.
-In doing this you ensure yourself that more client browser will be able to run your script.
+To deal with this a common practice in JavaScript development is to first transpile the source code before using it in a production environment.
+This transpilation step takes the source code and transpiles it into an older ECMAScript version.
+In doing this you ensure that more client browser will be able to run the script.
 This will rewrite the new language features, and often replace them with a function, called a \textit{polyfill}.
 You can think of a polyfill as an implementation of a new language feature.
 
@@ -51,7 +51,7 @@ Some popular transpilers for JS to JS transpilation are Webpack and Babel, but y
 
 \subsubsection{Node.js}
 
-Node.js (hereby simply referred to as Node) is a JavaScript runtime built on the JavaScript engine, V8, used by Chrome.
+Node.js (henceforth simply referred to as Node) is a JavaScript runtime built on the JavaScript engine, V8, used by Chrome.
 While most JavaScript runtimes live in the browser, Node doesn't.
 It is independent of the browser and can be run through a CLI.
 One major difference from the browser runtimes is that Node also supplies some libraries for IO, such as access to the file system, HTTP, and WebSocket.

@@ -84,7 +84,7 @@ For method renaming you have to give the signature of the method so that it is p
 Field renaming comes after the class renaming enclosed by a set of parentheses.
 Renaming classes will also affect the signatures of any methods using this class.
 Listing~\vref{code:rename} shows an often used example of renaming, where a graph template is renamed to better fit a domain, in this case a road map.
-When renaming the class \codeword{Node} the signature of the methods in \codeword{Edge} using this \codeword{Node} was also changed to reflect this, i.e.\ the method \codeword{Node getNodeFrom()} would become \codeword{City getNodeFrom()} with the class rename, and \codeword{City getCityFrom()} with the method renaming.
+When renaming the class \codeword{Node} the signature of the methods in \codeword{Edge} using this \codeword{Node} was also changed to reflect this, i.e.\ the method \codeword{Node getStartingNode()} would become \codeword{City getStartingNode()} with the class rename, and \codeword{City getStartingCity()} with the method renaming.
 
 \begin{code}{java}{Example of renaming classes during instantiation. This could be used to make the classes fit the domain of the project better.}{code:rename}
 template Graph {
@@ -93,8 +93,8 @@ template Graph {
     }
 
     class Edge {
-        Node getNodeFrom() { ... }
-        Node getNodeTo() { ... }
+        Node getStartingNode() { ... }
+        Node getDestinationNode() { ... }
     }
 
     class Graph {
@@ -107,8 +107,8 @@ package RoadMap {
     inst Graph with
         Node => City,
         Edge => Road
-            (getNodeFrom() -> getStartingCity(),
-            getNodeTo() -> getDestinationCity()),
+            (getStartingNode() -> getStartingCity(),
+            getDestinationNode() -> getDestinationCity()),
         Graph => RoadSystem;
     ...
 }
@@ -182,7 +182,7 @@ If two or more classes in the same or in different instantiations share the same
 Through this mechanism PT achieves a form of static multiple inheritance.
 If two classes don't share the same name, it is still possible to force a merge through renaming them to the same name.
 In listing~\vref{code:renameclassmerging} we see an example of renaming class \codeword{B} to \codeword{A} in order to merge them under the class name \codeword{A}.
-Merging the classes would simply lead to having a single class \codeword{A} with the attributes from both classes.
+Merging the classes would lead to having a single class \codeword{A} with the attributes from both classes.
 The two classes \codeword{A} and \codeword{B}, from templates \codeword{T1} and \codeword{T2} respectively, no longer exists in package \codeword{P}, but have formed the new class \codeword{A}, which is a union of both.
 Any pointers typed with the old \codeword{A} or \codeword{B} will now be pointing to the new merged class \codeword{A}.
 
