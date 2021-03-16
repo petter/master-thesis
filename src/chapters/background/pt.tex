@@ -202,7 +202,9 @@ You can also achieve the same functionality through class merging, which we will
     }
 \end{code}
 
+% TODO: Uklart hva dette betyr
 The extension of classes using the \codeword{addto}-clause is done independently for each class, ignoring any inheritance-patterns.
+What this means is that any additions made to a superclass will also be reflected in its subclasses, we do not have to worry about how the class is being used.
 If there is a class \codeword{A} with a subclass \codeword{B}, they can both get extensions independently of each other.
 Any extensions made to class \codeword{A} would of course still be inherited to class \codeword{B}, as with normal Java inheritance.
 
