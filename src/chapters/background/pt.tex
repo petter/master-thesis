@@ -75,16 +75,17 @@ package P {
 
 \subsubsection{Renaming}\label{subsubsec:renaming}
 
-During instantiation it is possible to rename classes (as well as interfaces and enums) and class attributes.
+During instantiation it is possible to rename classes (as well as interfaces and enums) and class attributes, both fields and methods.
 Renaming is a part of the instantiation of templates, and will only affect the copy made for this instantiation, and it is done for the copy before it replaces the \codeword{inst}-statement.
 Renaming is denoted by an optional \codeword{with}-clause at the end of the \codeword{inst}-statement.
-In the \codeword{with}-clause one can rename classes using the following fat arrow syntax, \codeword{A => B}, where class \codeword{A} is renamed to \codeword{B}, and you can rename class attributes with a similar arrow syntax, \codeword{i -> j}, where the attribute \codeword{i} is renamed to \codeword{j}.
-For method renaming you have to give the signature of the method so that it is possible to distinguish between overloaded versions, i.e. \codeword{m1(int) -> m2(int)}\footnote{On a more technical level the compiler will find the class or attribute declaration that is gonna be renamed, and then find all name occurrences bound to this declaration and rename these.}.
+In the \codeword{with}-clause one can rename classes using the following fat arrow syntax, \codeword{A => B}, where class \codeword{A} is renamed to \codeword{B}, and rename class attributes with a similar arrow syntax, \codeword{i -> j}, where the attribute \codeword{i} is renamed to \codeword{j}.
+For method renaming you have to give the signature of the method so that it is possible to distinguish between overloaded versions, i.e. \codeword{m1(int) -> m2(int)}.
+On a more technical level the compiler will find the class or attribute declaration that is going to be renamed, and then find all name occurrences bound to this declaration and rename these.
 
 Field renaming comes after the class renaming enclosed by a set of parentheses.
 Renaming classes will also affect the signatures of any methods using this class.
 Listing~\vref{code:rename} shows an often used example of renaming, where a graph template is renamed to better fit a domain, in this case a road map.
-When renaming the class \codeword{Node} the signature of the methods in \codeword{Edge} using this \codeword{Node} was also changed to reflect this, i.e.\ the method \codeword{Node getStartingNode()} would become \codeword{City getStartingNode()} with the class rename, and \codeword{City getStartingCity()} with the method renaming.
+When renaming the class \codeword{Node} the signature of the methods in \codeword{Edge} using this \codeword{Node} was also changed to reflect this, i.e.\ the method \codeword{Node getNodeFrom()} would become \codeword{City getNodeFrom()} with the class rename, and \codeword{City getStartingCity()} with the method renaming.
 
 \begin{code}{java}{Example of renaming classes during instantiation. This could be used to make the classes fit the domain of the project better.}{code:rename}
 template Graph {
@@ -93,8 +94,8 @@ template Graph {
     }
 
     class Edge {
-        Node getStartingNode() { ... }
-        Node getDestinationNode() { ... }
+        Node getNodeFrom() { ... }
+        Node getNodeTo() { ... }
     }
 
     class Graph {
@@ -107,8 +108,8 @@ package RoadMap {
     inst Graph with
         Node => City,
         Edge => Road
-            (getStartingNode() -> getStartingCity(),
-            getDestinationNode() -> getDestinationCity()),
+            (getNodeFrom() -> getStartingCity(),
+            getNodeTo() -> getDestinationCity()),
         Graph => RoadSystem;
     ...
 }
@@ -148,32 +149,62 @@ When instantiating a template you can also add attributes to the classes of the 
 These additions are written inside an \codeword{addto}-clause.
 Extending the class with additional attributes is done in the body of the clause, like you would in a normal Java class.
 If an addition has the same signature as an already existing method from the instantiated template class, then the addition will override the existing method, similarly to traditional inheritance.
-Extending the list of implemented interfaces for a class can be done by suffixing the \codeword{addto}-clause with \codeword{implements} and the list of interfaces.
-\red{Snakk om hvorfor dette er veldig viktig/nyttig.}
-Listing~\vref{code:addition} shows an example of adding attributes and implemented interfaces to an instantiated class.
-The resulting class \codeword{A} in package \codeword{P} would have the field \codeword{i}, methods \codeword{someMethod}, \codeword{someOtherMethod} and \codeword{run}, as well as implementing the interface \codeword{Runnable}.
+Listing~\vref{lst:simple-addto} shows an example of adding attributes an instantiated class.
+The resulting class \codeword{A} in package \codeword{P} would have the field \codeword{i} and the methods \codeword{someMethod} and \codeword{someOtherMethod}.
+
+\begin{code}{java}{Adding new attributes to the instantiated class A in package P}{lst:simple-addto}
+    template T {
+        class A {
+            void someMethod() { ... }
+        }
+    }
+
+    package P {
+        inst T;
+        addto A {
+            int i;
+            void someOtherMethod() { ... }
+        }
+    }
+\end{code}
+
+It is also possible to extend the list of implemented interfaces of a class by suffixing the \codeword{addto}-clause with a \codeword{implements}-clause containing the list of implementing interfaces.
+Having the possibility to add implementing interfaces to classes makes working with PT easier and enables the programmer to re-use template classes to a much larger degree.
+This feature's use is easier explained through an example.
+Say we have implemented some class that will deal with logging.
+This class can log the state of a class given the class implements some interface \codeword{Loggable}.
+If want to be able to log the state of our Graph implementation, from~\vref{code:rename}, then the Graph class would need to implement the \codeword{Loggable} interface.
+We can't do this at the declaration of the Graph template, as we do not have access to the interface at the time of declaration.
+By using \codeword{addto} however we are able to add the \codeword{Loggable} interface and the \codeword{log} method to the Graph class.
+You can also achieve the same functionality through class merging, which we will look at in section~\vref{subsubsec:merging-classes}.
+
+\begin{code}{java}{Adding the \codeword{Loggable} interface to the Graph class from listing~\vref{code:rename}, making it compatible with our logger implementation.}{lst:addto-interface}
+    template Logger {
+        interface Loggable {
+            String log();
+        }
+
+        class Logger {
+            void log(Loggable loggable) {
+                ...
+            }
+        }
+    }
+
+    package P {
+        inst Graph;
+        inst Logger;
+        addto Graph implements Loggable {
+            String log() {
+                ...
+            }
+        }
+    }
+\end{code}
 
 The extension of classes using the \codeword{addto}-clause is done independently for each class, ignoring any inheritance-patterns.
 If there is a class \codeword{A} with a subclass \codeword{B}, they can both get extensions independently of each other.
 Any extensions made to class \codeword{A} would of course still be inherited to class \codeword{B}, as with normal Java inheritance.
-
-
-\begin{code}{java}{Adding new attribute and extending the implemented interface for the instantiated class A in package P}{code:addition}
-template T {
-    class A {
-        void someMethod() { ... }
-    }
-}
-
-package P {
-    inst T;
-    addto A implements Runnable {
-        int i;
-        void someOtherMethod() { ... }
-        void run() { ... }
-    }
-}
-\end{code}
 
 
 \subsubsection{Merging classes}\label{subsubsec:merging-classes}
