@@ -24,6 +24,41 @@ As described in~\cite{jot}
 % - - In the graph example, assume that we have added the int variable length to Edge, and  that  n  is  a  Node-reference.
 % With  this  property  we  can  conveniently  specify  directly: “n.firstEdge().length = 5;”, as firstEdge is typed with the extended Edge class.
 
+The parallel extension requirement is about making additions to classes in a package/template, and being able to make use of them in the same collection.
+What this means is that if we are making additions to a class, then we should be able to reference these additions in a declaration or in an addition to a separate class withing the same package/template, without needing to cast it.
+We can see an example of this in listing~\vref{lst:parallel-extension}, where an addition to class \codeword{B} is referencing the added method of class \codeword{A}.
+The order of additions does not affect the parallel extension.
+We could just as easily switched the positions of the additions around in this example.
+
+\begin{code}{Java}{Example of parallel extension in PTj}{lst:parallel-extension}
+    template T {
+        class A {
+            ...
+        }
+
+        class B {
+            ...
+        }
+    }
+
+    package P {
+        inst T;
+
+        addto A {
+            void someMethod() {
+                ...
+            }
+        }
+
+        addto B {
+            void someOtherMethod() {
+                A a = new A();
+                a.someMethod();
+            }
+        }
+    }
+\end{code}
+
 \subsection{Hierarchy Preservation}\label{subsec:hierachy-preservation}
 % - \textbf{Hierarchy  preservation:}  The  mechanism  should  allow  B  to  be  a  subclass  of  A,  and  if  additional  attributes  are  given  to  A  and  to  B,  then  the  B  with  additions  should be a subclass of the A with additions.
 % Note that this will not be the case if we just use the collection C with the classes A and B and then define subclasses A’  and  B’  to  A  and  B,  respectively,  with  the  additions  we  want  in  these  subclasses.
