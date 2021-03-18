@@ -26,3 +26,5 @@ This will also be a case study on PTj and if it can improve on existing real wor
 ## TODOS
 - [ ] Undersøke mulighetene for å legge til frie funksjoner (funksjoner som ikke tilhører noen klasse) i templater, mtp renaming osv. Hvis ikke skriv om at det ikke blir tatt hensyn til.
 - [ ] Skrive konklusjon i planning
+- [ ] Skriv om open/closed templates i background, slik at det ikke kommer så brått på i implementasjon
+- [ ] Omskriv "Closing Templates" til å være litt mer forståelig.
