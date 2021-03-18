@@ -1,9 +1,11 @@
 % TODO: Kanskje bedre å ha denne inn i background til PT?
 \section{The Requirements of PT}\label{sec:the-requirements-of-pt}
 
-What are the requirements of PT?
+In~\cite{jot} the authors discuss requirements of a desired language mechanism for re-use and adaptation through collections of classes.
+They then present a proposal for Package Templates, which to a large extent fulfills all the desired requirements.
+In order for us to be satisfied to call our implementation of the language mechanism Package Templates, we will also have to meet these requirements.
 
-As described in~\cite{jot}
+The requirements presented in the paper were the following:
 
 \begin{multicols}{2}
     \begin{itemize}
@@ -16,6 +18,8 @@ As described in~\cite{jot}
         \item Collection-level type-checking
     \end{itemize}
 \end{multicols}
+
+In order to get a better understanding of what these requirements entail we will have to dive a bit deeper into each requirement.
 
 \subsection{Parallel Extension}\label{subsec:parallel-extension}
 % - \textbf{Parallel  extension:}  When  using  the  collection  C  in  a  certain  setting  we  can  add  attributes  to  A  and  B.
