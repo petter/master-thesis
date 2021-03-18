@@ -1,7 +1,31 @@
 %! Author = Petter
 %! Date = 9/22/2020
 
-\chapter{Planning the project}\label{ch:planning-the-project}
+\chapter{Planning the Project}\label{ch:planning-the-project}
+
+Before we start the implementation of our language we first need to do some planning.
+We know we are going to be creating a programming language, a superset of TypeScript with the addition of Package Templates.
+However, we might want to look at if creating a superset of TypeScript is the way to go, or if keeping it simple and extending JavaScript is a better call.
+There are a lot of approaches we can take for implementing our language, so we will have map out the requirements for our approach.
+Lastly we will have to look at all the different approaches we can take, and discuss the pros and cons of each approach.
+
+This planning phase is crucial for the success of the project, as starting of on the wrong approach for the wrong language would set us back immensely.
+
+\section{TypeScript vs. JavaScript}\label{sec:typescript-vs-javascript}
+
+When extending TypeScript you might be asking yourself if it is truly necessary, is it better to keep it simple and just extend JavaScript instead?
+This is something we need to find out before going any further with the planning of our project.
+
+\subsection{Typechecking templates}\label{subsec:why-typescript-verifying-templates}
+
+One of the requirements of PT is that it should be possible to type-check each template separately.
+There is no easy way to type-check JavaScript code without executing it and looking for runtime errors.
+Even if some JavaScript program successfully executes without throwing any errors, we can still not conclude that the program does not contain any type errors.
+TypeScript on the other hand, with the language being statically typed, we can, at least to a much larger extent, verify if some piece of code is type secure.
+Because of this trait TypeScript is the better candidate for our language.
+
+Now it should be noted that due to TypeScripts type system being unsound one could argue that this requirement of PT is not met.
+While this is true it still outperforms JavaScript on this remark, and we will later in section~\vref{sec:pt-requirements-verifying-templates} discuss more in-depth to what extent this requirement is met.
 
 \section{What Do We Need?}\label{sec:what-do-we-need}
 
@@ -17,21 +41,10 @@ In addition to these we would also like to look for some other desirable traits 
 
 \begin{itemize}
     \item Loosely coupled implementation (So that new versions of typescript not necessarily breaks our implementation).
-    \item Mer?
+    \item Mer? % TODO
 \end{itemize}
 
 
-\section{TypeScript vs JavaScript}\label{sec:typescript-vs-javascript}
-
-\subsection{Verifying templates}\label{subsec:why-typescript-verifying-templates}
-
-One of the requirements for PT is that each template should be verifiable.
-There is no easy way to verify if some JavaScript code is verifiable without executing it.
-With TypeScript on the other hand, with the language being statically typed, we can, at least to a much larger extent, verify if some piece of code is type secure.
-And thus we can also use this to validate each separate template in PT.
-
-Now it should be noted that due to TypeScripts type system being unsound one could argue that this requirement of PT is not met.
-While this is true it still outperforms JavaScript on this remark, and we will later in section~\vref{subsec:pt-requirements-verifying-templates} discuss more in-depth to what extent this requirement is met.
 
 
 
