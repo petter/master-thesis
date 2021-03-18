@@ -21,3 +21,7 @@ In this path we will use PTj to make an extendable compiler. The focus here is t
 ### Evaluating the usefulness of PTj in existing open source projects
 
 This will also be a case study on PTj and if it can improve on existing real world examples. Here we will evaluate the refactored examples on several metrics such as type-safety, scalability, readability, etc.
+
+
+## TODOS
+- [ ] Undersøke mulighetene for å legge til frie funksjoner (funksjoner som ikke tilhører noen klasse) i templater, mtp renaming osv. Hvis ikke skriv om at det ikke blir tatt hensyn til.
