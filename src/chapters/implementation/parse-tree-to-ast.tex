@@ -5,7 +5,7 @@
 
 Tree-sitter is a parser-generator written in Rust.
 Fortunately for us we can still use tree-sitter in Node, due to Node supporting native addons\footnote{Node native addons are dynamically-linked shared objects written in C++~\cite{nodenativeaddons}.}.
-Native addons in Node are fairly new, and at the time of writing the tree-sitter Node bindings are still using the older unstable \hyperref[https://github.com/nodejs/nan]{NAN} instead of the newer and more stable \hyperref[https://nodejs.org/api/n-api.html]{napi}.
+Native addons in Node are fairly new, and at the time of writing the tree-sitter Node bindings are still using the older unstable \textit{\hyperref[https://github.com/nodejs/nan]{nan}} (Native Abstractions for Node) instead of the newer and more stable \textit{\hyperref[https://nodejs.org/api/n-api.html]{Node-API}}.
 For the most part it does work, however I did meet some difficulties with the produced parse tree, more specifically the spread operator was not behaving properly on the native produced objects.
 To get around this we will be walking through the parse tree and produce an AST\@.
 What this means in practice is that we are going to be ignoring some parsing specific properties.
