@@ -30,7 +30,7 @@ We can see an example of this in listing~\vref{lst:parallel-extension}, where an
 The order of additions does not affect the parallel extension.
 We could just as easily switched the positions of the additions around in this example.
 
-\begin{code}{Java}{Example of parallel extension in PTj}{lst:parallel-extension}
+\begin{code}{Java}{Example of parallel extension in PTj. Here we make additions to both \codeword{A} and \codeword{B} in our instantiation in package \codeword{P}, and we are able to reference the additions done to \codeword{A} in our addition to \codeword{B}. This is done without the need to cast \codeword{A}, as if the additions were present at the time of declaration.}{lst:parallel-extension}
     template T {
         class A {
             ...
@@ -65,12 +65,10 @@ We could just as easily switched the positions of the additions around in this e
 % B’ will then not be a subclass of A’.
 %
 % - - In  the  compiler  example  this  is  exactly  what we need in order to be able to add attributes as explained in the example.
-
-\begin{code}{Java}{Example of hierarchy preservation}{lst:hierarchy-preservation}
-    class A {
-        ...
-    }
-\end{code}
+PT should never break the inheritance hierarchy of its contents.
+If we have a template with classes \codeword{A} and \codeword{B}, and class \codeword{B} a subclass of class \codeword{A}, then this relation should not be affected by any additions or merges done to either of the classes.
+That is if we make additions to class \codeword{B} it should still be a subclass of class \codeword{A}, and any additions made to class \codeword{A} should be inherited to class \codeword{B}.
+Even if we make additions to both class \codeword{A} and \codeword{B}, then \codeword{B} with additions should still be a subclass of class \codeword{A} with additions.
 
 \subsection{Renaming}\label{subsec:renaming}
 
@@ -78,12 +76,19 @@ We could just as easily switched the positions of the additions around in this e
 %
 % - - For  the  graph  example,  the  renaming  property  makes  it  possible  to  rename  the  nodes and edges to cities and roads.
 
+The renaming requirement states that PT should enable us to rename the names of any class, and its attributes, so that they better fit their use case.
+
 \subsection{Multiple Uses}\label{subsec:multiple-uses}
 % - \textbf{Multiple  uses:}  It  should  be  possible  to  use  the  classes  of  C  for  different  and  independent  purposes  in  the  same  program,  and  so  that  each  purpose  have  different additions and renamings.
 % The compiler should be able to check that each use implies a different set of classes as if they are defined in separate hierarchies.
 %
 % - - In  a  program  we  may  need  the  basic  graph  structure  for  different  purposes.
-In  addition  to  using  it  for  cities  and  roads,  we  could  in  the  same  program  use  it  to  form the structure of pipes and joints in a water distribution system.
+PT should be allow us to use packages/templates multiple times for different purposes in the same program, and any additions or renamings should not affect any of the other uses.
+Each use should be kept independent of each other.
+This is an important requirement of PT as when we create a package or a template it is often designed to be reused.
+An example of this is the graph template we created in listing~\vref{code:rename}.
+Here we bundled the minimal needed classes in order to have a working implementation for graphs.
+We then used this graph implementation to model a road systems, however we might later also want to reuse the graph implementation for modelling the sewer systems of each city, and this should not be affected by any changes we made to the graph template for our road system.
 
 \subsection{Type Parameterization}\label{subsec:type-parameterization}
 
@@ -93,8 +98,41 @@ In  addition  to  using  it  for  cities  and  roads,  we  could  in  the  same 
 % - - In the compiler example we assume that the front end shall always produce Java Bytecode,  and  we  use  some  readymade  mechanism  for  packing  the  code  to  a  correctly  formatted  class  file.
 % However,  a  number  of  such  packers  may  be  available,  and  we  do  not  want  to  choose  which  to  use  while  implementing  the  front end class collection.
 
+\red{Dette kan kanskje heller være en del av PT background. Skrev dette basert på JOT, men er det slik at PT nå bruker required types istedenfor? Da burde dette kanskje endres noe}
+
+The requirement of type parameterization of templates works similar to how type parameterization for classes works in Java.
+Type parameterization in Java enables the programmer to assume the existence of a class during declaration, and the class can later be given at the time of instantiation.
+Type parameters in Java can have a constraint that it must extend another class.
+Similarly, type parameterization in PT also enables the programmer to assume the existence of a class, however here the type parameter is accessible to the whole template.
+PT type parameters can also be constrained, however in PT type constraining uses structural typing instead of nominal typing.
+What this means is that instead of declaring what the type parameter must extend it instead declares what structure the type parameter must conform to.
+
+In listing~\vref{lst:type-parameterization} we see an example of how type parameterization can be used to implement a list.
+This example might not look too different from what you would do with type parameterization in Java, however having the type parameter at the template level does have some advantages.
+One advantage of having the type parameter at template level is that you don't need to specify the actual parameter again after the instantiation.
+At instantiation of the \codeword{ListsOf} template we can give i.e. a \codeword{Person} class, containing some information about a persons name, date of birth, etc., as the actual parameter and then we would not have to keep respecifying the actual parameter for every reference.
+Another advantage of using type parameters at the template level is that the type parameter can be used by all classes in the template.
+If we wanted to implement this in Java we would either have to have type parameters for both classes, or the \codeword{AuxElem} class would need to be a inner class of the \codeword{List} class.
+
+\begin{code}{Java}{Example from~\cite{jot} where type parameterization is used to create a list implementation.}{lst:type-parameterization}
+    template ListsOf<E> {
+        class List {
+            AuxElem first, last;
+            void insertAsLast(E e) { ... }
+            E removeFirst() { ... }
+        }
+        class AuxElem {
+            AuxElem next;
+            E e; // Reference to the real element
+        }
+    }
+\end{code}
+
 \subsection{Class Merging}\label{subsec:class-merging}
 
+PT should allow for merge two or more classes.
+When merging classes the result should be a union of their attributes.
+If we merge two classes \codeword{A} and \codeword{B}, it should be possible to reach all \codeword{B} attributes from an \codeword{A}-variable, and vice versa.
 
 % - \textbf{Class  merging:}  Assume  we  have  the  two  collections  C  (with  classes  A  and  B)  and D (with class E).
 % When they are both used in the same program, we should be able to merge e.g. the classes A and E so that the resulting class gets the union of the attributes, and so that we via an E-variable defined within D can also directly see the A attributes (and similarly for an A-variable in C).
@@ -103,6 +141,10 @@ In  addition  to  using  it  for  cities  and  roads,  we  could  in  the  same 
 % In a program handling personal relations we then want to use both collections together so that we obtain a new class, say PersonNode, which has all the  attributes  of  Node  and  Person,  and  where  a  Person-variable  p  defined  in  Persons gives access directly to the Node attributes, e.g. “p.firstEdge”.
 
 \subsection{Collection-Level Type-Checking}\label{subsec:collection-level-type-checking}
+
+The final requirement is collection-level type-checking.
+This requirement is there to ensure that each separate package/template can be independently type-checked.
+By having the possibility to type-check each pacakge/template we can also verify that the produced program is also type-safe, as long as the instantiation is conflict-free.
 
 % In  addition  to  these  properties,  it  is  important  that  such  collections  of  classes  can  be  separately type-checked.
 % We also prefer a mechanism that allows only single inheritance, as  the  merge  property  described  above  to  a  large  extent  will  take  care  of  the  need  for  combining  code  from  different  sources  (for  which  purpose  multiple  inheritance  is  often  used).
