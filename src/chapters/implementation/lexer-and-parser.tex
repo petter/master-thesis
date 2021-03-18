@@ -10,10 +10,13 @@ TypeScript is a large language that is constantly updated, and is getting new fe
 Because of this one of the requirements for our choice of parser generator is the possibility for extending grammars.
 This is important because we want to keep our grammar loosely coupled with the TypeScript grammar, and don't want to be forced to rewrite the entire TypeScript grammar, as well as keeping it up-to-date.
 
-We will be working with the TypeScript API, which only has a runtime library in JavaScript/TypeScript.
-Therefore, another desired attribute is a runtime library in TypeScript.
-This is not as essential as the requirement above, as we can get around using the TypeScript API and instead use the TypeScript CLI, or create a CLI in the language of the parser generator tools runtime library.
-
+Because our language will be extending TypeScript we would like to utilize the TypeScript compiler as much as we can.
+The TypeScript compiler will help us perform the type-checking for our compiler, as well as producing JavaScript output.
+Therefore we need to be able to interact with the TypeScript compiler somehow.
+The TypeScript compiler has two main interfaces for interaction, through the command-line interface or using the compiler API\@.
+Optimally we would like to use the compiler API as this is the easiest way for us to perform type-checking and compilation.
+The catch is however that the only language supported languages for the compiler API is JavaScript and TypeScript.
+Therefore a desired attribute for our choice of parser generator is that it offers a runtime library in either JavaScript or TypeScript, so that all of our implementation can be done in the same language, and not have to work with command-line interfaces programmatically.
 
 \subsubsection{ANTLR4}\label{subsubsec:antlr}
 
