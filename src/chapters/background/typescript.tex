@@ -50,15 +50,18 @@ You can think of a polyfill as an implementation of a new language feature.
 
 Some popular transpilers for JS to JS transpilation are Webpack and Babel, but you could also use the TypeScript compiler for this.
 
-\subsubsection{Node.js}
+\subsubsection{Node.js}\label{subsubsec:node}
 
-Node.js (henceforth simply referred to as Node) is a JavaScript runtime built on the JavaScript engine, V8, used by Chrome.
-While most JavaScript runtimes live in the browser, Node doesn't.
-It is independent of the browser and can be run through a CLI.
-One major difference from the browser runtimes is that Node also supplies some libraries for IO, such as access to the file system, HTTP, and WebSocket.
+As of the time of writing there are mainly two ways to execute JavaScript.
+You can run the program in the browser, as it was intended, or you can use a JavaScript runtime that runs on the backend, outside of the browser.
+Node.js (henceforth simply referred to as Node) is the mainstream solution for the latter.
+Node is a JavaScript runtime built on the JavaScript engine, V8, used by Chrome.
+It is independent of the browser and can be run through a \textit{CLI} (Command-Line Interface).
+One major difference from the browser runtimes is that Node also supplies some libraries for IO, such as access to the file system and the possibility to listen to HTTP requests and WebSocket events.
 This makes Node a good choice for writing networking applications for instance.
 
-We will be using Node for our compiler since it gives us access to the file system as well as enabling the compiler to be accessible through a CLI.
+We will be using the Node runtime for our compiler since it gives us access to the file system, as well as enabling the compiler to be executed through a CLI, as is the norm for most compilers.
+The compiler will still also be available as a library.
 
 \subsection{What is TypeScript?}\label{subsec:what-is-typescript}
 
