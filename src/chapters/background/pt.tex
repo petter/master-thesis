@@ -145,11 +145,11 @@ package P {
 
 \subsubsection{Additions to a template}\label{subsubsec:additions}
 
-When instantiating a template you can also add attributes to the classes of the template, as well as extending the classes implemented interfaces and this will only apply to the current copy.
+When instantiating a template you can also add attributes to the classes of the template, as well as extending the class' implemented interfaces and this will only apply to the current copy.
 These additions are written inside an \codeword{addto}-clause.
 Extending the class with additional attributes is done in the body of the clause, like you would in a normal Java class.
 If an addition has the same signature as an already existing method from the instantiated template class, then the addition will override the existing method, similarly to traditional inheritance.
-Listing~\vref{lst:simple-addto} shows an example of adding attributes an instantiated class.
+Listing~\vref{lst:simple-addto} shows an example of adding attributes to an instantiated class.
 The resulting class \codeword{A} in package \codeword{P} would have the field \codeword{i} and the methods \codeword{someMethod} and \codeword{someOtherMethod}.
 
 \begin{code}{java}{Adding new attributes to the instantiated class A in package P}{lst:simple-addto}
@@ -171,9 +171,10 @@ The resulting class \codeword{A} in package \codeword{P} would have the field \c
 It is also possible to extend the list of implemented interfaces of a class by suffixing the \codeword{addto}-clause with a \codeword{implements}-clause containing the list of implementing interfaces.
 Having the possibility to add implementing interfaces to classes makes working with PT easier and enables the programmer to re-use template classes to a much larger degree.
 This feature's use is easier explained through an example.
+
 Say we have implemented some class that will deal with logging.
-This class can log the state of a class given the class implements some interface \codeword{Loggable}.
-If want to be able to log the state of our Graph implementation, from~\vref{code:rename}, then the Graph class would need to implement the \codeword{Loggable} interface.
+This class can log the state of a class given that the class implements some interface \codeword{Loggable}.
+If we want to be able to log the state of our Graph implementation, from~\vref{code:rename}, then the Graph class would need to implement the \codeword{Loggable} interface.
 We can't do this at the declaration of the Graph template, as we do not have access to the interface at the time of declaration.
 By using \codeword{addto} however we are able to add the \codeword{Loggable} interface and the \codeword{log} method to the Graph class.
 You can also achieve the same functionality through class merging, which we will look at in section~\vref{subsubsec:merging-classes}.

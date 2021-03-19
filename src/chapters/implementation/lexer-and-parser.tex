@@ -3,7 +3,7 @@
 \subsection{Parser Generator}\label{subsec:parser-generator}
 
 There are a lot of parser generators out there, but there is no one-size-fits-all solution.
-In order to navigate through the sea of options we need to set some requirements in functionality, so that we can more easily find the right tool for the task.
+In order to navigate through the sea of options we need to set some requirements in terms of functionality, so that we can more easily find the right tool for the task.
 
 As we talked about in section~\vref{sec:what-do-we-need}, we set ourselves the goal to find an approach that would allow us to create an implementation that was loosely coupled with TypeScript.
 TypeScript is a large language that is constantly updated, and is getting new features fairly often.
@@ -15,7 +15,7 @@ The TypeScript compiler will help us perform the type-checking for our compiler,
 Therefore we need to be able to interact with the TypeScript compiler somehow.
 The TypeScript compiler has two main interfaces for interaction, through the command-line interface or using the compiler API\@.
 Optimally we would like to use the compiler API as this is the easiest way for us to perform type-checking and compilation.
-The catch is however that the only language supported languages for the compiler API is JavaScript and TypeScript.
+The catch is however that the only supported languages for the compiler API is JavaScript and TypeScript.
 Therefore a desired attribute for our choice of parser generator is that it offers a runtime library in either JavaScript or TypeScript, so that all of our implementation can be done in the same language, and not have to work with command-line interfaces programmatically.
 
 \subsubsection{ANTLR4}\label{subsubsec:antlr}
