@@ -31,7 +31,7 @@ However, it is also possible to achieve similar performance in structurally type
 We can see an example of subtype relations in both nominal and structural type systems, in a Java-like language, in listing~\vref{lst:subtype}.
 It is important to note that even though \codeword{C} is a \emph{subtype} of \codeword{A} in a structural language, it is not a \emph{subclass} of \codeword{A}.
 
-\begin{code}{Java}{Example of subtype relations in nominal and structural typing, in a Java-like language.}{lst:subtype}
+\begin{code}{Java}{Example of subtype relations in nominal and structural typing, in a Java-like language. In the example of the nominal subtype we have to explicitly state the subtype relation, while in the structural subtype example the subtype relation is inferred from the common attributes.}{lst:subtype}
     // Given class A
     class A {
         void f() { ... }
@@ -74,6 +74,7 @@ It is important to note that even though \codeword{C} is a \emph{subtype} of \co
 
 Often runtime-objects in nominally typed languages are tagged with the types (a pointer to the "type") of the object.
 This makes it cheap and easy to do runtime type checks, like in upcasting or doing a \codeword{instanceof} check in Java.
+It is also easier to check sub-type relations in nominal type systems, even though you might still have to do a structural comparison, you only have to perform this once per type.
 % TODO: Skriv mere
 
 \subsection{Advantages of Structural Types}\label{subsec:advantages-of-structural-types}
@@ -81,6 +82,7 @@ This makes it cheap and easy to do runtime type checks, like in upcasting or doi
 \subsubsection{Tidier and More Elegant}\label{subsubsec:tidier-and-more-elegant}
 
 Structural types carry with it all the information needed to understand its meaning.
+This is often seen as an advantage over nominal typing as the programmer only has to look at the type to understand it, while in nominal typing you would often have to look at the implementation or documentation to understand the type, as the type itself is part of a global collection of names.
 
 \subsubsection{Advanced Features}\label{subsubsec:advanced-type-features}
 
@@ -88,9 +90,40 @@ Type abstractions (parametric polymorphism, ADTs, user-defined type operators, f
 
 \subsubsection{More General Functions/Classes}\label{subsubsec:more-general-functions}
 
-Malayeri and Aldrich performed a study on the usefulness of structural subtyping.
-The study examined 29 open-source Java programs in order to
-See~\cite{malayeri}.
+Malayeri and Aldrich performed a study (see~\cite{malayeri}) on the usefulness of structural subtyping.
+The study was mainly focused around two characteristics of nominally-typed programs that would indicate that they would benefit from a structurally typed program.
+The first characteristic was that a program is systematically making use of a subset of methods of a type, in which there is no nominal type corresponding to the subset.
+The second characteristic was that two different classes might have methods which are equal in name and perform the same operation, but are not contained in a common nominal supertype.
+29 open-source Java projects were examined for these characteristics.
+
+For the first characteristic the authors ran structural type inference over the projects and found that on average the inferred structural type consisted of 3.5 methods, while the nominal types consisted of 37.8 methods.
+While for the second characteristic the authors looked for types with more than one common methods and found that every 2.9 classes would have a common method without a common nominal supertype.
+We can see that from both of these characteristics that the projects could have benefited from a structural type system, as this would make the programs more generalized, and could therefore support easier re-use of code.
+
+\subsection{Disadvantage of Structural Type Systems}\label{subsec:disadvantage-of-structural-type-systems}
+
+It is worth noting that the advantage of types conforming to each other without explicitly stating it in structural type systems can also be a disadvantage.
+Structurally written programs can be prone to \textit{spurious subsumption}, that is consuming a structurally equal type where it should not be consumed.
+An example of this can be seen in listing~\vref{lst:spurious-subsumption}.
+
+\begin{code}{typescript}{Example of spurious subsumption in TypeScript}{lst:spurious-subsumption}
+    function double(o: {calculate: () => number}) {
+        return o.value() * 2
+    }
+
+    const vector = {
+        x: 2,
+        y: 3,
+        calculate: () => 4
+    }
+
+    const unintended = {
+        value: () => {
+            doSomeSideEffect();
+            return 1;
+        }
+    }
+\end{code}
 
 \subsection{What Difference Does This Make For PT?}\label{subsec:what-difference-does-this-make-for-pt?}
 
@@ -107,10 +140,6 @@ We will instead look more closely into how a structural type system fits into PT
 %nominal cons:
 %
 %structural pros:
-%Structural types are "tidier and more elegant".
-%    They carry all the information to understand the meaning of the type.
-%    In nominal systems we are working with some global collection of names, which can make it hard to understand some types.
-% Structural types can help to make a method more general, reduce code duplication. See is structural subtyping useful.
 %
 %
 %structural cons:
@@ -157,7 +186,6 @@ We will instead look more closely into how a structural type system fits into PT
 \end{code}
 
 \subsection{Which Better Fits PT?}\label{subsec:which-better-fits-pt?}
-
 
 With the addition of required types in PT the language mechanism now has to utilize structural typing, independent of the underlying language's type system.
 Required types in PT already uses structural typing, even if the underlying language might be using a nominal type system.
