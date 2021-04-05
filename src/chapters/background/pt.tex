@@ -9,7 +9,7 @@
 % when such a module is used (or "instantiated") in a program, we must be able to add new
 % declarations at any subclass levels of the module classes, and to change names on declarations.
 
-Krogdahl proposed Generic Packages in 2001, which is a language mechanism aimed at "large scale code reuse in object oriented languages"~\cite{krogdahl:GP}.
+Krogdahl proposed Generic Packages in 2001, which is a language mechanism aimed at "large scale code reuse in object-oriented languages"~\cite{krogdahl:GP}.
 The idea behind this mechanism is to make modules of classes, called \textit{packages}, that could later be imported and instantiated.
 This would make "textual copies" of the package body, and would also allow for further expanding the classes of the packages.
 Modularizing through Generic Packages made the programming more flexible as you would easily be able to write modules with a certain functionality and be able to later import it several times when there is a need for the functionality.
@@ -17,7 +17,7 @@ Modularizing through Generic Packages made the programming more flexible as you 
 Generic Packages was later extended, and the mechanism is now called Package Templates (while the textual program modules themselves are simply called templates).
 The system is not fully implemented and there exists a number of proposals for extending it.
 
-\subsection{Syntax}\label{subsec:syntax}
+\subsection{Basics of Package Templates}\label{subsec:basics-of-package-templates}
 
 In this section we will look at the syntax of Package Templates (further referred to as \emph{PT}) in a Java-like language as proposed in~\cite{jot}.
 
@@ -243,3 +243,23 @@ package P {
 }
 \end{code}
 
+\subsection{Advanced Topics of PT}\label{subsec:advanced-topics-of-pt}
+
+With a firm understandings of the basics of PT we will now have to dig a bit deeper into some terminology and restrictions of the language mechanism.
+
+\subsubsection{Open and Closed Templates}\label{subsubsec:open-and-closed-templates}
+
+A \textit{closed template} is a template that does not contain any instantiation statements nor any additions to classes, it comprises only classes, interfaces and enums.
+The body of a closed template in Java is simply a Java program.
+Closed templates are self-contained units that can be separately type-checked~\cite{Axelsen2012}.
+An \textit{open template} on the other hand is a template which has one or more instantiations or \codeword{addto}-statements in its body.
+
+Open templates can be closed, and will be closed at compile-time.
+The task of closing a template is that of performing the contained instantiations and additions to classes.
+An open template can instantiate other open templates, as long as the instantiations are not cyclic, and these open templates will also have to be closed before the original template can be closed.
+
+Packages can also be open and closed and work in the same manner as with templates, except that they can not be instantiated.
+
+\subsubsection{No Indirect Multiple Inheritance}
+
+\subsubsection{}

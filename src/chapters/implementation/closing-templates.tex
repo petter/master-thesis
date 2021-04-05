@@ -1,8 +1,6 @@
-A closed template is a template that comprises only class, interface or enum declarations.
-An open template on the other hand is a template that contains at least one instantiation statement.
-
 The task of closing open packages and templates is what most of the implementation is focused around.
-It is the task of performing the instantiations declared in the body of a package/template.
+It is the task of performing the declared instantiations and altering the declared classes through \codeword{addto}-statements.
+This step is cruicial as it will make each package/template a valid TypeScript program and make the program ready for code generation.
 
 For instantiations without renaming the task is fairly simple.
 We merely have to find the referenced template, and replace the instantiation statement with the body of said template.
