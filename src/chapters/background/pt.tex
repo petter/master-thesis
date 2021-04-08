@@ -75,7 +75,8 @@ package P {
 
 \subsubsection{Renaming}\label{subsubsec:renaming}
 
-During instantiation it is possible to rename classes (as well as interfaces and enums) and class attributes, both fields and methods.
+During instantiation it is possible to rename classes (as well as interfaces and enums) and \textit{class attributes}.
+Here and henceforth we will be using the term class attributes to describe the union of both the fields and the methods of a class.
 Renaming is a part of the instantiation of templates, and will only affect the copy made for this instantiation, and it is done for the copy before it replaces the \codeword{inst}-statement.
 Renaming is denoted by an optional \codeword{with}-clause at the end of the \codeword{inst}-statement.
 In the \codeword{with}-clause one can rename classes using the following fat arrow syntax, \codeword{A => B}, where class \codeword{A} is renamed to \codeword{B}, and rename class attributes with a similar arrow syntax, \codeword{i -> j}, where the attribute \codeword{i} is renamed to \codeword{j}.
@@ -204,8 +205,8 @@ You can also achieve the same functionality through class merging, which we will
 \end{code}
 
 % TODO: Uklart hva dette betyr
-The extension of classes using the \codeword{addto}-clause is done independently for each class, ignoring any inheritance-patterns.
-What this means is that any additions made to a superclass will also be reflected in its subclasses, we do not have to worry about how the class is being used.
+The extension of classes using the \codeword{addto}-clause is done independently for each class, ignoring any inheritance-relations.
+Making an addition to a superclass
 If there is a class \codeword{A} with a subclass \codeword{B}, they can both get extensions independently of each other.
 Any extensions made to class \codeword{A} would of course still be inherited to class \codeword{B}, as with normal Java inheritance.
 
@@ -260,6 +261,6 @@ An open template can instantiate other open templates, as long as the instantiat
 
 Packages can also be open and closed and work in the same manner as with templates, except that they can not be instantiated.
 
-\subsubsection{No Indirect Multiple Inheritance}
+\subsubsection{tsuper}
 
-\subsubsection{}
+\subsubsection{No Indirect Multiple Inheritance}

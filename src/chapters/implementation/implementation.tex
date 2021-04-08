@@ -3,9 +3,27 @@
 
 \chapter{Implementation}\label{ch:implementation}
 
-In this chapter we are going to look at the implementation of PTS.
+In this chapter we are going to look at the implementation for our compiler for PTS, as described in chapter~\vref{ch:the-language---pts}.
 
 \section{Compiler Architecture}\label{sec:architecture}
+
+Our compiler consists of the following parts:
+
+\begin{itemize}
+    \item Lexing and parsing
+    \item Parse tree transformation
+    \item Type checking packages/templates
+    \item Code generation
+\end{itemize}
+
+An overview of our architecture can be seen in figure~\vref{fig:compiler-overview}.
+The first part of the compiler, namely the lexing and parsing will take a source file and transform it into a parse tree.
+Our compiler will then take this parse tree and transform it into a simpler AST\@.
+This simple AST will then be used to perform the PT transformations.
+We will then use this AST to close any open packages and templates, and finally use the transformed tree for code generation.
+After all packages and templates have been closed we can type-check each individual package/template to validate the type-safety of our program.
+Given a valid type-safe program we can then move on to code generation.
+The target language for our code generation will mainly be TypeScript, however we will also offer to transpile the TypeScript into JavaScript.
 
 \begin{figure}
    \centering
