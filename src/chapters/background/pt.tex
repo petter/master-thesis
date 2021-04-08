@@ -205,18 +205,18 @@ You can also achieve the same functionality through class merging, which we will
 \end{code}
 
 % TODO: Uklart hva dette betyr
-The extension of classes using the \codeword{addto}-clause is done independently for each class, ignoring any inheritance-relations.
-Making an addition to a superclass
-If there is a class \codeword{A} with a subclass \codeword{B}, they can both get extensions independently of each other.
-Any extensions made to class \codeword{A} would of course still be inherited to class \codeword{B}, as with normal Java inheritance.
+% The extension of classes using the \codeword{addto}-clause is done independently for each class, ignoring any inheritance-relations.
+% If there is a class \codeword{A} with a subclass \codeword{B}, they can both get extensions independently of each other.
+% Any extensions made to class \codeword{A} would of course still be inherited to class \codeword{B}, as with normal Java inheritance.
 
 
 \subsubsection{Merging classes}\label{subsubsec:merging-classes}
 
 If two or more classes in the same or in different instantiations share the same name they will be merged into one class.
 Through this mechanism PT achieves a form of multiple inheritance.
-This form of inheritance is different from what you would normally find in Java, it acts more like \textit{mixins}\footnote{A mixin is a language feature which enables you to inject code into a class.}.
-Here the subclasses are unaware of its superclasses, as this form of inheritance is merely merging of textual copies at compile time.
+This form of inheritance is different from what you would normally find in Java, it acts more like \textit{mixins} (A language feature for injecting code into a class, first introduced in the programming language Jigsaw~\cite{jigsaw}).
+% Here the subclasses are unaware of its superclasses, as this form of inheritance is merely merging of textual copies at compile time.
+The merging of the classes will not lead to a classic superclass-subclass relation, as the merged class is simply a concatenation of textual copies of the merging classes.
 We call this kind of inheritance static multiple inheritance.
 
 If two classes don't share the same name, it is still possible to force a merge through renaming them to the same name.

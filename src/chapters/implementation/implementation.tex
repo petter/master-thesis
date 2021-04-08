@@ -4,6 +4,28 @@
 \chapter{Implementation}\label{ch:implementation}
 
 In this chapter we are going to look at the implementation for our compiler for PTS, as described in chapter~\vref{ch:the-language---pts}.
+Before looking at the implementation we will first be discussing the methodology used during development.
+
+\section{Methodology}\label{sec:methodology}
+
+When tackling a project of this magnitude it is important to have a proper methodology for development.
+During the development phase of this project I have had a strong focus on using agile techniques, where I have filled the role as both product owner and developer.
+This agile software development has aided me in discovering new requirements as the project moves forward, and re-adjusting to these new requirements.
+I have actively used a Kanban board throughout development to help keep track of tasks and goals.
+
+The compiler was made in an iterative manner.
+For each iteration I would start off by implementing a new feature, and then put on the product owner hat and test out the compiler.
+While working as product owner I try to understand how I would like to use the language and what requirements I have for the language.
+This often leads to re-adjusting the requirements.
+
+I started off by creating a rough MVP (Minimum Viable Product), only implementing the most basic functionality, which comprised declaration of packages/templates and simple instantiation.
+This MVP made me understand the project and requirements better, and also gave the project some new requirements.
+After the initial iteration I decided to adopt a test-driven development approach.
+I made tests for the features I had already implemented and then continued to make tests for the next functionality goal.
+This was done in order to gain more confidence in the compiler, as well as helping me spot any erroneous code earlier rather than later, which makes fixing it less costly.
+All of this resulted in a better development cycle, making refactoring and implementation of new features a breeze.
+When adding new features or refactoring some tests will undoubtedly fail, and before moving on I made sure that all the tests were passing again.
+
 
 \section{Compiler Architecture}\label{sec:architecture}
 
@@ -65,6 +87,12 @@ Very slow compiler/PP because of the chosen implementation, with tree traverser 
 
 
 \section{Testing}\label{sec:testing}
+
+Testing has been an essential part throughout the development of the compiler.
+After the initial prototype of the compiler was running I continued onward with test driven development.
+This allows me to write up tests for all the features of the language, and run them concurrently as I make the changes to the implementation.
+
+The cycle
 
 \subsection{Lexer and Parser}\label{subsec:testing-lexer-and-parser}
 
