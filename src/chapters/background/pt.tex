@@ -212,18 +212,19 @@ You can also achieve the same functionality through class merging, which we will
 
 \subsubsection{Merging classes}\label{subsubsec:merging-classes}
 
-If two or more classes in the same or in different instantiations share the same name they will be merged into one class.
+If two or more classes in the same or in different instantiations in one package share the same name they will be merged into one class.
 Through this mechanism PT achieves a form of multiple inheritance.
-This form of inheritance is different from what you would normally find in Java, it acts more like \textit{mixins} (A language feature for injecting code into a class, first introduced in the programming language Jigsaw~\cite{jigsaw}).
+This form of inheritance is different from what you would normally find in Java, it acts more like \textit{mixins} (a language feature for injecting code into a class, first introduced in the programming language Jigsaw~\cite{jigsaw}).
 % Here the subclasses are unaware of its superclasses, as this form of inheritance is merely merging of textual copies at compile time.
 The merging of the classes will not lead to a classic superclass-subclass relation, as the merged class is simply a concatenation of textual copies of the merging classes.
-We call this kind of inheritance static multiple inheritance.
+We call this kind of inheritance \textit{static multiple inheritance}.
 
 If two classes don't share the same name, it is still possible to force a merge through renaming them to the same name.
-In listing~\vref{code:renameclassmerging} we see an example of renaming class \codeword{B} to \codeword{A} in order to merge them under the class name \codeword{A}.
-Merging the classes would lead to having a single class \codeword{A} with the attributes from both classes.
-The two classes \codeword{A} and \codeword{B}, from templates \codeword{T1} and \codeword{T2} respectively, no longer exists in package \codeword{P}, but have formed the new class \codeword{A}, which is a union of both.
-Any pointers typed with the old \codeword{A} or \codeword{B} will now be pointing to the new merged class \codeword{A}.
+In listing~\vref{code:renameclassmerging} we see an example of renaming class \codeword{A} from template \codeword{T1} to \codeword{C} and class \codeword{B} from template \codeword{T2} to \codeword{C}.
+Renaming these two classes to the same name will force these classes to be merged in package \codeword{P}.
+The result of this merge is a new class \codeword{C} with the attributes of both classes.
+The two classes \codeword{A} and \codeword{B}, from templates \codeword{T1} and \codeword{T2} respectively, no longer exists in package \codeword{P}, but have formed the new class \codeword{C}, which is a union of both.
+Any pointers typed with the old \codeword{A} or \codeword{B} will now be typed as the new merged class \codeword{C}.
 
 \begin{code}{java}{Instantiation with class merging through renaming}{code:renameclassmerging}
 template T1 {
@@ -239,8 +240,8 @@ template T2 {
 }
 
 package P {
-    inst T1 with A;
-    inst T2 with B => A;
+    inst T1 with A => C;
+    inst T2 with B => C;
 }
 \end{code}
 
@@ -255,9 +256,13 @@ The body of a closed template in Java is simply a Java program.
 Closed templates are self-contained units that can be separately type-checked~\cite{Axelsen2012}.
 An \textit{open template} on the other hand is a template which has one or more instantiations or \codeword{addto}-statements in its body.
 
-Open templates can be closed, and will be closed at compile-time.
+Open templates will be closed at compile-time.
 The task of closing a template is that of performing the contained instantiations and additions to classes.
-An open template can instantiate other open templates, as long as the instantiations are not cyclic, and these open templates will also have to be closed before the original template can be closed.
+Open templates can instantiate open templates, as long as these instantiations are not cyclic.
+What this means is that a template A can instantiate a template B if template B does not contain any instantiations of template A\@.
+A template B contains an instantiation of template A if it has an instantiation of template A in its body, or contains a nested instantiation of template A\@.
+
+This
 
 Packages can also be open and closed and work in the same manner as with templates, except that they can not be instantiated.
 

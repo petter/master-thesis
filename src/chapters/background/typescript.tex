@@ -38,7 +38,7 @@ JavaScript is a multi-paradigm language with dynamic typing...
 ECMAScript versions are generally released on a yearly basis.
 This release is in the form of a detailed document describing the language, ECMAScript, at the time of release.
 New versions will most likely include some additions to the language, but never any breaking changes\footnote{There has been occasions where there has been minor breaking changes between ECMAScript versions, but these changes happen very rarely and the affected areas are often insignificant.}.
-This is because the developer will not be able to control the environment on which the code will be executed\footnote{It is possible to ship chunks of code called \textit{polyfills} with your code in order to regain some control over the environment. We will go more in-depth on this in section~\vref{subsubsec:backwards-compatability}.} and you can not be sure which ECMAScript version the client browser will be using.
+This is because the developer will not be able to control the environment on which the code will be executed since you can not be sure which ECMAScript version the client browser is using.
 Because of this lack of control over the runtime environment it is crucial that any pre-existing language features don't have breaking changes between versions.
 
 \subsubsection{Backwards Compatibility}\label{subsubsec:backwards-compatability}
@@ -50,7 +50,8 @@ To deal with this a common practice in JavaScript development is to first transp
 This transpilation step takes the source code and transpiles it into an older ECMAScript version.
 In doing this you ensure that more client browser will be able to run the script.
 This will rewrite the new language features, and often replace them with a function, called a \textit{polyfill}.
-You can think of a polyfill as an implementation of a new language feature.
+You can think of a polyfill as an implementation of a new language feature that you ship with your code.
+These polyfills help the developer regain some control over the runtime environment on which the code will be run on, and ensures that the code will run on almost any browser as expected.
 
 Some popular transpilers for JS to JS transpilation are Webpack and Babel, but you could also use the TypeScript compiler for this.
 

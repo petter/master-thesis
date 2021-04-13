@@ -106,7 +106,7 @@ It is worth noting that the advantage of types conforming to each other without 
 Structurally written programs can be prone to \textit{spurious subsumption}, that is consuming a structurally equal type where it should not be consumed.
 An example of this can be seen in listing~\vref{lst:spurious-subsumption}.
 
-\begin{code}{typescript}{Example of spurious subsumption in TypeScript. Here the function \codeword{double} will consume an object that has a \codeword{calcualate} attribute. The intended use is to consume something that does a calculation on the object and returns a number which will be doubled, while the unintended use example in this case does some unexpected side-effect and returns a number as a status code. The unintended object can be consumed by the \codeword{double} function as it is conforms to the signature of the function, while in a nominally typed system this can be avoided to a much larger extent.}{lst:spurious-subsumption}
+\begin{code}{typescript}{Example of spurious subsumption in TypeScript. Here the function \codeword{double} will consume an object that has a \codeword{calculate} attribute. The intended use is to consume something that does a calculation on the object and returns a number which will be doubled, while the unintended use example in this case does some unexpected side-effect and returns a number as a status code. The unintended object can be consumed by the \codeword{double} function as it is conforms to the signature of the function, while in a nominally typed system this can be avoided to a much larger extent.}{lst:spurious-subsumption}
     function double(o: {calculate: () => number}) {
         return o.calculate() * 2
     }
