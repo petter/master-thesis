@@ -82,11 +82,11 @@ It is also easier to check sub-type relations in nominal type systems, even thou
 \subsubsection{Tidier and More Elegant}\label{subsubsec:tidier-and-more-elegant}
 
 Structural types carry with it all the information needed to understand its meaning.
-This is often seen as an advantage over nominal typing as the programmer only has to look at the type to understand it, while in nominal typing you would often have to look at the implementation or documentation to understand the type, as the type itself is part of a global collection of names.
+This is often seen as an advantage over nominal typing as the programmer arguably only has to look at the type to understand it, while in nominal typing you would often have to look at the implementation or documentation to understand the type, as the type itself is part of a global collection of names.
 
-\subsubsection{Advanced Features}\label{subsubsec:advanced-type-features}
-
-Type abstractions (parametric polymorphism, ADTs, user-defined type operators, functors, etc), these do not fit nice into nominal type systems.
+% \subsubsection{Advanced Features}\label{subsubsec:advanced-type-features}
+%
+% Type abstractions (parametric polymorphism, ADTs, user-defined type operators, functors, etc), these do not fit nice into nominal type systems.
 
 \subsubsection{More General Functions/Classes}\label{subsubsec:more-general-functions}
 
@@ -188,13 +188,60 @@ We will instead look more closely into how a structural type system fits into PT
 \subsection{Which Better Fits PT?}\label{subsec:which-better-fits-pt?}
 
 With the addition of required types in PT the language mechanism now has to utilize structural typing, independent of the underlying language's type system.
-Required types in PT already uses structural typing, even if the underlying language might be using a nominal type system.
-This is because PT doesn't allow using externally declared classes, interfaces, etc., so in order to be able to have constraints on generic types structural typing was needed.
-I would therefore argue that a structurally typed language is a better fit for PT in order to make it feel more like a first-class citizen.
-Having two different type systems for different contexts might prove to be confusing for the programmer.
+Using structural typing was seen as a necessity for required types as this would give the mechanism the its required flexibility.
+One could therefore argue that a structural type system is a better fit for Package Templates as it would remove the confusion of dealing with two different styles of typing in a single program, and make the language mechanism feel more like a first class citizen of the host language.
 
-It is important to note that even though structural typing might seem like a better fit for the current proposal of PT, there will certainly be proposals in the future where nominal type systems will prove to be the victor.
-The reader should also note that an implementation of PT in a language should not aim to change the underlying type system of the host language, as this will certainly only lead to more confusion than what we have explored in this chapter.
+However, there are also some quite significant problems with having PT in a structural language.
+Renaming is especially something that might not fit nicely into a structurally typed language.
+In listing~\vref{lst:problems-with-structural-pt} we see an example of a program that breaks after renaming an attribute.
+The renaming resulted in class \codeword{Consumable} no longer conforming to the signature of function \codeword{f} in class \codeword{Consumer}.
+PT does not support changing the signature of functions so there is no way for us to be able to make the \codeword{Consumable} class conform.
+In order to avoid running into this problem we might consider disallowing inline type declaration.
+This would force listing~\vref{lst:problems-with-structural-pt} to give an interface as the type for the formal parameter, \codeword{consumable}.
+We could then also rename the members of the interface in order to once again make the \codeword{Consumable} class conform to the signature of function \codeword{f}.
+
+It is noting that the problem of renaming breaking programs
+
+% Er dette et problem i PTj? Implementere interfaces osv
+\begin{code}{typescript}{Example of how using renaming in PTS might break a program. After renaming the field \codeword{i} to \codeword{j} the class \codeword{Consumable} is no longer consumable by function \codeword{f} in class \codeword{Consumer}.}{lst:problems-with-structural-pt}
+    template T {
+        class Consumable {
+            i = 0;
+        }
+
+        class Consumer {
+            function f(consumable : {i: number}) {
+                ...
+            }
+        }
+    }
+
+    pack P {
+        inst T { Consumable -> Consumable (i -> j) };
+    }
+\end{code}
+
+\begin{code}{Java}{Example of how using renaming in PTj might break a program. After renaming the method \codeword{f} to \codeword{g} the class, \codeword{A}, no longer conform to the implementing interface \codeword{I}.}{lst:problems-with-nominal-pt}
+    template T {
+        interface I {
+            void f();
+        }
+
+        class A implements I {
+            void f() { ... }
+        }
+    }
+
+    package P {
+        inst T with A => A (f() -> g());
+    }
+\end{code}
+
+% I would therefore argue that a structurally typed language is a better fit for PT in order to make it feel more like a first-class citizen.
+% Having two different type systems for different contexts might prove to be confusing for the programmer.
+%
+% It is important to note that even though structural typing might seem like a better fit for the current proposal of PT, there will certainly be proposals in the future where nominal type systems will prove to be the victor.
+% The reader should also note that an implementation of PT in a language should not aim to change the underlying type system of the host language, as this will certainly only lead to more confusion than what we have explored in this chapter.
 
 \section{Attribute Renaming}\label{sec:attribute-renaming}
 
