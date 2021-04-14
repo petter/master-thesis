@@ -21,6 +21,56 @@ These are not as common in mainstream programming languages, but are very promin
 However, in more recent (mainstream) programming languages, such as Go, TypeScript and Julia (at least for implicit typing), structural typing is becoming more and more common.
 A type in a structurally typed programming language is often defined as a record, and could for example be \codeword{\{ name:~string \}}.
 
+In listing~\vref{lst:nominal-typing-example} we can see an example of a nominally typed program in a Java-like language.
+Here \codeword{B} is a subtype of \codeword{A}, while \codeword{C} is not.
+This is due to nominally typed programs having the requirement of explicitly naming its subtype relations, through i.e. a subclass-relation.
+Because of this we can see that at the bottom of the listing the first two statements pass, since both \codeword{A} and \codeword{B} are of type \codeword{A}, while the last statement fails, as \codeword{C} is not of type \codeword{A}.
+
+In listing~\vref{lst:structural-typing-example} we see a structurally typed program.
+This program also has the exact same declarations as in listing~\vref{lst:nominal-typing-example}, that is classes \codeword{A}, \codeword{B}, and \codeword{C} and the function \codeword{g}.
+In this program both type \codeword{B} and type \codeword{C} are a subtype of type \codeword{A}, since they both contain all members of type \codeword{A}.
+Not necessarily the same implementation as in class \codeword{A}, but the same types as in type \codeword{A}.
+This is one of the sole differences between nominal and structural typing, types can conform to other types without having to explicitly state that they should.
+Type \codeword{C} is an example of this, while it does not have a subclass relation to class \codeword{A}, nor implement any common interface, it still conforms to the type of \codeword{A}.
+The result of this is that all three usages of function \codeword{g} are valid in a structural type system, while consuming \codeword{C} was illegal in the nominal example.
+
+
+\begin{code}{Java}{Example of a nominally typed program in a Java-like language}{lst:nominal-typing-example}
+    // Given the following class definitions for A, B and C:
+    class A {
+        void f() {
+            ...
+        }
+    }
+
+    class B extends A {
+        ...
+    }
+
+    class C {
+        void f() {
+            ...
+        }
+    }
+
+    // And a consumer with the following type:
+    void g(A a) { ... }
+
+    // Would result in the following
+    g(new A()); // Ok
+    g(new B()); // Ok
+    g(new C()); // Error, C not of type A
+\end{code}
+
+\begin{code}{Java}{Example of a structurally typed program in a Java-like language}{lst:structural-typing-example}
+    // Given the same class definitions and
+    // the same consumer as in the example above.
+    // Would result in the following
+    g(new A()); // Ok
+    g(new B()); // Ok
+    g(new C()); // Ok, because C is structurally equal to A
+\end{code}
+
 \subsection{Advantages of Nominal Types}\label{subsec:advantages-of-nominal-types}
 
 \subsubsection{Subtypes}\label{subsubsec:subtypes}
@@ -146,50 +196,14 @@ We will instead look more closely into how a structural type system fits into PT
 %
 
 
-
-
-\begin{code}{Java}{Example of a nominally typed program in a Java-like language}{lst:nominal-typing-example}
-    // Given the following class definitions for A, B and C:
-    class A {
-        void f() {
-            ...
-        }
-    }
-
-    class B extends A {
-        ...
-    }
-
-    class C {
-        void f() {
-            ...
-        }
-    }
-
-    // And a consumer with the following type:
-    void g(A a) { ... }
-
-    // Would result in the following
-    g(new A()); // Ok
-    g(new B()); // Ok
-    g(new C()); // Error, C not of type A
-\end{code}
-
-
-\begin{code}{Java}{Example of a structurally typed program in a Java-like language}{lst:structural-typing-example}
-    // Given the same class definitions and
-    // the same consumer as in the example above.
-    // Would result in the following
-    g(new A()); // Ok
-    g(new B()); // Ok
-    g(new C()); // Ok, because C is structurally equal to A
-\end{code}
-
 \subsection{Which Better Fits PT?}\label{subsec:which-better-fits-pt?}
 
 With the addition of required types in PT the language mechanism now has to utilize structural typing, independent of the underlying language's type system.
 Using structural typing was seen as a necessity for required types as this would give the mechanism the its required flexibility.
 One could therefore argue that a structural type system is a better fit for Package Templates as it would remove the confusion of dealing with two different styles of typing in a single program, and make the language mechanism feel more like a first class citizen of the host language.
+
+Another advantage for having structural typing for PT is that it can help strengthen one of the main concepts of Package Templates, namely re-use.
+As we learned from the study of Malayeri and Aldrich, structural typing can make programs more general which makes them more prone to re-use.
 
 However, there are also some quite significant problems with having PT in a structural language.
 Renaming is especially something that might not fit nicely into a structurally typed language.
@@ -200,7 +214,15 @@ In order to avoid running into this problem we might consider disallowing inline
 This would force listing~\vref{lst:problems-with-structural-pt} to give an interface as the type for the formal parameter, \codeword{consumable}.
 We could then also rename the members of the interface in order to once again make the \codeword{Consumable} class conform to the signature of function \codeword{f}.
 
-It is noting that the problem of renaming breaking programs
+It is worth noting that the problem of renaming causing programs to break is not something unique to structural typing, this can also occur in nominally typed programs.
+Listing~\vref{lst:problems-with-nominal-pt} showcases a program that breaks after renaming.
+In this listing we see that after renaming method \codeword{f} of class \codeword{A} the class no longer fulfill the requirements of the implementing interfaces \codeword{I}, as \codeword{I} expects a method \codeword{f} to be present, which it no longer is.
+We could resolve this by also performing an equal renaming to interface \codeword{I}.
+Although it is a problem in nominal PT as well, it is less so than with structural PT, since it can be resolved with just an additional renaming, where as with structural PT we would have to disallow inline-types in order to make the problem more solvable for the programmer.
+
+With the discussed general advantages and disadvantages of structural and nominal type systems, and the points brought forward in this section we can see that both types of typing have strong use cases.
+A nominal type system in PT would seemingly lead to less problematic renaming scenarios, while a structural type system in PT would arguably fit better with the overall theme of PT, flexible re-use.
+
 
 % Er dette et problem i PTj? Implementere interfaces osv
 \begin{code}{typescript}{Example of how using renaming in PTS might break a program. After renaming the field \codeword{i} to \codeword{j} the class \codeword{Consumable} is no longer consumable by function \codeword{f} in class \codeword{Consumer}.}{lst:problems-with-structural-pt}
