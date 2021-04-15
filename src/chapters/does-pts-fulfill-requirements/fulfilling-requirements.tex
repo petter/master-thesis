@@ -7,9 +7,105 @@ After getting an understanding of the requirements we are going to look at how o
 
 \input{chapters/does-pts-fulfill-requirements/the-requirements-of-pt.tex}
 
-\section{Verifying Templates}\label{sec:pt-requirements-verifying-templates}
+\section{PTS' Implementation of the Requirements}\label{sec:pts'-implementation-of-the-requirements}
 
-Talk about unsoudness of TypeScript.
-Talk about unsoudness of Java~\cite{java-unsound}
-Talk about since the requirement is met with Java we assume it is adequately met with TypeScript as well.
+With a proper understanding of the requirements of PT we can examine our implementation and see whether our implementation fulfills these requirements.
+For each requirement we will be looking at a program in PTS which showcases the requirements, and the resulting program after compilation.
+
+\subsection{Parallel Extension}
+
+In order for our implementation to fulfill this requirement it will have to be able to reference additions to a class in another addition in the same package/template.
+We can check if this is possible by creating a simple program, as seen in listing~\vref{lst:pts-parallel-extension}, and see if this results in a valid TypeScript program.
+Our PTS program consists of a template \codeword{T} with two classes \codeword{A} and \codeword{B}, and a package \codeword{P} which makes additions to both classes.
+The addition to class \codeword{A} simply adds another field, \codeword{j}, to the class, while the addition to class \codeword{B} adds a method to the class which references both the old attribute of class \codeword{A} as well as the new addition.
+The program successfully compiles and the resulting TypeScript program can be seen at the bottom of the listing.
+
+
+\begin{code}{typescript}{A program showcasing parallel extension in PTS, and the resulting program in TypeScript at the bottom.}{lst:pts-parallel-extension}
+    // PTS
+    template T {
+        class A {
+            i = 1;
+        }
+
+        class B {
+            x = 1;
+        }
+    }
+
+    pack P {
+        inst T;
+        addto A {
+            j = 1;
+        }
+
+        addto B {
+            function f() {
+                const a = new A();
+                return a.i + a.j;
+            }
+        }
+    }
+
+    // Resulting program
+    class A {
+        i = 1;
+        j = 1;
+    }
+
+    class B {
+        x = 1;
+        function f() {
+            const a = new A();
+            return a.i + a.j;
+        }
+    }
+\end{code}
+
+\subsection{Hierarchy Preserveration}
+
+\subsection{Renaming}
+
+\subsection{Multiple Uses}
+
+In order for this requirement to be fulfilled we should be able to re-use a template several times, with different renamings and additions while the different instantiations stay independent of each other.
+This was something I payed extra attention to during implementation, not just to fulfill the requirement, but to avoid bugs.
+I solved this by making sure that while transforming the AST this would be done in an immutable fashion.
+In order to test this we will be creating a simple program where we instantiate the same template more than once and see if the resulting program is as expected.
+The program can be seen in listing~\vref{lst:pts-multiple-uses}.
+The program comprises a template \codeword{T} with a single class, \codeword{A}, with an attribute \codeword{i}.
+This template will then be instantiated three times, where we first will be renaming the class and field, then instantiate without renaming, and finally instantiate it with just an attribute renaming.
+The expected program should have two classes, one class \codeword{B}, with an attribute \codeword{j}, and a class \codeword{A} where the two bottom instantiations should have created a merged class with attributes \codeword{i} and \codeword{x}.
+We can see from the resulting program after a successful compilation that this is as expected.
+
+\begin{code}{typescript}{A program showcasing multiple uses in PTS, and the resulting program in TypeScript at the bottom.}{lst:pts-multiple-uses}
+    // PTS
+    template T {
+        class A {
+            i = 0;
+        }
+    }
+
+    pack P {
+        inst T { A -> B (i -> j) };
+        inst T;
+        inst T { A -> A (i -> x) };
+    }
+
+    // Resulting program
+    class B {
+        j = 0;
+    }
+
+    class A {
+        i = 0;
+        x = 0;
+    }
+\end{code}
+
+\subsection{Type Parameterization}
+
+\subsection{Class Merging}
+
+\subsection{Collection-level Type-checking}
 

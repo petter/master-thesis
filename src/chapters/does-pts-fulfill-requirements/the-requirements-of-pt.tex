@@ -30,7 +30,7 @@ In order to get a better understanding of what these requirements entail we will
 % With  this  property  we  can  conveniently  specify  directly: “n.firstEdge().length = 5;”, as firstEdge is typed with the extended Edge class.
 
 The parallel extension requirement is about making additions to classes in a package/template, and being able to make use of them in the same collection.
-What this means is that if we are making additions to a class, then we should be able to reference these additions in a declaration or in an addition to a separate class withing the same package/template, without needing to cast it.
+What this means is that if we are making additions to a class, then we should be able to reference these additions in a declaration or in an addition to a separate class within the same package/template, without needing to cast it.
 We can see an example of this in listing~\vref{lst:parallel-extension}, where an addition to class \codeword{B} is referencing the added method of class \codeword{A}.
 The order of additions does not affect the parallel extension.
 We could just as easily switched the positions of the additions around in this example.
@@ -103,7 +103,7 @@ We then used this graph implementation to model a road systems, however we might
 % - - In the compiler example we assume that the front end shall always produce Java Bytecode,  and  we  use  some  readymade  mechanism  for  packing  the  code  to  a  correctly  formatted  class  file.
 % However,  a  number  of  such  packers  may  be  available,  and  we  do  not  want  to  choose  which  to  use  while  implementing  the  front end class collection.
 
-\red{Dette kan kanskje heller være en del av PT background. Skrev dette basert på JOT, men er det slik at PT nå bruker required types istedenfor? Da burde dette kanskje endres noe}
+%\red{Dette kan kanskje heller være en del av PT background. Skrev dette basert på JOT, men er det slik at PT nå bruker required types istedenfor? Da burde dette kanskje endres noe}
 
 The requirement of type parameterization of templates works similar to how type parameterization for classes works in Java.
 Type parameterization in Java enables the programmer to assume the existence of a class during declaration, and the class can later be given at the time of instantiation.
