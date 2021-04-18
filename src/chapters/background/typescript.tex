@@ -48,10 +48,10 @@ As we mentioned earlier, we do not transfer a binary to the client browser, we t
 So when a JavaScript script uses a new ECMAScript feature it is not guaranteed to work with every client browser, since a lot of users might have older browsers installed, or the team behind the browser has not implemented the language feature yet.
 To deal with this a common practice in JavaScript development is to first transpile the source code before using it in a production environment.
 This transpilation step takes the source code and transpiles it into an older ECMAScript version.
-In doing this you ensure that more client browser will be able to run the script.
+In doing this you ensure that more browsers will be able to run the script.
 This will rewrite the new language features, and often replace them with a function, called a \textit{polyfill}.
 You can think of a polyfill as an implementation of a new language feature that you ship with your code.
-These polyfills help the developer regain some control over the runtime environment on which the code will be run on, and ensures that the code will run on almost any browser as expected.
+These polyfills help the developer regain some control over the runtime environment on which the code will be run, and ensure that the code will run on almost any browser as expected.
 
 Some popular transpilers for JS to JS transpilation are Webpack and Babel, but you could also use the TypeScript compiler for this.
 

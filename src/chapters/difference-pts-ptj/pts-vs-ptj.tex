@@ -6,7 +6,7 @@
 
 \section{Nominal vs. Structural Typing}\label{sec:nominal-vs-structural-typing}
 
-One of the most notable differences between PTS and PTj are the underlying languages type systems.
+One of the most notable differences between PTS and PTj are the underlying languages' type systems.
 PTS, as an extension of TypeScript, has structural typing, while PTj on the other hand, an extension of Java, has nominal typing.
 
 Nominal and structural are two major categories of type systems.
@@ -14,15 +14,15 @@ Nominal is defined as "being something in name only, and not in reality" in the 
 Nominal types are as the name suggest, types in name only, and not in the structure of the object.
 They are the norm in mainstream programming languages, such as Java, C, and C++.
 A type could be \codeword{A} or \codeword{Tree}, and checking whether an object conforms to a type restriction, is to check that the type restriction is referring to the same named type, or a subtype.
-Structural types on the other hand is not tied to the name of the type, but to the structure of the object.
+Structural types on the other hand are not tied to the name of the type, but to the structure of the object.
 These are not as common in mainstream programming languages, but are very prominent in research literature.
 However, in more recent (mainstream) programming languages, such as Go, TypeScript and Julia (at least for implicit typing), structural typing is becoming more and more common.
 A type in a structurally typed programming language is often defined as a record, and could for example be \codeword{\{ name:~string \}}.
 
 In listing~\vref{lst:nominal-typing-example} we can see an example of a nominally typed program in a Java-like language.
 Here \codeword{B} is a subtype of \codeword{A}, while \codeword{C} is not.
-This is due to nominally typed programs having the requirement of explicitly naming its subtype relations, through i.e. a subclass-relation.
-Because of this we can see that at the bottom of the listing the first two statements pass, since both \codeword{A} and \codeword{B} are of type \codeword{A}, while the last statement fails, as \codeword{C} is not of type \codeword{A}.
+This is due to nominally typed programs having the requirement of explicitly naming its subtype relations, through e.g. a subclass-relation.
+Because of this we can see that at the bottom of the listing the first two statements pass, since both \codeword{A} and \codeword{B} are of type \codeword{A}, while the last statement fails (typically at compile time), as \codeword{C} is not of type \codeword{A}.
 
 In listing~\vref{lst:structural-typing-example} we see a structurally typed program.
 This program also has the exact same declarations as in listing~\vref{lst:nominal-typing-example}, that is classes \codeword{A}, \codeword{B}, and \codeword{C} and the function \codeword{g}.
@@ -216,9 +216,10 @@ It is worth noting that the problem of renaming causing programs to break is not
 Listing~\vref{lst:problems-with-nominal-pt} showcases a program that breaks after renaming.
 In this listing we see that after renaming method \codeword{f} of class \codeword{A} the class no longer fulfill the requirements of the implementing interfaces \codeword{I}, as \codeword{I} expects a method \codeword{f} to be present, which it no longer is.
 We could resolve this by also performing an equal renaming to interface \codeword{I}.
-Although it is a problem in nominal PT as well, it is less so than with structural PT, since it can be resolved with just an additional renaming, where as with structural PT we would have to disallow inline-types in order to make the problem more solvable for the programmer.
+Although it is a problem in nominal PT as well, it is less so than with structural PT, since it can be resolved with just an additional renaming, and due to the relation being explicitly stated we can also give an error message during compilation notifying the programmer of this inconsistency.
+In structural PT we would have to disallow inline-types in order to make the problem more solvable for the programmer, but due to the relation between the class and interface not necessarily being explicitly stated it would be harder to give a sensible warning for the programmer.
 
-With the discussed general advantages and disadvantages of structural and nominal type systems, and the points brought forward in this section we can see that both types of typing have strong use cases.
+With the discussed general advantages and disadvantages of structural and nominal type systems, and the points brought forward in this section we can see that both styles of typing have strong use cases with PT.
 A nominal type system in PT would seemingly lead to less problematic renaming scenarios, while a structural type system in PT would arguably fit better with the overall theme of PT, flexible re-use.
 
 

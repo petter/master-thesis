@@ -29,6 +29,7 @@ The program successfully compiles and the resulting TypeScript program can be se
         }
 
         class B {
+            a = new A();
             x = 1;
         }
     }
@@ -41,8 +42,7 @@ The program successfully compiles and the resulting TypeScript program can be se
 
         addto B {
             function f() {
-                const a = new A();
-                return a.i + a.j;
+                return this.a.i + this.a.j;
             }
         }
     }
@@ -55,9 +55,9 @@ The program successfully compiles and the resulting TypeScript program can be se
 
     class B {
         x = 1;
+        a = new A();
         function f() {
-            const a = new A();
-            return a.i + a.j;
+            return this.a.i + this.a.j;
         }
     }
 \end{code}
@@ -107,5 +107,5 @@ We can see from the resulting program after a successful compilation that this i
 
 \subsection{Class Merging}
 
-\subsection{Collection-level Type-checking}
+\subsection{Collection-level Type-checking}\label{subsec:implementation-collection-level-type-checking}
 

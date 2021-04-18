@@ -71,14 +71,14 @@ ts api
 
 After performing these steps we can finally produce the output.
 Producing TypeScript output is a pretty simple task.
-By traversing the AST we can concatenate the text from each leaf node with some whitespace between each leaf node.
-This will produce quite ugly, unformatted code, but as long as the closed packages and templates are valid typescript programs this will also produce a valid typescript program.
+By traversing the AST we can concatenate the text from each leaf node with whitespace between each leaf node's resulting textual representation.
+This will produce quite ugly, unformatted code, but as long as the contents of the closed packages and templates are valid typescript programs this will also produce a valid typescript program.
 In order to make it more readable we perform an extra step before writing the output to the specified file, a formatting step.
 There are a lot of TypeScript formatters out there, but we will be using \textit{Prettier}\footnote{A code formatter for the web ecosystem. See~\url{https://prettier.io/}.} for our implementation as it is relatively simple to use.
 Running our produced source code through the Prettier formatter produces a nicely formatted, readable output.
 
 The TypeScript output is probably the best target for understanding what the PT mechanism does, however it might not be the best output for production use.
-Since the only officially support language for the web is JavaScript we will also be implementing this as a target for code generation.
+Since the only officially supported language for the web is JavaScript we will also be implementing this as a target for code generation.
 This is fortunately also a relatively simple task, as we already depend on the TypeScript compiler, and since we are able to produce TypeScript source code, we can use this to produce JavaScript output.
 % TODO: Undersøk  hvilken ES versjon vi outputter til og om dette kan være lavere.
 

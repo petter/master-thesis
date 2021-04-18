@@ -42,6 +42,7 @@ We could just as easily switched the positions of the additions around in this e
         }
 
         class B {
+            A a = new A();
             ...
         }
     }
@@ -57,7 +58,6 @@ We could just as easily switched the positions of the additions around in this e
 
         addto B {
             void someOtherMethod() {
-                A a = new A();
                 a.someMethod();
             }
         }
