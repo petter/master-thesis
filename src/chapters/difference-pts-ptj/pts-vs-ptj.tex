@@ -219,11 +219,10 @@ We could resolve this by also performing an equal renaming to interface \codewor
 Although it is a problem in nominal PT as well, it is less so than with structural PT, since it can be resolved with just an additional renaming, and due to the relation being explicitly stated we can also give an error message during compilation notifying the programmer of this inconsistency.
 In structural PT we would have to disallow inline-types in order to make the problem more solvable for the programmer, but due to the relation between the class and interface not necessarily being explicitly stated it would be harder to give a sensible warning for the programmer.
 
-With the discussed general advantages and disadvantages of structural and nominal type systems, and the points brought forward in this section we can see that both styles of typing have strong use cases with PT.
+With the discussed general advantages and disadvantages of structural and nominal type systems, and the points brought forward in this section we can see that both styles of typing have strong use cases with PT\@.
 A nominal type system in PT would seemingly lead to less problematic renaming scenarios, while a structural type system in PT would arguably fit better with the overall theme of PT, flexible re-use.
 
 
-% Er dette et problem i PTj? Implementere interfaces osv
 \begin{code}{typescript}{Example of how using renaming in PTS might break a program. After renaming the field \codeword{i} to \codeword{j} the class \codeword{Consumable} is no longer consumable by function \codeword{f} in class \codeword{Consumer}.}{lst:problems-with-structural-pt}
     template T {
         class Consumable {
