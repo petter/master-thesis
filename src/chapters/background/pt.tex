@@ -262,11 +262,18 @@ Open templates can instantiate open templates, as long as these instantiations a
 What this means is that a template A can instantiate a template B if template B does not contain any instantiations of template A\@.
 A template B contains an instantiation of template A if it has an instantiation of template A in its body, or contains a nested instantiation of template A\@.
 
-% TODO
-This
-
 Packages can also be open and closed and work in the same manner as with templates, except that they can not be instantiated.
 
 \subsubsection{tsuper}
 
-\subsubsection{No Indirect Multiple Inheritance}
+\subsubsection{Avoiding Indirect Multiple Inheritance}\label{subsubsec:avoiding-indirect-multiple-inheritance}
+
+While PT enables the programmer to merge classes together and giving us some form of static multiple inheritance, it is not intended to actually enable multiple inheritance.
+However, with class merging, it is not uncommon that a class might end up with two or more different superclasses.
+To avoid this PT has some restrictions to stop this from happening.
+
+The first restriction is that external classes, classes defined outside the template, can not be used as a superclass.
+This might seem harsh at first, but it is still possible to implement interfaces outside the template, and this should circumvent most of the drawbacks this restrictions places upon us.
+
+The second restriction is that if two or more classes are merged in an instantiation, then their superclasses must also be merged in the same instantiation.
+This is to avoid the situation where merging two classes results in two or more different superclasses~\cite{jot}.
