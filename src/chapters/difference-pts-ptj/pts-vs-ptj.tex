@@ -21,7 +21,7 @@ A type in a structurally typed programming language is often defined as a record
 
 In listing~\vref{lst:nominal-typing-example} we can see an example of a nominally typed program in a Java-like language.
 Here \codeword{B} is a subtype of \codeword{A}, while \codeword{C} is not.
-This is due to nominally typed programs having the requirement of explicitly naming its subtype relations, through e.g. a subclass-relation.
+This is due to nominally typed programs having the requirement of explicitly naming its subtype relations, through e.g.\ a subclass-relation.
 Because of this we can see that at the bottom of the listing the first two statements pass, since both \codeword{A} and \codeword{B} are of type \codeword{A}, while the last statement fails (typically at compile time), as \codeword{C} is not of type \codeword{A}.
 
 In listing~\vref{lst:structural-typing-example} we see a structurally typed program.
