@@ -63,9 +63,19 @@ The target language for our code generation will mainly be TypeScript, however w
 \section{Closing Templates}\label{sec:closing-templates}
 \input{chapters/implementation/closing-templates}
 
-\section{Verification of Templates}\label{sec:verification-of-templates}
+\section{Type-checking of Templates}\label{sec:type-checking-of-templates}
 
-ts api
+After the previous step we have a program where all packages and templates are closed, meaning that the bodies of these should contain plain TypeScript.
+Because of this we can relatively easily type-check these by using the TypeScript compiler and its compiler API.
+In order for us to type-check our pacakges/templates we will have to transform the bodies of the packages/templates into a textual format.
+This will be done by applying our code generation implementation, which we will discuss in section~\vref{sec:code-generation}, to the body of the package/template we are currently working on.
+Running code generation on the package/template body will give us a TypeScript program.
+This program can then be passed on to the TypeScript compiler.
+We will make the TypeScript compiler transpile the program to JavaScript without emitting any output.
+This will effectively type-check the program.
+
+If the TypeScript compiler throws any errors we can log this for the user of our compiler to fix, and give which package/template this error was found.
+If no errors were thrown we have a type-safe package/template, and we can then proceed to the next step in our compilation.
 
 \section{Code Generation}\label{sec:code-generation}
 

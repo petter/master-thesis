@@ -115,7 +115,7 @@ What this means is that instead of declaring what the type parameter must extend
 In listing~\vref{lst:type-parameterization} we see an example of how type parameterization can be used to implement a list.
 This example might not look too different from what you would do with type parameterization in Java, however having the type parameter at the template level does have some advantages.
 One advantage of having the type parameter at template level is that you don't need to specify the actual parameter again after the instantiation.
-At instantiation of the \codeword{ListsOf} template we can give i.e. a \codeword{Person} class, containing some information about a persons name, date of birth, etc., as the actual parameter and then we would not have to keep respecifying the actual parameter for every reference.
+At instantiation of the \codeword{ListsOf} template we can give i.e. a \codeword{Person} class, containing some information about a persons name, date of birth, etc., as the actual parameter, and then we would not have to keep specifying the actual parameter for every reference.
 Another advantage of using type parameters at the template level is that the type parameter can be used by all classes in the template.
 If we wanted to implement this in Java we would either have to have type parameters for both classes, or the \codeword{AuxElem} class would need to be a inner class of the \codeword{List} class.
 

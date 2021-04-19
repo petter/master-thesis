@@ -12,13 +12,50 @@ After getting an understanding of the requirements we are going to look at how o
 With a proper understanding of the requirements of PT we can examine our implementation and see whether our implementation fulfills these requirements.
 For each requirement we will be looking at a program in PTS which showcases the requirements, and the resulting program after compilation.
 
-\subsection{Parallel Extension}
+\subsection{Parallel Extension}\label{subsec:pts-parallel-extension}
 
 In order for our implementation to fulfill this requirement it will have to be able to reference additions to a class in another addition in the same package/template.
-We can check if this is possible by creating a simple program, as seen in listing~\vref{lst:pts-parallel-extension}, and see if this results in a valid TypeScript program.
+To understand how this requirement can be fulfilled it is important to understand how the requirement could fail to be fulfilled.
+A failure to fulfill the requirement would be that making additions in parallel would fail to compile.
+Given a syntactically legal program the only ways for this to fail during compilation would be due to a semantic error.
+The legal reasons for an addition to fail would be if we are trying to make additions to a class which doesn't exist, or if we are trying to reference attributes in a class that does not exist.
+Both of these should fail, and in our compiler will fail.
+
+The first legal reason where our compiler should fail is when we are making additions to a non-existent class.
+This will be caught in the class merging part of our compiler.
+In the class merging part of the implementation the compiler will group all classes and additions by name.
+If there is a group with only additions then it will fail, as there is no class to make additions to.
+
+The second legal reason is when we are trying to reference non-existent attributes in a class.
+An example of this can be seen in listing~\vref{lst:pts-parallel-extension-non-existent-attribute}.
+This example will fail during the type-checking of our pacakges/templates, as discussed in~\vref{sec:type-checking-of-templates}.
+Instead of trying to examine the class \codeword{A} for an attribute \codeword{h}, and maybe not finding it as it might be in a later instantiation, we will assume that the addition is valid and perform the addition to the class.
+When we later have performed any further instantiations and additions we will run a type-check on the templates/packages which will pick the error up.
+
+\begin{code}{typescript}{An example showing a program that should fail during compilation, where we are trying to reference a non-existent attribute, \codeword{h}, in an addition to class \codeword{A}.}{lst:pts-parallel-extension-non-existent-attribute}
+    template T {
+        class A {
+            function f() {
+                return 1;
+            }
+        }
+    }
+
+    package P {
+        inst T;
+        addto A {
+            function g() {
+                this.h();
+            }
+        }
+    }
+\end{code}
+
+
+We can check if this is possible by creating a simple program, as seen in listing~\vref{lst:pts-parallel-extension}, and see if this results in a valid TypeScript program with the intended semantics and correct bindings.
 Our PTS program consists of a template \codeword{T} with two classes \codeword{A} and \codeword{B}, and a package \codeword{P} which makes additions to both classes.
 The addition to class \codeword{A} simply adds another field, \codeword{j}, to the class, while the addition to class \codeword{B} adds a method to the class which references both the old attribute of class \codeword{A} as well as the new addition.
-The program successfully compiles and the resulting TypeScript program can be seen at the bottom of the listing.
+The program successfully compiles, and the resulting TypeScript program can be seen at the bottom of the listing.
 
 
 \begin{code}{typescript}{A program showcasing parallel extension in PTS, and the resulting program in TypeScript at the bottom.}{lst:pts-parallel-extension}
@@ -65,6 +102,8 @@ The program successfully compiles and the resulting TypeScript program can be se
 \subsection{Hierarchy Preserveration}
 
 \subsection{Renaming}
+
+This requirement
 
 \subsection{Multiple Uses}
 
