@@ -15,48 +15,10 @@ For each requirement we will be looking at a program in PTS which showcases the 
 \subsection{Parallel Extension}\label{subsec:pts-parallel-extension}
 
 In order for our implementation to fulfill this requirement it will have to be able to reference additions to a class in another addition in the same package/template.
-To understand how this requirement can be fulfilled it is important to understand how the requirement could fail to be fulfilled.
-A failure to fulfill the requirement would be that making additions in parallel would fail to compile.
-Given a syntactically legal program the only ways for this to fail during compilation would be due to a semantic error.
-The legal reasons for an addition to fail would be if we are trying to make additions to a class which doesn't exist, or if we are trying to reference attributes in a class that does not exist.
-Both of these should fail, and in our compiler will fail.
-
-The first legal reason where our compiler should fail is when we are making additions to a non-existent class.
-This will be caught in the class merging part of our compiler.
-In the class merging part of the implementation the compiler will group all classes and additions by name.
-If there is a group with only additions then it will fail, as there is no class to make additions to.
-
-The second legal reason is when we are trying to reference non-existent attributes in a class.
-An example of this can be seen in listing~\vref{lst:pts-parallel-extension-non-existent-attribute}.
-This example will fail during the type-checking of our pacakges/templates, as discussed in~\vref{sec:type-checking-of-templates}.
-Instead of trying to examine the class \codeword{A} for an attribute \codeword{h}, and maybe not finding it as it might be in a later instantiation, we will assume that the addition is valid and perform the addition to the class.
-When we later have performed any further instantiations and additions we will run a type-check on the templates/packages which will pick the error up.
-
-\begin{code}{typescript}{An example showing a program that should fail during compilation, where we are trying to reference a non-existent attribute, \codeword{h}, in an addition to class \codeword{A}.}{lst:pts-parallel-extension-non-existent-attribute}
-    template T {
-        class A {
-            function f() {
-                return 1;
-            }
-        }
-    }
-
-    package P {
-        inst T;
-        addto A {
-            function g() {
-                this.h();
-            }
-        }
-    }
-\end{code}
-
-
 We can check if this is possible by creating a simple program, as seen in listing~\vref{lst:pts-parallel-extension}, and see if this results in a valid TypeScript program with the intended semantics and correct bindings.
 Our PTS program consists of a template \codeword{T} with two classes \codeword{A} and \codeword{B}, and a package \codeword{P} which makes additions to both classes.
 The addition to class \codeword{A} simply adds another field, \codeword{j}, to the class, while the addition to class \codeword{B} adds a method to the class which references both the old attribute of class \codeword{A} as well as the new addition.
 The program successfully compiles, and the resulting TypeScript program can be seen at the bottom of the listing.
-
 
 \begin{code}{typescript}{A program showcasing parallel extension in PTS, and the resulting program in TypeScript at the bottom.}{lst:pts-parallel-extension}
     // PTS
@@ -98,6 +60,52 @@ The program successfully compiles, and the resulting TypeScript program can be s
         }
     }
 \end{code}
+
+Now we see that it does work for the program above, so it would seem that the basic mechanism for parallel extensions does work.
+However, to be completely certain that it will work for all programs we are going to have to investigate this a bit further.
+To understand how this requirement can be fulfilled it is important to understand how the requirement could fail to be fulfilled.
+A failure to fulfill the requirement would be that making additions in parallel would fail to compile.
+Given a syntactically legal program the only ways for this to fail during compilation would be due to a semantic error.
+The legal reasons for an addition to fail would be if we are trying to make additions to a class which doesn't exist, or if we are trying to reference attributes in a class that does not exist.
+Both of these should fail, and in our compiler will fail.
+
+The first legal reason where our compiler should fail is when we are making additions to a non-existent class.
+This will be caught in the class merging part of our compiler.
+In the class merging part of the implementation the compiler will group all classes and additions by name.
+If there is a group with only additions then it will fail, as there is no class to make additions to.
+
+The second legal reason is when we are trying to reference non-existent attributes in a class.
+An example of this can be seen in listing~\vref{lst:pts-parallel-extension-non-existent-attribute}.
+This example will fail during the type-checking of our pacakges/templates, as discussed in~\vref{sec:type-checking-of-templates}.
+Instead of trying to examine the class \codeword{A} for an attribute \codeword{h}, and maybe not finding it as it might be in a later instantiation, we will assume that the addition is valid and perform the addition to the class.
+When we later have performed any further instantiations and additions we will run a type-check on the templates/packages which will pick the error up.
+
+\begin{code}{typescript}{An example showing a program that should fail during compilation, where we are trying to reference a non-existent attribute, \codeword{h}, in an addition to class \codeword{A}.}{lst:pts-parallel-extension-non-existent-attribute}
+    template T {
+        class A {
+            function f() {
+                return 1;
+            }
+        }
+    }
+
+    package P {
+        inst T;
+        addto A {
+            function g() {
+                this.h();
+            }
+        }
+    }
+\end{code}
+
+Now that we understand when it should fail lets look at some scenarios where it should not fail.
+We do not want it to fail compilation if we have a valid parallel extension.
+One such way it could fail is if we tried to check if the addition contains any invalid references or type errors.
+This could commonly happen if we are trying to check the addition's references to the declared class.
+However if not implemented properly this might fail as there might be several declarations that are going to be merged, including additions.
+As we discussed previously we are avoiding this from happening by assuming that the addition is valid, and waiting until all merging has been performed and then type-checking the program afterwards.
+This has the downside of making it harder to give meaningful error messages when an error is made by the programmer, however we can assure ourselves that we do not wrongly fail compilation.
 
 \subsection{Hierarchy Preserveration}
 
