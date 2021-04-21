@@ -135,9 +135,9 @@ If we wanted to implement this in Java we would either have to have type paramet
 
 \subsection{Class Merging}\label{subsec:class-merging}
 
-PT should allow for merge two or more classes.
+PT should allow for merging two or more classes.
 When merging classes the result should be a union of their attributes.
-If we merge two classes \codeword{A} and \codeword{B}, it should be possible to reach all \codeword{B} attributes from an \codeword{A}-variable, and vice versa.
+If we merge two classes \codeword{A} and \codeword{B}, it should be possible to reach all of \codeword{B}'s attributes from an \codeword{A}-variable, and vice versa.
 
 % - \textbf{Class  merging:}  Assume  we  have  the  two  collections  C  (with  classes  A  and  B)  and D (with class E).
 % When they are both used in the same program, we should be able to merge e.g. the classes A and E so that the resulting class gets the union of the attributes, and so that we via an E-variable defined within D can also directly see the A attributes (and similarly for an A-variable in C).
