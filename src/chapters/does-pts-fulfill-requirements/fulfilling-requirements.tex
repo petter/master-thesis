@@ -53,8 +53,8 @@ The program successfully compiles, and the resulting TypeScript program can be s
     }
 
     class B {
-        x = 1;
         a = new A();
+        x = 1;
         function f() {
             return this.a.i + this.a.j;
         }
@@ -109,6 +109,56 @@ This has the downside of making it harder to give meaningful error messages when
 
 \subsection{Hierarchy Preserveration}
 
+In order to fulfill the hierarchy preservation requirement we have to preserve all super-/subclass relations after additions and merges have been applied.
+Listing~\vref{lst:pts-hierarchy-preservation} shows a program, and the resulting TypeScript program after compilation, which fulfills the requirement of hierarchy preservation.
+This one example certainly fulfills the requirement as class \codeword{B} is still a subclass to class \codeword{A} after both a merge and an addition is made to \codeword{B}.
+As we talked about briefly in section~\vref{subsec:merging-class-declarations} when we merge classes we make sure to also merge their class signatures.
+This means that we might end up with instances where we are extending multiple classes, however this will then be picked up in the type-checking stage of the compiler.
+If we had not merged class declarations, and just stuck with a random class declarations in the group of classes that should be merged for instance, we could have ended up breaking the inheritance hierarchy in the aforementioned listing, as we could have ended up with class \codeword{C}'s declaration, which does not have a superclass.
+Because of this we can with confidence say that we have fulfilled the requirement of hierarchy preservation.
+
+\begin{code}{typescript}{Example showcasing a program where the super-/subclass relation between classes \codeword{A} and \codeword{B} is preserved after additions and class merging have been applied. We can see the resulting TypeScript program at the bottom of the listing, where the semantics are as expected.}{lst:pts-hierarchy-preservation}
+    // PTS
+    template T1 {
+        class A {
+            i = 0;
+        }
+
+        class B extends A {
+            f() {
+                return this.i;
+            }
+        }
+    }
+
+    template T2 {
+        class C {
+            j = 0;
+        }
+    }
+
+    package P {
+        inst T1;
+        inst T2 { C -> B };
+        addto B {
+            k = 0;
+        }
+    }
+
+    // Resulting program
+    class A {
+        i = 0;
+    }
+
+    class B extends A {
+        f() {
+            return this.i;
+        }
+        j = 0;
+        k = 0;
+    }
+\end{code}
+
 \subsection{Renaming}
 
 This requirement
@@ -151,6 +201,13 @@ We can see from the resulting program after a successful compilation that this i
 \end{code}
 
 \subsection{Type Parameterization}
+
+The type parameterization requirement is something the implementation does not fulfill.
+This was not implemented due to it being down prioritized.
+There is only so much time available during the span of a master thesis, and I chose to rather look at how the core of PT would fit into a structurally language like TypeScript, rather than on making sure it would be a fully fleshed out implementation of PT.
+Another reason for avoiding this is that much of Type Parameterization can be achieved through merging and renaming.
+
+% TODO kanskje vise noen eksempler på dette
 
 \subsection{Class Merging}
 

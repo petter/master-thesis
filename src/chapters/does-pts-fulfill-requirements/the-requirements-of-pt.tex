@@ -71,7 +71,7 @@ We could just as easily switched the positions of the additions around in this e
 %
 % - - In  the  compiler  example  this  is  exactly  what we need in order to be able to add attributes as explained in the example.
 PT should never break the inheritance hierarchy of its contents.
-If we have a template with classes \codeword{A} and \codeword{B}, and class \codeword{B} a subclass of class \codeword{A}, then this relation should not be affected by any additions or merges done to either of the classes.
+If we have a template with classes \codeword{A} and \codeword{B}, and class \codeword{B} is a subclass of class \codeword{A}, then this relation should not be affected by any additions or merges done to either of the classes.
 That is if we make additions to class \codeword{B} it should still be a subclass of class \codeword{A}, and any additions made to class \codeword{A} should be inherited to class \codeword{B}.
 Even if we make additions to both class \codeword{A} and \codeword{B}, then \codeword{B} with additions should still be a subclass of class \codeword{A} with additions.
 
