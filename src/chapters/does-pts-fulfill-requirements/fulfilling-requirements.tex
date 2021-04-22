@@ -107,7 +107,7 @@ However if not implemented properly this might fail as there might be several de
 As we discussed previously we are avoiding this from happening by assuming that the addition is valid, and waiting until all merging has been performed and then type-checking the program afterwards.
 This has the downside of making it harder to give meaningful error messages when an error is made by the programmer, however we can assure ourselves that we do not wrongly fail compilation.
 
-\subsection{Hierarchy Preserveration}
+\subsection{Hierarchy Preservation}\label{subsec:pts-hierarchy-preservation}
 
 In order to fulfill the hierarchy preservation requirement we have to preserve all super-/subclass relations after additions and merges have been applied.
 Listing~\vref{lst:pts-hierarchy-preservation} shows a program, and the resulting TypeScript program after compilation, which fulfills the requirement of hierarchy preservation.
@@ -159,7 +159,7 @@ Because of this we can with confidence say that we have fulfilled the requiremen
     }
 \end{code}
 
-\subsection{Renaming}
+\subsection{Renaming}\label{subsec:pts-renaming}
 
 In order to be able to fulfill the renaming requirement our implementation should be able to rename classes and it's attributes.
 This renaming should result in a program where not only the declarations have been renamed, but also all references.
@@ -207,7 +207,7 @@ Due to this we can assume that this requirement is also fulfilled.
     }
 \end{code}
 
-\subsection{Multiple Uses}
+\subsection{Multiple Uses}\label{subsec:pts-multiple-uses}
 
 In order for this requirement to be fulfilled we should be able to re-use a template several times, with different renamings and additions while the different instantiations stay independent of each other.
 This was something I payed extra attention to during implementation, not just to fulfill the requirement, but to avoid bugs.
@@ -244,7 +244,7 @@ We can see from the resulting program after a successful compilation that this i
     }
 \end{code}
 
-\subsection{Type Parameterization}
+\subsection{Type Parameterization}\label{subsec:pts-type-parameterization}
 
 The type parameterization requirement is something the implementation does not fulfill.
 This was not implemented due to it being down prioritized.
@@ -272,7 +272,7 @@ Required types does of course have a lot of advantages such as making it possibl
 
 \subsection{Collection-level Type-checking}\label{subsec:implementation-collection-level-type-checking}
 
-\section{Conclusion}
+\section{Conclusion}\label{sec:requirements-conclusion}
 
 While we do not fulfill every requirement, we do fulfill most of them.
 The current implementation might not be a full implementation of PT, but we can confidently say we have at least made an implementation of the core of PT.
