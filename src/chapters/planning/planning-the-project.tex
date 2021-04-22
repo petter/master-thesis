@@ -3,6 +3,8 @@
 
 \chapter{Planning the Project}\label{ch:planning-the-project}
 
+
+
 Before we start the implementation of our language we first need to do some planning.
 We know we are going to be creating a programming language, a superset of TypeScript with the addition of Package Templates.
 However, we might want to look at if creating a superset of TypeScript is the way to go, or if keeping it simple and extending JavaScript is a better call.
@@ -54,12 +56,14 @@ Before jumping into a project of this magnitude it is important to find out what
 The goal of this project is to extend TypeScript with the Package Templates language mechanism, this could be achieved by one of the following methods:
 
 \begin{itemize}
+    \item Implementing as a TypeScript library
     \item Making a fork of the TypeScript compiler
     \item Making a preprocessor for the TypeScript compiler
     \item Making a compiler plugin / transform
     \item Making a custom compiler from scratch
 \end{itemize}
 
+\input{chapters/planning/implementing-as-a-library}
 
 \subsection{Preprocessor for the TypeScript Compiler}\label{subsec:preprocessor-for-the-typescript-compiler}
 

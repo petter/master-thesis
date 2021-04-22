@@ -41,6 +41,12 @@
         #1]{#2}}
  {\end{minted}\end{listing}}
 
+\newcommand{\codeinputfile}[4]{
+    \begin{listing}
+        \inputminted[frame=lines]{#2}{#1}
+        \caption{#3}
+        \label{#4}
+    \end{listing}}
 
 
 \begin{document}
