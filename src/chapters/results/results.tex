@@ -1,5 +1,44 @@
 \chapter{Results}\label{ch:results}
 
+\begin{code}{typescript}{"Real world example" of PTS being used in React. In this example we create a component for fetching Json when component has been mounted, and then we re-use merge this functionality with our "Pokemon-card". Since external superclasses are not allowed in PT we will have to assume that we have a template \codeword{Component}, which contains the \codeword{Component}-class.}{lst:pts-react}
+    template FetchJson {
+        class FetchJson {
+            componentDidMount() {
+                fetch(this.props.url)
+                    .then(response => response.json())
+                    .then(data =>
+                        this.setState(state => ({...state, data})))
+            }
+        }
+    }
+
+    pack Pokemon {
+        inst Component;
+        inst FetchJson { FetchJson -> Pokemon };
+        addto Pokemon extends Component {
+            render() {
+                if(this.state.data === undefined)
+                    return 'Loading...';
+
+                const name = this.state.data.name;
+                const image = this.state.data.sprites.front_default;
+                return (
+                    <div>
+                        <img src={image} />
+                        <h1>{name}</h1>
+                    </div>
+                )
+            }
+        }
+
+        class App extends Component {
+            render() {
+                <Pokemon url="https://pokeapi.co/api/v2/pokemon/ditto" />
+            }
+        }
+    }
+\end{code}
+
 \section{Future Works}\label{sec:future-works}
 
 \subsection{Diamond Problem}\label{subsec:diamond-problem}
