@@ -333,8 +333,6 @@ A template B contains an instantiation of template A if it has an instantiation 
 
 Packages can also be open and closed and work in the same manner as with templates, except that they can not be instantiated.
 
-%\subsubsection{tsuper}
-
 \subsubsection{Avoiding Indirect Multiple Inheritance}\label{subsubsec:avoiding-indirect-multiple-inheritance}
 
 While PT enables the programmer to merge classes together and giving us some form of static multiple inheritance, it is not intended to actually enable multiple inheritance.
@@ -345,3 +343,9 @@ This might seem harsh at first, but it is still possible to implement interfaces
 
 The second restriction is that if two or more classes are merged in an instantiation, then their superclasses must also be merged in the same instantiation.
 This is to avoid the situation where merging two classes results in two or more different superclasses~\cite{jot}.
+
+\subsection{PTj}\label{subsec:ptj}
+
+Implementation of PT in Java.
+
+%TODO

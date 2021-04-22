@@ -161,7 +161,51 @@ Because of this we can with confidence say that we have fulfilled the requiremen
 
 \subsection{Renaming}
 
-This requirement
+In order to be able to fulfill the renaming requirement our implementation should be able to rename classes and it's attributes.
+This renaming should result in a program where not only the declarations have been renamed, but also all references.
+Listing~\vref{lst:pts-renaming} shows an example program of renaming in PTS, where we are renaming a class, \codeword{A}, and the class' attribute, \codeword{i}.
+We can see in the resulting program that the identifier in the declaration of both the class and the attribute has changed, but so has the references to these in the constructor of the class and references in another class, \codeword{B}
+The renaming has also not wrongly renamed other references that are similar in naming.
+This example does of course not cover all the edge cases of renaming, however in the source code for the implementation there have been made quite extensive tests that cover most (if not all) scenarios for renaming, which are passing.
+Due to this we can assume that this requirement is also fulfilled.
+
+\begin{code}{typescript}{Example of renaming in PTS.}{lst:pts-renaming}
+    // PTS
+    template T {
+        class A {
+            i = 0;
+            constructor(i: number) {
+                this.i = i;
+            }
+        }
+
+        class B {
+            a = new A();
+            function f() {
+                return a.i;
+            }
+        }
+    }
+
+    pack P {
+        inst T { A -> X (i -> j) };
+    }
+
+    // Resulting program
+    class X {
+        j = 0;
+        constructor(i: number) {
+            this.j = i;
+        }
+    }
+
+    class B {
+        a = new X();
+        function f() {
+            return a.j;
+        }
+    }
+\end{code}
 
 \subsection{Multiple Uses}
 
@@ -206,10 +250,30 @@ The type parameterization requirement is something the implementation does not f
 This was not implemented due to it being down prioritized.
 There is only so much time available during the span of a master thesis, and I chose to look at how the core of PT would fit into a structurally language like TypeScript, rather than on making sure it would be a fully fleshed out implementation of PT\@.
 Another reason for avoiding this is that much of type parameterization can be achieved through merging and renaming.
+Listing~\vref{lst:type-parameterization-without-rt} shows an example of how you can use an empty class as a generic type implementation of lists, similar to the list implementation with required types in listing~\vref{lst:type-parameterization}.
+Required types does of course have a lot of advantages such as making it possible to constrain the type, and forcing the programmer to give an actual parameter for the type, which we are unable to do.
 
-% TODO kanskje vise noen eksempler på dette
+\begin{code}{java}{Example of a similar list implementation as in listing~\vref{lst:type-parameterization}, without the use of required types. Instead of giving a type for the required type we will have to merge the class \codeword{E} with the "actual parameter".}{lst:type-parameterization-without-rt}
+    template ListsOf {
+        class E { }
+        class List {
+            AuxElem first, last;
+            void insertAsLast(E e) { ... }
+            E removeFirst() { ... }
+        }
+        class AuxElem {
+            AuxElem next;
+            E e;
+        }
+    }
+\end{code}
 
 \subsection{Class Merging}
 
 \subsection{Collection-level Type-checking}\label{subsec:implementation-collection-level-type-checking}
 
+\section{Conclusion}
+
+While we do not fulfill every requirement, we do fulfill most of them.
+The current implementation might not be a full implementation of PT, but we can confidently say we have at least made an implementation of the core of PT.
+Not having the full implementation does mean that we might not be able to examine all the differences between our implementation and PTj, however we will be able to examine the common elements, which covers the most interesting parts.
