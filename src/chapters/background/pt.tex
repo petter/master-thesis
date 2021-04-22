@@ -19,7 +19,7 @@ The system is not fully implemented and there exists a number of proposals for e
 
 \subsection{Basics of Package Templates}\label{subsec:basics-of-package-templates}
 
-In this section we will look at the syntax of Package Templates (further referred to as \emph{PT}) in a Java-like language as proposed in~\cite{jot}.
+In this section we will look at the syntax of Package Templates (further referred to as \emph{PT}) in a Java-like language as proposed in~\cite{jot}, with the extensions of required types as proposed in~\cite{requiredtypes}.
 
 \subsubsection{Defining packages and package templates}
 
@@ -118,7 +118,7 @@ package RoadMap {
 \end{code}
 
 Renaming makes it possible to instantiate templates with conflicting names of classes, or even instantiate the same templates multiple times.
-Listing~\vref{code:renamingdoubleinst} shows an example of this where we instantiate the same template T twice without any issues.
+Listing~\vref{code:renamingdoubleinst} shows an example of this where we instantiate the same template, \codeword{T}, twice without any issues.
 
 \begin{code}{java}{Example of instantiating the same template twice solved by renaming.}{code:renamingdoubleinst}
 template T {
@@ -245,6 +245,75 @@ package P {
 }
 \end{code}
 
+\subsubsection{Required Types}\label{subsubsec:required-types}
+
+Required types in PT gives the programmer extra flexibility when declaring templates.
+They are generic types declared at the template level, which will need a substitute at instantiation.
+These types can then be used throughout the template, similar to how you would use generics in a Java class.
+The most basic required type can be seen below.
+
+\begin{minted}{java}
+    template T { required type R { } }
+\end{minted}
+
+Here \codeword{R} is a required type which can be substituted for any class or interface at instantiation.
+Required types can be constrained using both nominal types, such as classes and interfaces, and structural types, constraining the type to have certain attributes.
+Below we can see examples of defining different required types with different types of constraints, where the first has a simple nominal type constraint, the second having a similar structural constraint, and the third having both a nominal and structural constraint.
+
+\begin{minted}{java}
+    template T {
+        required type R1 extends Runnable { }
+        required type R2 { void f(); }
+        required type R3 extends Runnable { void f(); }
+    }
+\end{minted}
+
+We could then instantiate the template, \codeword{T}, giving class or interface pointers as actual parameters for the required types, as seen below.
+
+\begin{minted}{java}
+    package P {
+        class A implements Runnable {
+            void run() { ... }
+        }
+
+        class B {
+             void f() { ... }
+        }
+
+        interface C extends Runnable {
+            void f();
+        }
+
+        inst T with
+            R1 <= A,
+            R2 <= B,
+            R3 <= C;
+    }
+\end{minted}
+
+Required types as presented above can not be used as classes or interfaces, that is you cannot create a new object of the type or implement the type as an interface for a class, as they can be substituted with both.
+They can only be used as type references, like in the simple Tree implementation example below.
+
+\begin{minted}{java}
+    template Tree {
+        required type E { }
+
+        class Tree {
+            Node root;
+            ...
+        }
+
+        class Node {
+            E e;
+            List<Node> children;
+            ...
+        }
+    }
+\end{minted}
+
+It is also possible to declare required classes and interfaces similarly to required types, which can be used as classes and interfaces respectively, however this will not be discussed in this thesis.
+If the reader wants to get a better understanding for required types, required classes and required interfaces I recommend reading~\cite{requiredtypes}.
+
 \subsection{Advanced Topics of PT}\label{subsec:advanced-topics-of-pt}
 
 With a firm understandings of the basics of PT we will now have to dig a bit deeper into some terminology and restrictions of the language mechanism.
@@ -264,13 +333,12 @@ A template B contains an instantiation of template A if it has an instantiation 
 
 Packages can also be open and closed and work in the same manner as with templates, except that they can not be instantiated.
 
-\subsubsection{tsuper}
+%\subsubsection{tsuper}
 
 \subsubsection{Avoiding Indirect Multiple Inheritance}\label{subsubsec:avoiding-indirect-multiple-inheritance}
 
 While PT enables the programmer to merge classes together and giving us some form of static multiple inheritance, it is not intended to actually enable multiple inheritance.
-However, with class merging, it is not uncommon that a class might end up with two or more different superclasses.
-To avoid this PT has some restrictions to stop this from happening.
+However, with class merging, it is not uncommon that a class might end up with two or more different superclasses. To avoid this PT has some restrictions to stop this from happening.
 
 The first restriction is that external classes, classes defined outside the template, can not be used as a superclass.
 This might seem harsh at first, but it is still possible to implement interfaces outside the template, and this should circumvent most of the drawbacks these restrictions places upon us.
