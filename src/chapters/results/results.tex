@@ -1,8 +1,8 @@
 \chapter{Results}\label{ch:results}
 
-\begin{code}{typescript}{"Real world example" of PTS being used in React. In this example we create a component for fetching JSON when the component has been mounted, and then we re-use this functionality in our Pokemon-component. Since external superclasses are not allowed in PT we will have to assume that we have a template \codeword{Component}, which contains the \codeword{Component}-class.}{lst:pts-react}
+\begin{code}{typescript}{Real world example of PTS being used in React. In this example we create a component for fetching JSON when the component has been mounted, and then we re-use this functionality in our Pokemon-component.}{lst:pts-react}
     template FetchJson {
-        class FetchJson {
+        class FetchJson extends Component {
             componentDidMount() {
                 fetch(this.props.url)
                     .then(response => response.json())
@@ -13,7 +13,6 @@
     }
 
     pack Pokemon {
-        inst Component;
         inst FetchJson { FetchJson -> Pokemon };
         addto Pokemon extends Component {
             render() {

@@ -12,7 +12,11 @@ After getting an understanding of the requirements we are going to look at how o
 With a proper understanding of the requirements of PT we can examine our implementation and see whether our implementation fulfills these requirements.
 For each requirement we will be looking at a program in PTS which showcases the requirements, and the resulting program after compilation.
 
+
 \subsection{Parallel Extension}\label{subsec:pts-parallel-extension}
+
+% TODO: Dette avsnittet ble kanskje litt rart og omstendelig - jeg tror det kunne ha godt av at du leser gjennom en gang til med tanke på en utenforstående leser, og at du arbeider litt mer med formuleringene i teksten.
+% TODO: Forklar bedre "legal" reaons to fail, eller omformuler
 
 In order for our implementation to fulfill this requirement it will have to be able to reference additions to a class in another addition in the same package/template.
 We can check if this is possible by creating a simple program, as seen in listing~\vref{lst:pts-parallel-extension}, and see if this results in a valid TypeScript program with the intended semantics and correct bindings.
@@ -61,10 +65,8 @@ The program successfully compiles, and the resulting TypeScript program can be s
     }
 \end{code}
 
-Now we see that it does work for the program above, so it would seem that the basic mechanism for parallel extensions does work.
-However, to be completely certain that it will work for all programs we are going to have to investigate this a bit further.
 To understand how this requirement can be fulfilled it is important to understand how the requirement could fail to be fulfilled.
-A failure to fulfill the requirement would be that making additions in parallel would fail to compile.
+A failure to fulfill the requirement would be that making additions in parallel would fail to compile, or create an otherwise incorrect program.
 Given a syntactically legal program the only ways for this to fail during compilation would be due to a semantic error.
 The legal reasons for an addition to fail would be if we are trying to make additions to a class which doesn't exist, or if we are trying to reference attributes in a class that does not exist.
 Both of these should fail, and in our compiler will fail.
@@ -99,7 +101,7 @@ When we later have performed any further instantiations and additions we will ru
     }
 \end{code}
 
-Now that we understand when it should fail lets look at some scenarios where it should not fail.
+Now that we understand when it should fail let us look at some scenarios where it should not fail.
 We do not want it to fail compilation if we have a valid parallel extension.
 One such way it could fail is if we tried to check if the addition contains any invalid references or type errors.
 This could commonly happen if we are trying to check the addition's references to the declared class.
@@ -111,11 +113,11 @@ This has the downside of making it harder to give meaningful error messages when
 
 In order to fulfill the hierarchy preservation requirement we have to preserve all super-/subclass relations after additions and merges have been applied.
 Listing~\vref{lst:pts-hierarchy-preservation} shows a program, and the resulting TypeScript program after compilation, which fulfills the requirement of hierarchy preservation.
-This one example certainly fulfills the requirement as class \codeword{B} is still a subclass to class \codeword{A} after both a merge and an addition is made to \codeword{B}.
-As we talked about briefly in section~\vref{subsec:merging-class-declarations} when we merge classes we make sure to also merge their class signatures.
-This means that we might end up with instances where we are extending multiple classes, however this will then be picked up in the type-checking stage of the compiler.
-If we had not merged class declarations, and just stuck with a random class declarations in the group of classes that should be merged for instance, we could have ended up breaking the inheritance hierarchy in the aforementioned listing, as we could have ended up with class \codeword{C}'s declaration, which does not have a superclass.
-Because of this we can with confidence say that we have fulfilled the requirement of hierarchy preservation.
+This one example fulfills the requirement as class \codeword{B} is still a subclass to class \codeword{A} after both a merge and an addition is made to \codeword{B}.
+As we talked about briefly in section~\vref{subsec:merging-class-declarations} when we merge classes we make sure to also merge their class heritage, combining the extending classes and implementing interfaces of the different classes.
+This means that we might end up with instances where we are extending multiple different classes, however this will then be picked up in the type-checking stage of the compiler.
+If we had not merged class heritage, we could have ended up breaking the inheritance hierarchy in the aforementioned listing, as we could have for example ended up with class \codeword{C}'s heritage, which does not have a superclass.
+Because of the heritage merging we can with confidence say that we have fulfilled the requirement of hierarchy preservation, as we always preserve all super-/subclass relations.
 
 \begin{code}{typescript}{Example showcasing a program where the super-/subclass relation between classes \codeword{A} and \codeword{B} is preserved after additions and class merging have been applied. We can see the resulting TypeScript program at the bottom of the listing, where the semantics are as expected.}{lst:pts-hierarchy-preservation}
     // PTS
@@ -161,13 +163,14 @@ Because of this we can with confidence say that we have fulfilled the requiremen
 
 \subsection{Renaming}\label{subsec:pts-renaming}
 
-In order to be able to fulfill the renaming requirement our implementation should be able to rename classes and it's attributes.
+In order to be able to fulfill the renaming requirement our implementation should be able to rename classes and their attributes.
 This renaming should result in a program where not only the declarations have been renamed, but also all references.
 Listing~\vref{lst:pts-renaming} shows an example program of renaming in PTS, where we are renaming a class, \codeword{A}, and the class' attribute, \codeword{i}.
 We can see in the resulting program that the identifier in the declaration of both the class and the attribute has changed, but so has the references to these in the constructor of the class and references in another class, \codeword{B}
 The renaming has also not wrongly renamed other references that are similar in naming.
 This example does of course not cover all the edge cases of renaming, however in the source code for the implementation there have been made quite extensive tests that cover most (if not all) scenarios for renaming, which are passing.
 Due to this we can assume that this requirement is also fulfilled.
+% TODO diskuter rundt strukturell typing og potensiell usikkerhet rundt hvilken deklarasjon en bruksforekomst forholder seg til.
 
 \begin{code}{typescript}{Example of renaming in PTS.}{lst:pts-renaming}
     // PTS
@@ -247,11 +250,11 @@ We can see from the resulting program after a successful compilation that this i
 \subsection{Type Parameterization}\label{subsec:pts-type-parameterization}
 
 The type parameterization requirement is something the implementation does not fulfill.
-This was not implemented due to it being down prioritized.
+This was not implemented due to it not being prioritized.
 There is only so much time available during the span of a master thesis, and I chose to look at how the core of PT would fit into a structurally language like TypeScript, rather than on making sure it would be a fully fleshed out implementation of PT\@.
 Another reason for avoiding this is that much of type parameterization can be achieved through merging and renaming.
 Listing~\vref{lst:type-parameterization-without-rt} shows an example of how you can use an empty class as a generic type implementation of lists, similar to the list implementation with required types in listing~\vref{lst:type-parameterization}.
-Required types does of course have a lot of advantages such as making it possible to constrain the type, and forcing the programmer to give an actual parameter for the type, which we are unable to do.
+Required types do of course have a lot of advantages such as making it possible to constrain the type, and forcing the programmer to give an actual parameter for the type, which we are unable to do.
 
 \begin{code}{java}{Example of a similar list implementation as in listing~\vref{lst:type-parameterization}, without the use of required types. Instead of giving a type for the required type we will have to merge the class \codeword{E} with the "actual parameter".}{lst:type-parameterization-without-rt}
     template ListsOf {
@@ -275,5 +278,6 @@ Required types does of course have a lot of advantages such as making it possibl
 \section{Conclusion}\label{sec:requirements-conclusion}
 
 While we do not fulfill every requirement, we do fulfill most of them.
-The current implementation might not be a full implementation of PT, but we can confidently say we have at least made an implementation of the core of PT.
-Not having the full implementation does mean that we might not be able to examine all the differences between our implementation and PTj, however we will be able to examine the common elements, which covers the most interesting parts.
+The current implementation might not be a full implementation of PT, but we can confidently say we have at least made an implementation of the core of PT for TypeScript.
+Not having a full implementation does mean that we might not be able to examine all the differences between our implementation and PTj, however we will be able to examine the common elements, which covers the most interesting parts.
+This allows us to explore how a mechanism like PT fits with the TypeScript language, and its potential utility.
