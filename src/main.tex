@@ -25,6 +25,7 @@
 \addbibresource{library.bib}
 
 
+
 % Custom macros
 \newcommand{\codeword}[1]{\texttt{#1}}
 \newcommand{\plname}{Package Template Script}
@@ -40,6 +41,9 @@
         frame=lines,
         #1]{#2}}
  {\end{minted}\end{listing}}
+
+\AtBeginEnvironment{minted}{%
+    \renewcommand{\fcolorbox}[4][]{#4}}
 
 \newcommand{\codeinputfile}[4]{
     \begin{listing}
