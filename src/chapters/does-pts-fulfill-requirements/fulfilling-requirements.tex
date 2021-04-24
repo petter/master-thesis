@@ -122,7 +122,7 @@ We can see in the resulting program that the identifier in the declaration of bo
 The renaming has also not wrongly renamed other references that are similar in naming.
 This example does of course not cover all the edge cases of renaming, however in the source code for the implementation there have been made quite extensive tests that cover most (if not all) scenarios for renaming, which are passing.
 Due to this we can assume that this requirement is also fulfilled.
-% TODO diskuter rundt strukturell typing og potensiell usikkerhet rundt hvilken deklarasjon en bruksforekomst forholder seg til.
+
 
 \begin{code}{typescript}{Example of renaming in PTS.}{lst:pts-renaming}
     // PTS
@@ -159,6 +159,42 @@ Due to this we can assume that this requirement is also fulfilled.
         function f() {
             return a.j;
         }
+    }
+\end{code}
+
+% TODO diskuter rundt strukturell typing og potensiell usikkerhet rundt hvilken deklarasjon en bruksforekomst forholder seg til.
+It is worth noting however that since TypeScript is a structurally typed language we can run into scenarios where a rename could result in an invalid program.
+Listing~\vref{lst:pts-renaming-problem} showcases this problem.
+The problem arises in the \codeword{a} attribute of class \codeword{B} in template \codeword{T}.
+This has been declared to be a variable expecting an object where there exists an attribute \codeword{i}, which is a number.
+\codeword{a} is initialised with an object of the class \codeword{A}.
+This is fine in template \codeword{T}, however when \codeword{T} is instantiated in package \codeword{P}, and \codeword{A}'s attribute \codeword{i} is renamed to \codeword{j}
+
+\begin{code}{typescript}{Example showcasing the problem of having renaming in a structural language. In class \codeword{B} we have an attribute, \codeword{a}, that expects an object that contains an attribute \codeword{i}. The attribute is initialized with an \codeword{A} object. This is fine in template \codeword{T} as \codeword{A} contains an attribute \codeword{i}, however when class \codeword{A}'s attribute is renamed in the instantiation in package \codeword{P} then an object of \codeword{A} is no longer valid as a value, since it no longer contains an attribute \codeword{i}. This is an instance where we can't just rename the references to \codeword{i}, since this reference isn't explicitly related to \codeword{A}.}{lst:pts-renaming-problem}
+    // PTS
+    template T {
+        class A {
+            i = 0;
+        }
+
+        class B {
+            a : { i : number } = new A();
+            i = a.i;
+        }
+    }
+
+    pack P {
+        inst T { A -> A (i -> j) };
+    }
+
+    // Expected result
+    class A {
+        j = 0;
+    }
+
+    class B {
+        a : { i : number } = new A();
+        i = a.i;
     }
 \end{code}
 
