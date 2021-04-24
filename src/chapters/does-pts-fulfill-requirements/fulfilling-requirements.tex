@@ -118,11 +118,9 @@ Because of the heritage merging we can with confidence say that we have fulfille
 In order to be able to fulfill the renaming requirement our implementation should be able to rename classes and their attributes.
 This renaming should result in a program where not only the declarations have been renamed, but also all references.
 Listing~\vref{lst:pts-renaming} shows an example program of renaming in PTS, where we are renaming a class, \codeword{A}, and the class' attribute, \codeword{i}.
-We can see in the resulting program that the identifier in the declaration of both the class and the attribute has changed, but so has the references to these in the constructor of the class and references in another class, \codeword{B}
-The renaming has also not wrongly renamed other references that are similar in naming.
-This example does of course not cover all the edge cases of renaming, however in the source code for the implementation there have been made quite extensive tests that cover most (if not all) scenarios for renaming, which are passing.
-Due to this we can assume that this requirement is also fulfilled.
-
+We can see in the resulting program that the identifier in the declaration of both the class and the attribute has changed, but so has the references to these in the constructor of the class and references in another class, \codeword{B}\@.
+The renaming has also not wrongly renamed other references that are similar in naming, such as the parameter of the constructor of class \codeword{A}\@.
+This simple example works as expected, however there are also scenarios where the renaming does not work as expected.
 
 \begin{code}{typescript}{Example of renaming in PTS.}{lst:pts-renaming}
     // PTS
@@ -163,12 +161,13 @@ Due to this we can assume that this requirement is also fulfilled.
 \end{code}
 
 % TODO diskuter rundt strukturell typing og potensiell usikkerhet rundt hvilken deklarasjon en bruksforekomst forholder seg til.
-It is worth noting however that since TypeScript is a structurally typed language we can run into scenarios where a rename could result in an invalid program.
+Since TypeScript is a structurally typed language we can run into scenarios where a rename could and should result in an invalid program.
 Listing~\vref{lst:pts-renaming-problem} showcases this problem.
 The problem arises in the \codeword{a} attribute of class \codeword{B} in template \codeword{T}.
-This has been declared to be a variable expecting an object where there exists an attribute \codeword{i}, which is a number.
+This has been declared to be a variable expecting an object where there exists an attribute \codeword{i}.
 \codeword{a} is initialised with an object of the class \codeword{A}.
-This is fine in template \codeword{T}, however when \codeword{T} is instantiated in package \codeword{P}, and \codeword{A}'s attribute \codeword{i} is renamed to \codeword{j}
+This is fine in template \codeword{T}, however when \codeword{T} is instantiated in package \codeword{P}, and \codeword{A}'s attribute \codeword{i} is renamed to \codeword{j}, this is no longer the case.
+Since an object of \codeword{A} no longer contains an attribute \codeword{i}, this is no longer valid.
 
 \begin{code}{typescript}{Example showcasing the problem of having renaming in a structural language. In class \codeword{B} we have an attribute, \codeword{a}, that expects an object that contains an attribute \codeword{i}. The attribute is initialized with an \codeword{A} object. This is fine in template \codeword{T} as \codeword{A} contains an attribute \codeword{i}, however when class \codeword{A}'s attribute is renamed in the instantiation in package \codeword{P} then an object of \codeword{A} is no longer valid as a value, since it no longer contains an attribute \codeword{i}. This is an instance where we can't just rename the references to \codeword{i}, since this reference isn't explicitly related to \codeword{A}.}{lst:pts-renaming-problem}
     // PTS
@@ -198,10 +197,18 @@ This is fine in template \codeword{T}, however when \codeword{T} is instantiated
     }
 \end{code}
 
+The aforementioned listing shows how we would like the compilation result to look like, however this is not the result the current implementation produces.
+TypeScript's type system can be quite complicated, and due to a lack of time I chose to ignore most of the type declarations.
+The current implementation would have treated the attribute \codeword{a} as an \codeword{A}-variable, since it is being initialized with an object of \codeword{A}, and therefore have renamed later references to \codeword{a.i} to \codeword{a.j}.
+It was more important to get a working prototype, than support all scenarios with different type signatures.
+This is something I would of course have liked to take into consideration if I had more time to spend on the implementation.
+Deciding the type of variables is something that possibly would have come for cheaper if I had opted for a fork of the TypeScript compiler as my approach.
+This is something we will come back to in~\vref{subsec:result-approach}.
+
 \subsection{Multiple Uses}\label{subsec:pts-multiple-uses}
 
 In order for this requirement to be fulfilled we should be able to re-use a template several times, with different renamings and additions while the different instantiations stay independent of each other.
-This was something I payed extra attention to during implementation, not just to fulfill the requirement, but to avoid bugs.
+This was something I paid extra attention to during implementation, not just to fulfill the requirement, but to avoid bugs.
 I solved this by making sure that while transforming the AST this would be done in an immutable fashion.
 In order to test this we will be creating a simple program where we instantiate the same template more than once and see if the resulting program is as expected.
 The program can be seen in listing~\vref{lst:pts-multiple-uses}.
