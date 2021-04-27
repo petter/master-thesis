@@ -8,7 +8,8 @@
 Before we start the implementation of our language we first need to do some planning.
 We know we are going to be creating a programming language, a superset of TypeScript with the addition of Package Templates.
 However, we might want to look at if creating a superset of TypeScript is the way to go, or if keeping it simple and extending JavaScript is a better call.
-There are a lot of approaches we can take for implementing our language, so we will have map out the requirements for our approach.
+We might also want to see if it is needed to create a language at all, or if we are able to create a TypeScript library which can achieve the functionality of PT instead.
+There are a lot of approaches we can take for implementing our language, so we will have to map out the requirements for our desired approach.
 Lastly we will have to look at all the different approaches we can take, and discuss the pros and cons of each approach.
 
 This planning phase is crucial for the success of the project, as starting off on the wrong approach for the wrong language would set us back immensely.
@@ -18,7 +19,7 @@ This planning phase is crucial for the success of the project, as starting off o
 When extending TypeScript you might be asking yourself if it is truly necessary, is it better to keep it simple and just extend JavaScript instead?
 This is something we need to find out before going any further with the planning of our project.
 
-\subsection{Typechecking templates}\label{subsec:why-typescript-verifying-templates}
+\subsection{Type-checking Templates}\label{subsec:why-typescript-verifying-templates}
 
 One of the requirements of PT is that it should be possible to type-check each template separately.
 There is no easy way to type-check JavaScript code without executing it and looking for runtime errors.
@@ -28,6 +29,13 @@ Because of this trait TypeScript is the better candidate for our language.
 
 Now it should be noted that due to TypeScripts type system being unsound one could argue that this requirement of PT is not met.
 While this is true it still outperforms JavaScript on this remark, and we will later in section~\vref{subsec:implementation-collection-level-type-checking} discuss more in-depth to what extent this requirement is met.
+
+\subsection{Renaming}\label{subsec:ts-vs-js-renaming}
+
+Renaming is a hard task.
+In order to perform a rename we will need to rename the declaration, and find all references to this declaration and also rename these.
+Doing this at compile time would mean that we will have to implement a type system of sorts, since this will help us identify references.
+This is also one of the reasons for why TypeScript is a better candidate than JavaScript, as TypeScript is statically typed, meaning the type of a variable is known at compile-time, while JavaScript is dynamically typed, where the type of a variable is first known at run-time.
 
 \section{What Do We Need?}\label{sec:what-do-we-need}
 
@@ -57,9 +65,9 @@ The goal of this project is to extend TypeScript with the Package Templates lang
 
 \begin{itemize}
     \item Implementing as a TypeScript library
-    \item Making a fork of the TypeScript compiler
     \item Making a preprocessor for the TypeScript compiler
     \item Making a compiler plugin / transform
+    \item Making a fork of the TypeScript compiler
     \item Making a custom compiler from scratch
 \end{itemize}
 
@@ -67,7 +75,8 @@ The goal of this project is to extend TypeScript with the Package Templates lang
 
 \subsection{Preprocessor for the TypeScript Compiler}\label{subsec:preprocessor-for-the-typescript-compiler}
 
-More work than ex plugin / transformer.
+% TODO
+\red{Tenker vi må diskutere hva en preprosessor er her. Det jeg gjør i min implementasjon er nok en slags preprosessering, men jeg gjør også mer enn en typisk preprosessor. Kan vi si at en preprosessor er noe som gjør en transformasjon på kildekoden, uten "kunnskap" om det underliggende språket. Jobber bare med det som tekst? Gjør ikke noen semantisk sjekk, osv. I så fall er det ikke mulig å implementere som PP, da blant annet renaming krever en kunnskap til det underliggende språket, men instansiering kan nok gjøres gjennom PP.}
 
 \subsection{TypeScript Compiler Plugin / Transform}\label{subsec:typescript-compiler-plugin}
 

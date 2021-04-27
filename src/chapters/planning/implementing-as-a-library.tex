@@ -37,6 +37,8 @@
 
 \subsection{Implementing PT as a TS Library}\label{subsec:implementing-pt-as-a-ts-library}
 
+One of the first approaches we need to check out is if we are able to achieve the functionality of PT, without having to create a compiler.
+Creating a library would presumably be an easier task than having to create a compiler, and it would also make it easier to use, as the programmer would not have to install a compiler in order to get the PT functionality.
 In order to implement PT we need to be able to handle the following:
 
 \begin{itemize}
@@ -50,9 +52,9 @@ In order to implement PT we need to be able to handle the following:
 
 For defining templates we would like a construct that can wrap our template classes in a scope.
 We will also need to be able to reference the template.
-ECMAScript has three options for this, an array, an object or a class.
-It should however also be possible to inherit from classes in your own template, which pretty much rules out both arrays and objects, as there is no way of referencing other members during definition of the array/object.
-Templates could there be defined as ECMAScript classes, where each member of the template is a static attribute of the template.
+JavaScript has three options for this, an array, an object or a class.
+It should however also be possible to inherit from classes in your own template, which rules out both arrays and objects, as there is no way of referencing other members during definition of the array/object.
+Templates could there be defined as classes, where each member of the template is an attribute of the template.
 In listing~\vref{code:libraryimpl-template} we see an example of how this could be done.
 
 We are making the templates classes static in order to be able to rename them, see section~\vref{sub:renaming_classes}.
@@ -62,7 +64,7 @@ We are making the templates classes static in order to be able to rename them, s
 \subsubsection{Renaming Classes and Class Attributes}\label{subsubsec:renaming-classes-and-class-attributes}
 
 Renaming of classes is possible to an extent.
-Since we made the classes static attributes of the template class we could easily just create a new static field on the template class (with decleration merging to get the correct type for the new name) and \codeword{delete}\cite{deleteop} the old field.
+Since we made the classes static attributes of the template class we could easily just create a new static field on the template class (with declaration merging to get the correct type for the new name) and \codeword{delete}\cite{deleteop} the old field.
 We can see an example of this in listing~\vref{code:libraryimpl-template-renaming}.
 
 \codeinputfile{class-renaming-example.ts}{typescript}{Example of renaming a template class}{code:libraryimpl-template-renaming}
