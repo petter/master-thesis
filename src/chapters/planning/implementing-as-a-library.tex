@@ -54,23 +54,51 @@ For defining templates we would like a construct that can wrap our template clas
 We will also need to be able to reference the template.
 JavaScript has three options for this, an array, an object or a class.
 It should however also be possible to inherit from classes in your own template, which rules out both arrays and objects, as there is no way of referencing other members during definition of the array/object.
-Templates could there be defined as classes, where each member of the template is an attribute of the template.
+Templates should therefore be defined as classes, where each member of the template is an attribute of the template class.
 In listing~\vref{code:libraryimpl-template} we see an example of how this could be done.
 
-We are making the templates classes static in order to be able to rename them, see section~\vref{sub:renaming_classes}.
+%We are making the templates classes static in order to be able to rename them, see section~\vref{sub:renaming_classes}.
 
-\codeinputfile{template-example-without-decorator.ts}{typescript}{Example of defining a template}{code:libraryimpl-template}
+\codeinputfile{template-example-without-decorator.ts}{typescript}{Example of defining a template in a library implementation.}{code:libraryimpl-template}
 
 \subsubsection{Renaming Classes and Class Attributes}\label{subsubsec:renaming-classes-and-class-attributes}
 
 Renaming of classes is possible to an extent.
-Since we made the classes static attributes of the template class we could easily just create a new static field on the template class (with declaration merging to get the correct type for the new name) and \codeword{delete}\cite{deleteop} the old field.
+Since we made the classes static attributes of the template class we could easily just create a new static field on the template class and use the \codeword{delete}-op~\footnote{An operator in JavaScript for removing a property of an object. See~\url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/delete}.} to remove the old field.
 We can see an example of this in listing~\vref{code:libraryimpl-template-renaming}.
+
 
 \codeinputfile{class-renaming-example.ts}{typescript}{Example of renaming a template class}{code:libraryimpl-template-renaming}
 
 Even though we were able to give the class a "new name", this would still not actually rename the class.
 Any reference to the old names would be left unchanged, and thus we are not able to achieve renaming in TypeScript.
+Listing~\vref{lst:lib-rename-problem} shows how this can be a problem, where the function \codeword{f} of class \codeword{X} would fail at run-time due to it not being able to find class \codeword{A}.
+
+\begin{code}{typescript}{Example showcasing the problems of renaming classes in a template in the library implementation.}{lst:lib-rename-problem}
+    // Type-safe template declaration
+    class T1 {
+        static A = class {
+            i = 0;
+        }
+        static X = class {
+            f() {
+                return new A();
+            }
+        }
+    }
+
+   // Renaming
+    const classRef = T1.A;
+    T1.B = classRef;
+    delete T1.A;
+
+    // Trying to use the template after renaming
+    const x = new T1.X();
+    x.f(); // ReferenceError: A is not defined
+\end{code}
+
+Attribute renaming would most likely be possible in a similar manner, where we could change the prototype~\footnote{The prototype of a class is an object which objects of the class inherit their methods from. See~\url{https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes}.} of the class.
+Seeing as we are not able to fully rename classes by doing this we will not be looking further into this.
 
 \subsubsection{Instantiating Templates}\label{subsubsec:instantiating-templates}
 
@@ -82,15 +110,16 @@ An example of this can be seen in listing~\vref{code:libraryimpl-template-inst}.
 
 The instantiation will only contain references to the instantiated templates classes, while PT instantiations make textual copies of the templates content.
 Only having references to the original template could mean that if a template that has been instantiated is later renamed, then the instantiated template might lose some of its references.
-
+We could possibly avoid circumvent this by getting the textual representation of the class, through the class' \codeword{toString}, and then use \codeword{eval} to evaluate the class declaration.
 
 \subsubsection{Merging Classes}
 
 For merging of types you would use the built-in declaration merging~\cite{declerationmerging}.
-Implementation merging is also possible because ECMAScript has open classes.
+Implementation merging is also possible because JavaScript has open classes.
 For implementation merging you would create an empty class which has the type of the merged declarations, and then assign the fields and methods from the merging classes to this class.
 There are several libraries that supports class merging, such as mixin-js~\cite{mixinjs}.
 
 \subsubsection{Conclusion}
 
-Since we are not able to support renaming and instantiations we can conclude that Package Templates can not be implemented as a library in TypeScript, we will need to implement this as part of a compiler.
+Since we are not able to support renaming fully we will not be able to implement PT as a library for TypeScript.
+Because of this we will have to instead create a compiler for this task.

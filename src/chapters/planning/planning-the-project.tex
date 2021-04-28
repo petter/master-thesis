@@ -3,8 +3,6 @@
 
 \chapter{Planning the Project}\label{ch:planning-the-project}
 
-
-
 Before we start the implementation of our language we first need to do some planning.
 We know we are going to be creating a programming language, a superset of TypeScript with the addition of Package Templates.
 However, we might want to look at if creating a superset of TypeScript is the way to go, or if keeping it simple and extending JavaScript is a better call.
@@ -55,10 +53,7 @@ In addition to these we would also like to look for some other desirable traits 
 \end{itemize}
 
 
-
-
-
-\section{Choosing the right approach}\label{sec:choosing-the-right-approach}
+\section{Approach}\label{sec:choosing-the-right-approach}
 
 Before jumping into a project of this magnitude it is important to find out what approach to use. 
 The goal of this project is to extend TypeScript with the Package Templates language mechanism, this could be achieved by one of the following methods:
@@ -66,9 +61,9 @@ The goal of this project is to extend TypeScript with the Package Templates lang
 \begin{itemize}
     \item Implementing as a TypeScript library
     \item Making a preprocessor for the TypeScript compiler
-    \item Making a compiler plugin / transform
+    \item Making a compiler plugin/transform
     \item Making a fork of the TypeScript compiler
-    \item Making a custom compiler from scratch
+    \item Making a custom compiler
 \end{itemize}
 
 \input{chapters/planning/implementing-as-a-library}
@@ -112,10 +107,28 @@ However, being able to have most of the logic loosely coupled with the compiler 
 
 \subsection{TypeScript Compiler Fork}\label{subsec:typescript-compiler-fork}
 
-Possible, however not as accessible as other alternatives and will make upkeep expensive.
-
 The TypeScript compiler is a monolith.
 It has about 2.5 million lines of code, and therefore has a quite steep learning curve to get into.
-If we were to go with this route it would be quite hard to keep up with the TypeScript updates, as updates to the compiler might break our implementation.
-However, as we have seen, going the plugin / transform route also requires us to fork the underlying compiler and make changes to it, however with the majority of the implementation being loosely coupled it would still make it easier to keep up-to-date.
-That being said it will probably be a lot easier to do semantic analysis in a fork of the TypeScript compiler vs in a plugin / transform.
+If we were to go with this route it could prove a hard task to keep up with the TypeScript updates, as updates to the compiler \textit{might} break our implementation.
+However, as we have seen, going the plugin/transform route also requires us to fork the underlying compiler and make changes to it, however with the majority of the implementation being loosely coupled it might presumably still make it easier to keep up-to-date.
+That being said it will probably be a lot easier to do semantic analysis in a fork of the TypeScript compiler vs in a plugin/transform.
+
+\subsection{Making a Custom Compiler}\label{subsec:making-a-custom-compiler}
+
+Making a custom compiler for PTS might seem like a hard task, but let us dig deeper into what this entails.
+Firstly we need to consider what the target should be.
+Normally a compiler would output some sort of byte code, like Java byte code in the Java compiler.
+Many compilers also produce native code.
+Native code is pretty much out of the image for our implementation as we still want to stay in the same ecosystem, namely the browser.
+We could possibly also produce WebAssembly byte code, however there are a lot of constructs in TypeScript/JavaScript that do not translate to WebAssembly, such as working with the DOM.
+Since both of these are out of the picture we could either produce TypeScript or JavaScript.
+Producing TypeScript is possibly the easiest way to go, as most of PTS is TypeScript.
+And producing TypeScript also means that we could run the resulting program through the TypeScript compiler to produce JavaScript.
+
+Having TypeScript as the target for our compiler also means that we can ignore most parts of the language and mainly focus on the PT specifics.
+The rest of the language can be outputted pretty much as is, since our language will be a superset of TypeScript.
+
+
+\section{Conclusion}\label{sec:planning-conclusion}
+
+We will be making a custom compiler for a superset of TypeScript with the addition of the language mechanism Package Templates.
