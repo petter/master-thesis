@@ -8,7 +8,7 @@ Renaming on the other hand requires a bit more work.
 
 In order to perform renaming on an instantiation we will have to perform the following tasks.
 \begin{enumerate}
-    \item Create a scope for the template body, and give all nodes of the body access to this scope
+    \item Create a correctly scoped AST.
     \item Find all identifiers, member expressions, class declarations, etc., and replace them with \textit{reference nodes}\footnote{Reference nodes are AST nodes that contain a pointer to the class or attribute they are supposed to represent. This makes the task of renaming easier as we only have to worry about changing the name in one place. We will go into more detail about this in section~\vref{subsec:transforming-nodes-to-references}.}
     \item Perform the rename.
     \item Transform the scoped AST with reference nodes back to the original AST\@.
@@ -48,20 +48,17 @@ In order to get a better understanding of this we will go through each step of c
 
 This step of closing templates works on the body of a copy of the instantiated template.
 In order to be able to rename classes and class attributes we first need to create correct scopes in which the renaming can be applied to.
-We start of with a list of normal AST nodes and will transform these nodes into nodes that has a reference to the scope they are part of.
+We start off with a list of normal AST nodes and will transform these nodes into nodes that has a reference to the scope they are part of.
 
-Scopes in the compiler mainly consists of three different classes.
-The \codeword{Scope}, \codeword{Variable}, and \codeword{Class} classes.
-
+Scope is represented through the \codeword{Scope} class.
 The \codeword{Scope} class is essentially a symbol table that optionally extends a parent scope.
 A scope without a reference to a parent scope is the root scope.
-The symbol table is implemented as a map from the original attribute or class name, to a reference to either \codeword{Variable} or \codeword{Class} instance.
-Looking up symbols in the symbol table will always start in the called scope, and work its way upwards until we reach the root scope.
-This allows us to correctly handle shadowed variables.
+The symbol table is implemented as a map from the original attribute or class name, to a reference to either a variable (this covers both class attributes and other variables used throughout the program) or a class.
+Looking up symbols in the symbol table will always start in the called scope, looking for any references matching the given name.
+If we don't find any references with the given name we propagate the lookup to the parent scope.
+Given further misses in the symbol table means that we will eventually reach the root scope, and if the root scope also doesn't contain any references then we fail the compilation and inform the programmer that there is a reference error in the program.
 
-The \codeword{Variable} class is a representation for class attributes.
-The class contains the name of the attribute.
-
+Having several layers of scope enables us to correctly handle shadowed variables, or parallel declarations with equal naming.
 
 For creating scopes I chose the following node types for "making new scopes".
 
@@ -81,25 +78,116 @@ For creating scopes I chose the following node types for "making new scopes".
 \end{itemize}
 \end{multicols}
 
+We start of with a root scope which is given to the root node of the template body.
+We then traverse the tree and give every node a reference to the scope.
+When we reach one of the aforementioned nodes that should have its own scope, we create a new scope, with the current scope as the parent scope.
+This new scope is then given to all nodes beneath this node, until we reach another node in the list above.
+
+At the end of this traversal we have an AST where every node has a reference to the scope its in.
+
 \subsection{Transforming Nodes to References}\label{subsec:transforming-nodes-to-references}
 
+In order to rename a class or an attribute we need to find all references to the class or attribute.
+That is what this step is supposed to do, find all references and group these together, so that a rename can be performed.
+A reference in our program can either be a variable or a class reference.
+
+A variable reference can be a class attribute or any other variable declaration.
+Even though we call it a variable reference this does also cover functions, however both variables and functions share the same namespace, so there is essentially no difference between them, unlike Java where methods and variables can have the same name.
+These references are represented by a \codeword{Variable} class.
+The class contains the name of the attribute, and optionally what type it is.
+The type of a variable is set through a very simple type-inference (relative to TypeScripts type system), where we only look at if there is a \codeword{new}-expression assigned to the variable at declaration.
+If the variable is initialized with a class instantiation then the variable is a object of that class.
+This is not necessarily true, as the variable might have an explicitly declared type, however we currently ignore these in the implementation.
+
+Class references are all references to the class.
+This can be the class declaration itself, instantiations of the class, etc.
+The \codeword{Class} class is a representation for classes.
+They are an extension of the \codeword{Variable} class, so they can store the name of the class, however they also have references to all the variables that are instances of the class, and optionally a superclass, which is a reference to another \codeword{Class} instance.
+
+When a reference is created this is registered in the scope where it occurred.
+We can then later lookup the reference instance in the symbol table of the scope.
+
+With an understanding of what a reference is, let us look at how we can transform the AST nodes that are references.
 Transforming nodes into references mainly consists of two steps.
 
 \begin{itemize}
-    \item Transform declarations
-    \item Transform references
+    \item Transforming the declarations
+    \item Transforming references
 \end{itemize}
 
 \subsubsection{Transform Declarations}
 
+When transforming declarations we both create the \codeword{Variable} or \codeword{Class} instance, register them in the scope they were found, and transform the identifier in the declaration to a reference.
+This reference is a special AST node.
+It is represented by the \codeword{RefNode} class.
+This class contains the same fields as other scoped AST nodes, \codeword{type} (which is always \codeword{"variable"} for reference nodes), \codeword{text}, \codeword{children} and \codeword{scope}, as well as two extra fields.
+The first field is a reference to the \codeword{Variable} or \codeword{Class} instance that the \codeword{RefNode} is a reference to.
+The second is a field containing the original type of the node, which are used when transforming the \codeword{RefNode}s back to the original AST\@.
+
 The task of transforming declarations requires several passes through the AST\@.
-This is because in order to register som declarations we need to have others registered.
+In total we pass through the AST three times when transforming declarations, once for class declarations, once for class heritage, and once for class attribute declarations.
+This is because in order to transform some declarations we need to have access to others.
 To understand this we can look at the difference between the first and second pass.
 
-During the first pass through the AST we register and transform all class declarations.
-Now for the second pass we register class heritage.
-The second pass needs to update the \codeword{Class} instances from the first pass with what class they are extending.
-If we try to do this in a single pass we would have to register classes
+During the first pass through the AST we register and transform all class declarations, creating the \codeword{Class} instances.
+Listing~\vref{lst:transform-reference-class-decl} shows an example of how a class declaration will be transformed in this step.
+In the listing we can see that the \codeword{"type_identifier"} node has been transformed to a \codeword{RefNode} instance.
+
+For the second pass we register class heritage.
+The second pass updates the \codeword{Class} instances' superclasses, by looking them up in the scope.
+If we had done these two steps in the same pass through the AST we might have ended up in situations where we can't find the superclass instance, as we might not have reached the declaration yet.
+
+In addition to transforming class declarations, and their heritage, we also transform attribute declarations.
+This could have been done in the same pass as with class heritage, however it was separated to make it more understandable.
+During this transformation we also check if there is a \codeword{new}-expression in the assignment, in order to possibly register the type of the variable.
+The current implementation only supports public field definitions.
+Other declaration types could be supported in the same manner as public field definitions, however due to a lack of time these were not implemented.
+
+\begin{code}{javascript}{AST of a class declaration of class A before and after transforming the references. The values surrounded by angle brackets are references to \codeword{Scope}/\codeword{Class} instances.}{lst:transform-reference-class-decl}
+    // Before transformation
+    {
+        type: 'class_declaration',
+        text: 'class A ...',
+        scope: <Scope 1>,
+        children: [
+            {
+                type: 'class',
+                text: 'class',
+                scope: <Scope 1>,
+                children: []
+            }, {
+                type: 'type_identifier',
+                text: 'A',
+                scope: <Scope 1>,
+                children: [],
+            }
+            ...
+        ]
+    }
+
+    // After transformation
+    {
+        type: 'class_declaration',
+        text: 'class A ...'
+        scope: <Scope 1>,
+        children: [
+            {
+                type: 'class',
+                text: 'class',
+                scope: <Scope 1>,
+                children: []
+            }, {
+                type: 'variable',
+                text: '',
+                scope: <Scope 1>,
+                children: [],
+                origType: 'type_identifier',
+                ref: <Class 1>
+            },
+            ...
+        ]
+    }
+\end{code}
 
 \subsubsection{Transform References}
 
