@@ -8,7 +8,7 @@ We know we are going to be creating a programming language, a superset of TypeSc
 However, we might want to look at if creating a superset of TypeScript is the way to go, or if keeping it simple and extending JavaScript is a better call.
 We might also want to see if it is needed to create a language at all, or if we are able to create a TypeScript library which can achieve the functionality of PT instead.
 There are a lot of approaches we can take for implementing our language, so we will have to map out the requirements for our desired approach.
-Lastly we will have to look at all the different approaches we can take, and discuss the pros and cons of each approach.
+Lastly we will have to look at all the different approaches we can take, and see which approach is right for this project.
 
 This planning phase is crucial for the success of the project, as starting off on the wrong approach for the wrong language would set us back immensely.
 
@@ -22,7 +22,7 @@ This is something we need to find out before going any further with the planning
 One of the requirements of PT is that it should be possible to type-check each template separately.
 There is no easy way to type-check JavaScript code without executing it and looking for runtime errors.
 Even if some JavaScript program successfully executes without throwing any errors, we can still not conclude that the program does not contain any type errors.
-TypeScript on the other hand, with the language being statically typed, we can, at least to a much larger extent, verify if some piece of code is type secure.
+TypeScript on the other hand, with the language being statically typed, we can, at least to a much larger extent, verify if some piece of code is type safe.
 Because of this trait TypeScript is the better candidate for our language.
 
 Now it should be noted that due to TypeScripts type system being unsound one could argue that this requirement of PT is not met.
@@ -31,7 +31,7 @@ While this is true it still outperforms JavaScript on this remark, and we will l
 \subsection{Renaming}\label{subsec:ts-vs-js-renaming}
 
 Renaming is a hard task.
-In order to perform a rename we will need to rename the declaration, and find all references to this declaration and also rename these.
+In order to perform a rename we will need to find the declaration and all references to this declaration and rename these.
 Doing this at compile time would mean that we will have to implement a type system of sorts, since this will help us identify references.
 This is also one of the reasons for why TypeScript is a better candidate than JavaScript, as TypeScript is statically typed, meaning the type of a variable is known at compile-time, while JavaScript is dynamically typed, where the type of a variable is first known at run-time.
 
@@ -59,7 +59,7 @@ Before jumping into a project of this magnitude it is important to find out what
 The goal of this project is to extend TypeScript with the Package Templates language mechanism, this could be achieved by one of the following methods:
 
 \begin{itemize}
-    \item Implementing as a TypeScript library
+    \item Implementing as a library
     \item Making a preprocessor for the TypeScript compiler
     \item Making a compiler plugin/transform
     \item Making a fork of the TypeScript compiler
@@ -71,32 +71,41 @@ The goal of this project is to extend TypeScript with the Package Templates lang
 \subsection{Preprocessor for the TypeScript Compiler}\label{subsec:preprocessor-for-the-typescript-compiler}
 
 % TODO
-\red{Tenker vi må diskutere hva en preprosessor er her. Det jeg gjør i min implementasjon er nok en slags preprosessering, men jeg gjør også mer enn en typisk preprosessor. Kan vi si at en preprosessor er noe som gjør en transformasjon på kildekoden, uten "kunnskap" om det underliggende språket. Jobber bare med det som tekst? Gjør ikke noen semantisk sjekk, osv. I så fall er det ikke mulig å implementere som PP, da blant annet renaming krever en kunnskap til det underliggende språket, men instansiering kan nok gjøres gjennom PP.}
+%\red{Tenker vi må diskutere hva en preprosessor er her. Det jeg gjør i min implementasjon er nok en slags preprosessering, men jeg gjør også mer enn en typisk preprosessor. Kan vi si at en preprosessor er noe som gjør en transformasjon på kildekoden, uten "kunnskap" om det underliggende språket. Jobber bare med det som tekst? Gjør ikke noen semantisk sjekk, osv. I så fall er det ikke mulig å implementere som PP, da blant annet renaming krever en kunnskap til det underliggende språket, men instansiering kan nok gjøres gjennom PP.}
+Could we implement the PT specific features in a preprocessor?
+In order to understand this we need to understand what a preprocessor is.
+A preprocessor is often used in combination with a compiler, where the preprocessor often prepares the source files for compilation, such as removing comments, expanding macros (such as \codeword{\#include} in C), and other smaller transformations.
+One distinct difference between a preprocessor and a compiler is that the preprocessor works on the source code as a piece of text, with no knowledge of the underlying programming language, while the compiler often has knowledge about the language of the program.
+This means that the compiler is able to perform more advanced tasks, such as semantic analysis.
 
-\subsection{TypeScript Compiler Plugin / Transform}\label{subsec:typescript-compiler-plugin}
+So the question becomes, can we transform a PTS program to TypeScript by just doing textual transformations, and no semantic analysis.
+We would most likely be able to implement parts of PT with a preprocessor such as simple instantiation without renaming.
+However, as we mentioned in section~\vref{sec:typescript-vs-javascript} we will need to do some type-checking in order to find the correct references when renaming, we can't just rename everything that is textually equal.
+This means that we will need something more advanced than a preprocessor to implement the features of PT\@.
+
+\subsection{TypeScript Compiler Plugin/Transform}\label{subsec:typescript-compiler-plugin}
 
 At the time of writing the official TypeScript compiler does not support compile time plugins.
 The plugins for the TypeScript compiler is, as the TypeScript compiler wiki specifies, "for changing the editing experience only"~\cite{tscplugin}.
-However, there are alternatives that do enable compile time plugins / transformers;
+However, there are alternatives that do enable compile time plugins/transformers;
 
 \begin{itemize}
     \item ts-loader~\cite{tsloadergithub}, for the webpack ecosystem
-    \item Awesome Typescript Loader~\cite{awesometypescriptloadergithub}, for the webpack ecosystem. Deprecated
-    \item ts-node~\cite{tsnodegithub}, REPL / runtime
-    \item ttypescript~\cite{ttypescriptgithub}, TypeScript tool TODO: Les mer på dette
+    \item Awesome Typescript Loader~\cite{awesometypescriptloadergithub}, for the webpack ecosystem.
+    \item ts-node~\cite{tsnodegithub}, REPL/runtime
 \end{itemize}
 
-Unfortunately ts-loader, Awesome Typescript Loader and ts-node does not support adding custom syntax, as it only transforms the AST produced by the TypeScript compiler.
+Unfortunately all of the above do not support adding custom syntax, as they only work on the AST produced by the TypeScript compiler.
 Because of this they are not a viable option for our use-case and will therefore be discarded.
 
 \subsection{Babel plugin}\label{subsec:babel-plugin}
 
-Babel isn't strictly for TypeScript, but for JavaScript as a whole, however we could write our plugin to be dependent on the TypeScript transformation plugin.
+Babel isn't strictly for TypeScript, but for JavaScript, however there does exist a plugin for TypeScript in babel, and we could write a plugin that depend on this TypeScript plugin.
 
 Making a Babel plugin will make it very accessible as most web-projects use Babel, and the upkeep is cheap, as plugins are loosely coupled with the core.
 
 In order for a Babel plugin to support custom syntax it has to provide a custom parser, a fork of the Babel parser.
-Through this we can extend the TypeScript syntax with our syntax for PT.
+Through this we can extend the TypeScript syntax with our syntax for PT\@.
 This is all hidden away from the user, as this custom parser is a dependency of our Babel plugin.
 
 Seeing as we have to make a fork of the parser in order to solve our problem, the upkeep will not be as cheap as first anticipated.
@@ -120,7 +129,7 @@ Firstly we need to consider what the target should be.
 Normally a compiler would output some sort of byte code, like Java byte code in the Java compiler.
 Many compilers also produce native code.
 Native code is pretty much out of the image for our implementation as we still want to stay in the same ecosystem, namely the browser.
-We could possibly also produce WebAssembly byte code, however there are a lot of constructs in TypeScript/JavaScript that do not translate to WebAssembly, such as working with the DOM.
+We could possibly also produce WebAssembly byte code, however there are a lot of constructs in TypeScript/JavaScript that do not translate to WebAssembly, such as working with the DOM\@.
 Since both of these are out of the picture we could either produce TypeScript or JavaScript.
 Producing TypeScript is possibly the easiest way to go, as most of PTS is TypeScript.
 And producing TypeScript also means that we could run the resulting program through the TypeScript compiler to produce JavaScript.
@@ -131,4 +140,7 @@ The rest of the language can be outputted pretty much as is, since our language 
 
 \section{Conclusion}\label{sec:planning-conclusion}
 
-We will be making a custom compiler for a superset of TypeScript with the addition of the language mechanism Package Templates.
+While creating a Babel plugin might be a good approach, it would seem that creating a custom compiler is the safer bet.
+Creating a custom compiler will make it more accessible to most, as setting up a babel project is harder than running a compiler.
+
+With the planning done we can jump into the implementation.
