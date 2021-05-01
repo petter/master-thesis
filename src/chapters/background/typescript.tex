@@ -71,6 +71,16 @@ The compiler will still also be available as a library.
 \subsection{What is TypeScript?}\label{subsec:what-is-typescript}
 
 TypeScript is a superset of JavaScript.
-The language builds on JavaScript with the additions of static type definitions~\cite{tswebsite}.
+The language builds on JavaScript with the additions of static type definitions.
+TypeScripts type system is structural, which means that the type of an object is not bound to a name, such as with nominal typing, but rather the structure of the object, such as having an attribute \codeword{i}, which may be restricted to a number.
+The type system also offers some more advanced type features such as union types, where you can combine types into a new type.
+The new union type represents values that can be any one of the combined types.
+There are also similarly intersection types.
+These types combine other types into a new type, which is the intersection of the combined types.
 
 All valid JavaScript programs are also valid TypeScript programs.
+Types in TypeScript can be optional, as the type inference is powerful enough to infer most types without writing extra code.
+The type-checking can be tailored to be stricter or leaner, where you can for instance disable features such as usage of \codeword{any}-types, which are a way for the programmer to bypass the type-check for certain values.
+TypeScript has full interoperability with JavaScript, so you can adopt the language without refactoring.
+If you are working with a JavaScript library, but you want the safety of types, there can often be found type declaration files written by the community in the DefinitelyTyped project~\cite{tswebsite}.
+
