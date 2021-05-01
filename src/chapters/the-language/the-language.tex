@@ -98,11 +98,16 @@ The productions for non-terminals $\bnfpn{id}$, $\bnfpn{class declaration}$, $\b
     \label{fig:pts-grammar}
 \end{figure}
 
-\section{Example programs}\label{sec:example-programs}
+\section{Example Program}\label{sec:example-program}
 
-Listing~\vref{lst:pts-renaming}.
+Listing~\vref{lst:pts-example-inst-renaming-addto} shows an example of a program in PTS\@.
+This program showcases the basics of defining packages and templates, and how instantiation, renaming and additions can be applied in the language.
+We also have a similar program at the bottom, showing how this is done PT\@.
+While both the basic instantiation and additions stay pretty much the same, renaming do have some interesting differences.
+We can see that in the PT example we have to specify the signature of methods we are renaming, while in PTS example it is enough to just specify the names of the methods.
+This requirement of specifying method signature is something we could remove in PTS because of the difference between the underlying languages, as we discussed previously in section~\vref{sec:syntax}.
 
-\begin{code}{typescript}{An example program with instantiation, renaming, and addition-classes in PTS vs. PT}{lst:pts-renaming}
+\begin{code}{typescript}{An example program with instantiation, renaming, and addition-classes in PTS vs. PT}{lst:pts-example-inst-renaming-addto}
     // PTS
     template T {
         class A {

@@ -140,6 +140,22 @@ The rest of the language can be outputted pretty much as is, since our language 
 
 \section{Conclusion}\label{sec:planning-conclusion}
 
+
+While it would be great to be able to implement Package Templates as an internal DSL in TypeScript, it would seem that this is not a suitable approach.
+Even though we were able to modify the prototype of the classes in the templates, and effectively achieve some form of renaming, we were not able to rename the references.
+This means that we won't be able to use the renaming to its fullest potential, and are thus not able to implement it as an internal DSL\@.
+On top of this, while we were able to reproduce certain PT functionality such as simple instantiations and class merging, it seems to be ... % TODO hvorfor er det ikke nais
+
+Making a TypeScript compiler plugin would seemingly also be a good approach, in the future.
+As we discussed the official TypeScript compiler, nor any of its alternatives, does not have proper support for plugins that would alter the syntax of the language.
+Due to this we are not able to implement the features of PT, since these would require us to add extra syntax.
+At the time this makes this approach not viable, however if in the future this would be supported it might prove a good approach for doing tasks such as these.
+
+Implementing PT into the TypeScript compiler would likely lead to the most robust implementation, however the sheer size of the TypeScript compiler makes this approach undesirable.
+I fear that this approach would be too time costly for this project, and might lead to an incomplete implementation.
+A similar project has been performed by Isene in~\cite{Isene2018}.
+Here Isene came to the conclusion that a project of this size is better fit for a group of two.
+
 While creating a Babel plugin might be a good approach, it would seem that creating a custom compiler is the safer bet.
 Creating a custom compiler will make it more accessible to most, as setting up a babel project is harder than running a compiler.
 
