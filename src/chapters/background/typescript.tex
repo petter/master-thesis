@@ -24,14 +24,28 @@ Second is CSS which gives our structured documents styling such as background co
 The third and final layer is JavaScript which enables web pages to have dynamic content.
 Whenever you visit a website that isn't just static information, but instead might have timely content updates, interactive maps, etc., then JavaScript is most likely involved~\cite{whatisjs}.
 
-JavaScript, or more precisely ECMAScript, is the programming language of the web.
-It is a language that conforms to the ECMAScript specification.
-ECMAScript is simply a JavaScript standard, created by Ecma International, made to ensure interoperability across different browsers.
+JavaScript is a programming language conforming to the ECMAScript standard.
+ECMAScript is a JavaScript standard, created by Ecma International, made to standardize the JavaScript language and ensure interoperability across different browsers.
 There is no official runtime or compiler for JavaScript as it is up to each browser to implement the languages runtime.
 When we create a JavaScript program/script for a web page we don't compile it and transfer a binary or bytecode file for the web page to execute, instead the browser takes the raw source code and interprets it\footnote{On a more technical level, JavaScript is generally just-in-time compiled in the browser.}.
 
-% TODO
-JavaScript is a multi-paradigm language with dynamic typing...
+JavaScript is a multi-paradigm language, mainly consisting of object-orientation and functional programming, with a dynamic type system.
+It is object-oriented in the way that most datastructures are represented through objects, and functional in the way that it has first-class functions, where functions can be free from a class and are treated as values which can be assigned to variables and sent around as parameters.
+
+Where most object-oriented programming languages are class based, like Java, JavaScript is \textit{prototype-based}.
+What this means is that the objects are not class instances, but are rather "instances" of a prototype.
+What you would normally think of as a class instance in Java, is an object with a reference to a prototype object.
+These instances are created through constructor functions, which create an object and sets the prototype for the object.
+
+An object in JavaScript is a "bag" of properties containing values, which are specified in the prototype constructor, and a reference to the prototype object it is an instance of.
+The prototype object is not special in any way, it is just another object that has contains values that can be commonly used by all objects with the same prototype, and can themselves have prototype objects.
+This is how inheritance works in JavaScript, chains of prototype objects, where the \codeword{Object} prototype is at the end of the chain, similar to how the \codeword{Object} class is at the top of the inheritance hierarchy in Java.
+The \codeword{Object} prototype has \codeword{null} as its prototype, and \codeword{null} does not have any prototype.
+When trying to access a member of an object the object itself is first checked, then its prototype, and the prototype's prototype and so on, following the chain of prototypes, until a match is found~\cite{prototypechaining}, or until there is no more prototypes to follow.
+Since prototypes are just objects they can as with any other object be changed at runtime or replaced by other prototypes.
+
+In ECMAScript 2015 there was introduced a class-syntax, however this is just syntactic sugar for creating the prototype object, and the associated constructor.
+Extending a class with this syntax is as you would expect just defining the prototype for the prototype object.
 
 \subsubsection{ECMAScript Versions}\label{subsubsec:ecmascript-versions}
 
