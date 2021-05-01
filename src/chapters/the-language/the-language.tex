@@ -1,19 +1,19 @@
 \chapter{The Language - PTS}\label{ch:the-language---pts}
 
-While the majority of the semantics of PTS will be equal to that of PTj, we will have to change some syntax.
+While the majority of the semantics of PTS will be equal to that of PT, we will have to change some syntax.
 
 \section{Syntax}\label{sec:syntax}
 
 For the implementation of PT we need syntax for the following:
 
 \begin{itemize}
-    \item Defining packages (\codeword{package} in PTj)
-    \item Defining templates (\codeword{template} in PTj)
-    \item Instantiating templates (\codeword{inst} in PTj)
-    \item Specifying renaming for an instantiation (\codeword{with} in PTj)
-    \item Renaming classes (\codeword{=>} in PTj)
-    \item Renaming class attributes (\codeword{->} in PTj)
-    \item Additions to classes (\codeword{addto} in PTj)
+    \item Defining packages (\codeword{package} in PT)
+    \item Defining templates (\codeword{template} in PT)
+    \item Instantiating templates (\codeword{inst} in PT)
+    \item Specifying renaming for an instantiation (\codeword{with} in PT)
+    \item Renaming classes (\codeword{=>} in PT)
+    \item Renaming class attributes (\codeword{->} in PT)
+    \item Additions to classes (\codeword{addto} in PT)
 \end{itemize}
 
 \codeword{template}, \codeword{addto}, and \codeword{inst} are all not in use nor reserved in the ECMAScript standard or in TypeScript, and can therefore be used in \plname{} without any issues.
@@ -24,8 +24,8 @@ It could also be beneficial to not share the keyword in order to avoid creating 
 \codeword{module} is also a keyword that could be used to describe a PT package, however this is already used in the ES standard, and should therefore also be avoided in order to avoid confusion.
 We will therefore use \codeword{pack} instead.
 
-Renaming in PTj uses \codeword{=>}(fat-arrow) for renaming classes, and \codeword{->}(thin-arrow) for renaming class attributes.
-PTj, for historical purposes, used two different operators for renaming classes and methods, however in more recent PT implementations, such as~\cite{Isene2018}, a single common operator is used for both.
+Renaming in PT uses \codeword{=>}(fat-arrow) for renaming classes, and \codeword{->}(thin-arrow) for renaming class attributes.
+PT, for historical purposes, used two different operators for renaming classes and methods, however in more recent PT implementations, such as~\cite{Isene2018}, a single common operator is used for both.
 We will do as the latter, and only use a single common operator for renaming.
 Another reason for rethinking the renaming syntax is the fact that the \codeword{=>}(fat-arrow) operator is already in use in arrow functions~\cite{arrowfunction}, and reusing it for renaming could potentially produce an ambiguous grammar, or the very least be confusing to the programmer.
 JavaScript currently supports renaming of destructured attributes using the \codeword{:}(colon) operator and aliasing imports using the keyword \codeword{as}.
@@ -34,10 +34,10 @@ We could opt to choose one of these for renaming in PTS as well, however in orde
 The \codeword{with} keyword is currently in use in JavaScript for \codeword{with}-statements~\cite{with-statement}.
 With it being a statement, we could still use it and not end up with an ambiguous grammar, however as with previous keywords, we will avoid using it in order to minimize concept confusion.
 Instead of this we will contain our instantiation renamings inside a block-scope (\codeword{\{ \}}).
-Field renamings for a class will remain the same as in PTj, being enclosed in parentheses (\codeword{( )}).
+Field renamings for a class will remain the same as in PT, being enclosed in parentheses (\codeword{( )}).
 
 Another change we will make to renaming is to remove the requirement of having to specify the signature of the method being renamed.
-This was necessary in PTj as Java supports overloading, which means that several methods could have the same name, or a method and a field.
+This was necessary in PT as Java supports overloading, which means that several methods could have the same name, or a method and a field.
 Method overloading is not supported in JavaScript/TypeScript, and we do therefore not need this constraint.
 
 \section{The PTS Grammar}\label{sec:the-pts-grammar}
@@ -102,7 +102,7 @@ The productions for non-terminals $\bnfpn{id}$, $\bnfpn{class declaration}$, $\b
 
 Listing~\vref{lst:pts-renaming}.
 
-\begin{code}{typescript}{An example program with instantiation, renaming, and addition-classes in PTS vs. PTj}{lst:pts-renaming}
+\begin{code}{typescript}{An example program with instantiation, renaming, and addition-classes in PTS vs. PT}{lst:pts-renaming}
     // PTS
     template T {
         class A {
@@ -119,7 +119,7 @@ Listing~\vref{lst:pts-renaming}.
         }
     }
 
-    // PTj
+    // PT
     template T {
         class A {
             String f() {

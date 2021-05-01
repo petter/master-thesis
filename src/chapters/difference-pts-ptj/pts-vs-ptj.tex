@@ -1,13 +1,13 @@
 %! Author = petter
 %! Date = 04.01.2021
 
-\chapter{Difference between PTS and PTj}\label{ch:difference-between-pts-and-ptj}
+\chapter{Difference between PTS and PT}\label{ch:difference-between-pts-and-ptj}
 
 
 \section{Nominal vs. Structural Typing}\label{sec:nominal-vs-structural-typing}
 
-One of the most notable differences between PTS and PTj are the underlying languages' type systems.
-PTS, as an extension of TypeScript, has structural typing, while PTj on the other hand, an extension of Java, has nominal typing.
+One of the most notable differences between PTS and PT are the underlying languages' type systems.
+PTS, as an extension of TypeScript, has structural typing, while PT on the other hand, an extension of Java, has nominal typing.
 
 Nominal and structural are two major categories of type systems.
 Nominal is defined as "being something in name only, and not in reality" in the Oxford dictionary.
@@ -241,7 +241,7 @@ A nominal type system in PT would seemingly lead to less problematic renaming sc
     }
 \end{code}
 
-\begin{code}{Java}{Example of how using renaming in PTj might break a program. After renaming the method \codeword{f} to \codeword{g} the class, \codeword{A}, no longer conform to the implementing interface \codeword{I}.}{lst:problems-with-nominal-pt}
+\begin{code}{Java}{Example of how using renaming in PT might break a program. After renaming the method \codeword{f} to \codeword{g} the class, \codeword{A}, no longer conform to the implementing interface \codeword{I}.}{lst:problems-with-nominal-pt}
     template T {
         interface I {
             void f();
