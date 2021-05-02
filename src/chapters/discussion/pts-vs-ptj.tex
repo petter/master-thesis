@@ -1,10 +1,7 @@
 %! Author = petter
 %! Date = 04.01.2021
 
-\chapter{Difference between PTS and PT}\label{ch:difference-between-pts-and-ptj}
-
-
-\section{Nominal vs. Structural Typing}\label{sec:nominal-vs-structural-typing}
+\section{Nominal vs. Structural Typing in PT}\label{sec:difference-between-pts-and-ptj}
 
 One of the most notable differences between PTS and PT are the underlying languages' type systems.
 PTS, as an extension of TypeScript, has structural typing, while PT on the other hand, an extension of Java, has nominal typing.
@@ -256,8 +253,3 @@ A nominal type system in PT would seemingly lead to less problematic renaming sc
         inst T with A => A (f() -> g());
     }
 \end{code}
-
-\section{Attribute Renaming}\label{sec:attribute-renaming}
-
-Don't need full signature in PTS, because no overloading, etc.
-Might be easier to understand PTS version?

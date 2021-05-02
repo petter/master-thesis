@@ -1,19 +1,19 @@
-\chapter{Does PTS Fulfill The Requirements of PT?}\label{ch:does-pts-fulfill-the-requirements-of-pt?}
+\section{Does PTS Fulfill The Requirements of PT?}\label{sec:does-pts-fulfill-the-requirements-of-pt?}
 
 This thesis is concerned about implementing Package Templates in TypeScript.
 However, in order to determine to what degree we have actually implemented PT or just created something that looks like it, we have to understand what the requirements of PT are, and if we are meeting those requirements.
 We will therefore in this chapter look at the requirements as described in~\cite{jot}.
 After getting an understanding of the requirements we are going to look at how our implementation holds up to them.
 
-\input{chapters/does-pts-fulfill-requirements/the-requirements-of-pt.tex}
+\input{chapters/discussion/the-requirements-of-pt.tex}
 
-\section{PTS' Implementation of the Requirements}\label{sec:pts'-implementation-of-the-requirements}
+\subsection{PTS' Implementation of the Requirements}\label{subsec:pts'-implementation-of-the-requirements}
 
 With a proper understanding of the requirements of PT we can examine our implementation and see whether our implementation fulfills these requirements.
 For each requirement we will be looking at a program in PTS which showcases the requirements, and the resulting program after compilation.
 
 
-\subsection{Parallel Extension}\label{subsec:pts-parallel-extension}
+\subsubsection{Parallel Extension}\label{subsubsec:pts-parallel-extension}
 
 To understand how this requirement can be fulfilled it is important to understand how the requirement could fail to be fulfilled.
 A failure to fulfill the requirement would be that making additions in parallel would fail to compile, or create an otherwise incorrect program.
@@ -61,7 +61,7 @@ By doing this we will not incorrectly throw any false-negatives when it comes to
 This approach does unfortunately come with some downsides.
 By not addressing the issue at the addition stage it makes it harder to give informative error messages when invalid references do occur, however this was a tradeoff that was beneficial for this project.
 
-\subsection{Hierarchy Preservation}\label{subsec:pts-hierarchy-preservation}
+\subsubsection{Hierarchy Preservation}\label{subsubsec:pts-hierarchy-preservation}
 
 In order to fulfill the hierarchy preservation requirement we have to preserve all super-/subclass relations after additions and merges have been applied.
 Listing~\vref{lst:pts-hierarchy-preservation} shows a program, and the resulting TypeScript program after compilation, which fulfills the requirement of hierarchy preservation.
@@ -113,7 +113,7 @@ Because of the heritage merging we can with confidence say that we have fulfille
     }
 \end{code}
 
-\subsection{Renaming}\label{subsec:pts-renaming}
+\subsubsection{Renaming}\label{subsubsec:pts-renaming}
 
 In order to be able to fulfill the renaming requirement our implementation should be able to rename classes and their attributes.
 This renaming should result in a program where not only the declarations have been renamed, but also all references.
@@ -205,7 +205,7 @@ This is something I would of course have liked to take into consideration if I h
 Deciding the type of variables is something that possibly would have come for cheaper if I had opted for a fork of the TypeScript compiler as my approach.
 This is something we will come back to in~\vref{subsec:result-approach}.
 
-\subsection{Multiple Uses}\label{subsec:pts-multiple-uses}
+\subsubsection{Multiple Uses}\label{subsubsec:pts-multiple-uses}
 
 In order for this requirement to be fulfilled we should be able to re-use a template several times, with different renamings and additions while the different instantiations stay independent of each other.
 This was something I paid extra attention to during implementation, not just to fulfill the requirement, but to avoid bugs.
@@ -242,7 +242,7 @@ We can see from the resulting program after a successful compilation that this i
     }
 \end{code}
 
-\subsection{Type Parameterization}\label{subsec:pts-type-parameterization}
+\subsubsection{Type Parameterization}\label{subsubsec:pts-type-parameterization}
 
 The type parameterization requirement is something the implementation does not fulfill.
 This was not implemented due to it not being prioritized.
@@ -266,11 +266,11 @@ Required types do of course have a lot of advantages such as making it possible 
     }
 \end{code}
 
-\subsection{Class Merging}
+\subsubsection{Class Merging}
 
-\subsection{Collection-level Type-checking}\label{subsec:implementation-collection-level-type-checking}
+\subsubsection{Collection-level Type-checking}\label{subsubsec:implementation-collection-level-type-checking}
 
-\section{Conclusion}\label{sec:requirements-conclusion}
+\subsection{Conclusion}\label{subsec:requirements-conclusion}
 
 While we do not fulfill every requirement, we do fulfill most of them.
 The current implementation might not be a full implementation of PT, but we can confidently say we have at least made an implementation of the core of PT for TypeScript.

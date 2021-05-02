@@ -1,5 +1,5 @@
 % TODO: Kanskje bedre å ha denne inn i background til PT?
-\section{The Requirements of PT}\label{sec:the-requirements-of-pt}
+\subsection{The Requirements of PT}\label{subsec:the-requirements-of-pt}
 
 In~\cite{jot} the authors discuss requirements of a desired language mechanism for re-use and adaptation through collections of classes.
 They then present a proposal for Package Templates, which to a large extent fulfills all the desired requirements.
@@ -22,7 +22,7 @@ The requirements presented in the paper were the following:
 
 In order to get a better understanding of what these requirements entail we will have to dive a bit deeper into each requirement.
 
-\subsection{Parallel Extension}\label{subsec:parallel-extension}
+\subsubsection{Parallel Extension}\label{subsubsec:parallel-extension}
 % - \textbf{Parallel  extension:}  When  using  the  collection  C  in  a  certain  setting  we  can  add  attributes  to  A  and  B.
 % These  additions  should  also  have  effect  for  the  code  of  C,  e.g.  so  that  we  by  means  of  an  A-variable  defined  in  C  can  directly  (without  casting) access the attributes added to A.
 %
@@ -64,7 +64,7 @@ We could just as easily switched the positions of the additions around in this e
     }
 \end{code}
 
-\subsection{Hierarchy Preservation}\label{subsec:hierachy-preservation}
+\subsubsection{Hierarchy Preservation}\label{subsubsec:hierachy-preservation}
 % - \textbf{Hierarchy  preservation:}  The  mechanism  should  allow  B  to  be  a  subclass  of  A,  and  if  additional  attributes  are  given  to  A  and  to  B,  then  the  B  with  additions  should be a subclass of the A with additions.
 % Note that this will not be the case if we just use the collection C with the classes A and B and then define subclasses A’  and  B’  to  A  and  B,  respectively,  with  the  additions  we  want  in  these  subclasses.
 % B’ will then not be a subclass of A’.
@@ -75,7 +75,7 @@ If we have a template with classes \codeword{A} and \codeword{B}, and class \cod
 That is if we make additions to class \codeword{B} it should still be a subclass of class \codeword{A}, and any additions made to class \codeword{A} should be inherited to class \codeword{B}.
 Even if we make additions to both class \codeword{A} and \codeword{B}, then \codeword{B} with additions should still be a subclass of class \codeword{A} with additions.
 
-\subsection{Renaming}\label{subsec:renaming}
+\subsubsection{Renaming}\label{subsubsec:renaming2}
 
 % - \textbf{Renaming:}  When  C  is  used,  we  should  be  able  to  change  the  name  of  A  and  B,  and of their attributes, so that they fit with the specific use situation.
 %
@@ -83,7 +83,7 @@ Even if we make additions to both class \codeword{A} and \codeword{B}, then \cod
 
 The renaming requirement states that PT should enable us to rename the names of any class, and its attributes, so that they better fit their use case.
 
-\subsection{Multiple Uses}\label{subsec:multiple-uses}
+\subsubsection{Multiple Uses}\label{subsubsec:multiple-uses}
 % - \textbf{Multiple  uses:}  It  should  be  possible  to  use  the  classes  of  C  for  different  and  independent  purposes  in  the  same  program,  and  so  that  each  purpose  have  different additions and renamings.
 % The compiler should be able to check that each use implies a different set of classes as if they are defined in separate hierarchies.
 %
@@ -95,7 +95,7 @@ An example of this is the graph template we created in listing~\vref{code:rename
 Here we bundled the minimal needed classes in order to have a working implementation for graphs.
 We then used this graph implementation to model a road systems, however we might later also want to reuse the graph implementation for modelling the sewer systems of each city, and this should not be affected by any changes we made to the graph template for our road system.
 
-\subsection{Type Parameterization}\label{subsec:type-parameterization}
+\subsubsection{Type Parameterization}\label{subsubsec:type-parameterization}
 
 % - \textbf{Type parameterization:} It should be possible to write a collection of classes that assumes the existence of classes that have some required attributes, but are not yet completely defined.
 % In each use of this collection, one can provide specific classes that have at least the required attributes.
@@ -133,7 +133,7 @@ If we wanted to implement this in Java we would either have to have type paramet
     }
 \end{code}
 
-\subsection{Class Merging}\label{subsec:class-merging}
+\subsubsection{Class Merging}\label{subsubsec:class-merging}
 
 PT should allow for merging two or more classes.
 When merging classes the result should be a union of their attributes.
@@ -145,7 +145,7 @@ If we merge two classes \codeword{A} and \codeword{B}, it should be possible to 
 % - - Assume that we in addition to the graph collection have a collection Persons with a class Person.
 % In a program handling personal relations we then want to use both collections together so that we obtain a new class, say PersonNode, which has all the  attributes  of  Node  and  Person,  and  where  a  Person-variable  p  defined  in  Persons gives access directly to the Node attributes, e.g. “p.firstEdge”.
 
-\subsection{Collection-Level Type-Checking}\label{subsec:collection-level-type-checking}
+\subsubsection{Collection-Level Type-Checking}\label{subsubsec:collection-level-type-checking}
 
 The final requirement is collection-level type-checking.
 This requirement is there to ensure that each separate package/template can be independently type-checked.
