@@ -152,11 +152,18 @@ Due to this we are not able to implement the features of PT, since these would r
 At the time this makes this approach not viable, however if in the future this would be supported it might prove a good approach for doing tasks such as these.
 
 Implementing PT into the TypeScript compiler would likely lead to the most robust implementation, however the sheer size of the TypeScript compiler makes this approach undesirable.
-I fear that this approach would be too time costly for this project, and might lead to an incomplete implementation.
-A similar project has been performed by Isene in~\cite{Isene2018}.
-Here Isene came to the conclusion that a project of this size is better fit for a group of two.
+I fear that this approach would be too time costly for this project, and might lead to an incomplete implementation as a result of this.
+A similar project has been performed by Isene in~\cite{Isene2018}, where they implemented PT in C\# by extending the Roslyn compiler.
+Here Isene suggested that a project of this size was better fit for a group of two.
+To avoid re-discovering this we will therefore opt to go for another approach.
+As well as this an implementation of PT in the TypeScript compiler would not achieve our desired trait of having a loosely coupled implementation.
+This could result in a tedious process of dealing with merge conflicts when updates to the TypeScript compiler comes out.
 
-While creating a Babel plugin might be a good approach, it would seem that creating a custom compiler is the safer bet.
-Creating a custom compiler will make it more accessible to most, as setting up a babel project is harder than running a compiler.
+Creating a plugin for babel might be a good approach, however since we have to implement our grammar as part of a fork of the babel parser, this makes the approach less desirable.
+As with the approach of implementing PT in a fork of the TypeScript compiler this would also lead to a tightly coupled implementation, at least for the parser part of our compiler.
+If we were able to write a plugin for the parsing step of Babel this might prove a viable option, however as of now there are no plans of supporting this.
+
+Our last approach is creating a custom compiler.
+As discussed previously, if we are able to % TODO
 
 With the planning done we can jump into the implementation.
