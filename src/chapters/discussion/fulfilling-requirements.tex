@@ -15,6 +15,7 @@ For each requirement we will be looking at a program in PTS which showcases the 
 
 \subsubsection{Parallel Extension}\label{subsubsec:pts-parallel-extension}
 
+Fulfilling the requirement of parallel extension requires us to be able to merge or make extensions to classes, and be able to reference these additions within the same package/template, in the same or in a different class.
 To understand how this requirement can be fulfilled it is important to understand how the requirement could fail to be fulfilled.
 A failure to fulfill the requirement would be that making additions in parallel would fail to compile, or create an otherwise incorrect program.
 Failure to compile might of course not always be a bad thing, there are certain scenarios where we do want the compiler to throw an error.
@@ -27,7 +28,7 @@ If there is a group containing only additions then it will fail, as we have no c
 
 The second scenario is when we are trying to reference non-existent attributes in a class.
 An example of this can be seen in listing~\vref{lst:pts-parallel-extension-non-existent-attribute}.
-This example will fail during the type-checking of our pacakges/templates, as discussed in~\vref{sec:type-checking-of-templates}.
+This example will fail during the type-checking of our packages/templates, as discussed in~\vref{sec:type-checking-of-templates}.
 Our approach for dealing with this is pretty much by not dealing with it, and instead assume that everything is okay at this stage of the compilation.
 We will then instead discover any inconsistencies in the type-checking stage of the compiler.
 In the aforementioned listing it is of course pretty easy to examine class \codeword{A} to see if it contains an attribute \codeword{h}, however it might not always be this easy.
@@ -246,7 +247,7 @@ We can see from the resulting program after a successful compilation that this i
 
 The type parameterization requirement is something the implementation does not fulfill.
 This was not implemented due to it not being prioritized.
-There is only so much time available during the span of a master thesis, and I chose to look at how the core of PT would fit into a structurally language like TypeScript, rather than on making sure it would be a fully fleshed out implementation of PT\@.
+There is only so much time available during the span of a master thesis, and I chose to look at how the core of PT would fit into a structurally typed language like TypeScript, rather than on making sure it would be a fully fleshed out implementation of PT\@.
 Another reason for avoiding this is that much of type parameterization can be achieved through merging and renaming.
 Listing~\vref{lst:type-parameterization-without-rt} shows an example of how you can use an empty class as a generic type implementation of lists, similar to the list implementation with required types in listing~\vref{lst:type-parameterization}.
 Required types do of course have a lot of advantages such as making it possible to constrain the type, and forcing the programmer to give an actual parameter for the type, which we are unable to do.
@@ -266,7 +267,41 @@ Required types do of course have a lot of advantages such as making it possible 
     }
 \end{code}
 
-\subsubsection{Class Merging}
+\subsubsection{Class Merging}\label{subsubsec:pts-class-merging}
+
+%TODO Les over og finpuss på dette
+
+In order to fulfill the requirement of class merging we will have to be able to merge classes through instantiating two or more templates containing a class with a common name, or through renaming a class at instantiating leading to two classes having the same name.
+A failure to fulfill this requirement could be that a resulting program would contain two different class declarations, where these should have been merged.
+This could occur if we had for instance not respected the renaming of a class at the time class merging, that is if we had renamed a class to be merged, but this was not picked up during class merging.
+Our implementation of class merging has been made so that it is essentially unaware of the instantiation and renaming steps, it is done as a separate step after these actions have been performed.
+What this means is that after performing all instantiations, with optional renamings, we can momentarily end up with several class declaration, which would be an invalid TypeScript program, however before the closing of templates step is done we will merge all class declarations and \codeword{addto}-statements.
+The resulting program could of course still be an invalid TypeScript program, as the merge of classes could lead to erroneous code, such as duplicate function declarations, however this is not a result of an invalid implementation, but rather an error as a product of an invalid input program.
+The class merging step, will merge classes without checking their bodies, as these will be picked up in the type-checking step later on.
+By separating the logic of instantiations and renaming, as we have done, we should minimize the potential for an invalid implementation of class merging.
+
+Listing~\vref{lst:req-class-merging-example} shows a program with class merging, and the resulting program from a compilation of the PTS program.
+Here we merge two classes with the same name, \codeword{A}, which has two different
+
+\begin{code}{typescript}{Example of a program with class merging, where we merge two classes, \codeword{A}, with attributes, \codeword{i} and \codeword{j}, respectively. The resulting program shown at the bottom is as expected a merge of the two classes.}{lst:req-class-merging-example}
+    // PTS
+    template T {
+        class A {
+            i = 0;
+        }
+    }
+
+    pack P {
+        inst T;
+        inst T { A -> A (i -> j) };
+    }
+
+    // Resulting program
+    class A {
+        i = 0;
+        j = 0;
+    }
+\end{code}
 
 \subsubsection{Collection-level Type-checking}\label{subsubsec:implementation-collection-level-type-checking}
 
