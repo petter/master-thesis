@@ -31,9 +31,16 @@ While this is true it still outperforms JavaScript on this remark, and we will l
 \subsection{Renaming}\label{subsec:ts-vs-js-renaming}
 
 Renaming is a hard task.
-In order to perform a rename we will need to find the declaration and all references to this declaration and rename these.
+In order to perform a (safe) renaming we will need to find the declaration and all references to this declaration and rename these.
 Doing this at compile time would mean that we will have to implement a type system of sorts, since this will help us identify references.
 This is also one of the reasons for why TypeScript is a better candidate than JavaScript, as TypeScript is statically typed, meaning the type of a variable is known at compile-time, while JavaScript is dynamically typed, where the type of a variable is first known at run-time.
+While TypeScript generally allows us to determine the types of variables at compile time, this is not always the case, since it is possible for the programmer to explicitly type a variable with \codeword{any}, a catch-all type which effectively bypasses type-checking.
+This means that we can still run into the same issues as we would in a JavaScript program, and not be able to perform a safe renaming, however in cases such as these where the programmer has explicitly chosen to bypass the type-check, it might then also be acceptable to not offer renaming of \codeword{any}-typed variables.
+
+\subsection{Language Choice Conclusion}\label{subsec:langauge-choice-conclusion}
+
+Since TypeScript would enable us to perform type-checks on templates, as well as making it possible to perform safe renamings we will in this project opt to go for TypeScript as our choice of language.
+% TODO kanskje litt mer her
 
 \section{What Do We Need?}\label{sec:what-do-we-need}
 
