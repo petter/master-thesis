@@ -1,5 +1,73 @@
 \chapter{Results}\label{ch:results}
 
+\section{How Can PTS Be Used?}\label{sec:how-can-this-be-used?}
+
+\subsection{Creating a PTS Project}\label{subsec:creating-a-pts-project}
+
+In order to use the PTS compiler you will need to have node and npm installed on your computer.
+
+Initialize the project:
+
+\begin{minted}{bash}
+    mkdir <project name>
+    cd <project name>
+    npm init -y
+    npm install pts-lang
+\end{minted}
+
+Add a start and/or build script to \codeword{package.json}:
+
+\begin{minted}{json}
+    {
+      "scripts": {
+        "start": "pts-lang -i src/index.pts --run",
+        "build": "pts-lang -i src/index.pts -o build/index"
+      }
+    }
+\end{minted}
+
+\subsection{A Real World Example}\label{subsec:a-real-world-example}
+
+
+\begin{code}{typescript}{Real world example of PTS being used in React. In this example we create a component for fetching JSON when the component has been mounted, and then we re-use this functionality in our Pokemon-component.}{lst:pts-react}
+    template FetchJson {
+        class FetchJson extends Component {
+            componentDidMount() {
+                fetch(this.props.url)
+                .then(response => response.json())
+                .then(data =>
+                this.setState(state => ({...state, data})))
+            }
+        }
+    }
+
+    pack Pokemon {
+        inst FetchJson { FetchJson -> Pokemon };
+        addto Pokemon extends Component {
+            render() {
+                if(this.state.data === undefined)
+                return 'Loading...';
+
+                const name = this.state.data.name;
+                const image = this.state.data.sprites.front_default;
+                return (
+                <div>
+                <img src={image} />
+                <h1>{name}</h1>
+                </div>
+                )
+            }
+        }
+
+        class App extends Component {
+            render() {
+                <Pokemon
+                url="https://pokeapi.co/api/v2/pokemon/ditto" />
+            }
+        }
+    }
+\end{code}
+
 \section{Conclusion}\label{sec:result-conclusion}
 
 \subsection{Approach}\label{subsec:result-approach}
@@ -7,44 +75,6 @@
 Did I choose the right approach?
 TypeScript compiler fork might have been easier.
 
-\begin{code}{typescript}{Real world example of PTS being used in React. In this example we create a component for fetching JSON when the component has been mounted, and then we re-use this functionality in our Pokemon-component.}{lst:pts-react}
-template FetchJson {
-    class FetchJson extends Component {
-        componentDidMount() {
-            fetch(this.props.url)
-                .then(response => response.json())
-                .then(data =>
-                    this.setState(state => ({...state, data})))
-        }
-    }
-}
-
-pack Pokemon {
-    inst FetchJson { FetchJson -> Pokemon };
-    addto Pokemon extends Component {
-        render() {
-            if(this.state.data === undefined)
-                return 'Loading...';
-
-            const name = this.state.data.name;
-            const image = this.state.data.sprites.front_default;
-            return (
-                <div>
-                    <img src={image} />
-                    <h1>{name}</h1>
-                </div>
-            )
-        }
-    }
-
-    class App extends Component {
-        render() {
-            <Pokemon
-                url="https://pokeapi.co/api/v2/pokemon/ditto" />
-        }
-    }
-}
-\end{code}
 
 \section{Future Work}\label{sec:future-work}
 
