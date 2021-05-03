@@ -1,45 +1,16 @@
-%\section{Implementing PT as a TS library}\label{sec:implementing_pt_as_a_ts_library}
-%
-%In order to implement PT we need to be able to handle the following:
-%
-%\begin{itemize}
-%    \item Defining templates
-%    \item Instantiating templates
-%    \item Renaming classes
-%    \item Renaming class attributes
-%    \item Merging classes
-%\end{itemize}
-%
-%\subsection{Defining Templates}\label{sub:defining_templates}
-%
-%Templates could be defined as an ECMAScript class, where each member of the template is a static attribute.
-%
-%\subsection{Instantiating Templates}\label{sub:instantiating_templates}
-%
-%\subsection{Renaming Classes}\label{sub:renaming_classes}
-%
-%Since each class in a template is just a static member, we could create a new template where we use the new name for our class as the attribute name, and point to the class from the "old" template.
-%
-%TODO: Because of ES having open classes this could lead to unwanted side-effects.
-%Might need to look into a different solution for this.
-%
-%\subsection{Renaming Class Attributes}\label{sub:renaming_class_attribtues}
-%
-%Maybe impossible?
-%
-%\subsection{Merging Classes}\label{sub:merging_classes}
-%
-%For merging of the types you would use the built-in decleration merging~\cite{declerationmerging}.
-%Implementation merging is also possible because ECMAScript has open classes.
-%For implementation merging you would create an empty class which has the type of the merged declarations, and then assign the fields and methods from the merging classes to this class.
+\subsection{Implementing PT as a TypeScript Library}\label{subsec:implementing-pt-as-a-ts-library}
 
-% TODO Les over og se om dette er brukbart
-
-\subsection{Implementing PT as a TS Library}\label{subsec:implementing-pt-as-a-ts-library}
+% Tror Groovy bruker "meta-classes" til å oppnå gjenbruk og renaming av klasser. Vi kan bruke prototyper til å oppnå lignende i JS.
 
 One of the first approaches we need to check out is if we are able to achieve the functionality of PT, without having to create a compiler.
-Creating a library would presumably be an easier task than having to create a compiler, and it would also make it easier to use, as the programmer would not have to install a compiler in order to get the PT functionality.
-In order to implement PT we need to be able to handle the following:
+Instead of creating a compiler, that would likely be a complicated and time-consuming task, we could potentially get away with implementing the features of PT within TypeScript itself.
+In~\cite{groovypt}, Axelsen and Krogdahl shows how they were able to implement PT in Groovy by utilizing the languages' meta-programming capabilities.
+We will in this section therefore try to achieve something similar in TypeScript.
+While Groovy seems to have better meta-programming capabilities, it would seem that we are able to achieve
+
+%This would entail creating an internal DSL\footnote{Internal DSLs are domain specific languages that can be used inside} for defining templates and a library for achieving the functionality of PT, such as instantiating, renaming and class merging.
+%This approach would presumably be an easier task than having to create a compiler, and it could potentially make it easier to use, as the programmer would not have to install a compiler in order to get the PT functionality.
+%In order to implement PT we need to be able to handle the following:
 
 \begin{itemize}
     \item Defining templates
@@ -56,8 +27,6 @@ JavaScript has three options for this, an array, an object or a class.
 It should however also be possible to inherit from classes in your own template, which rules out both arrays and objects, as there is no way of referencing other members during definition of the array/object.
 Templates should therefore be defined as classes, where each member of the template is an attribute of the template class.
 In listing~\vref{code:libraryimpl-template} we see an example of how this could be done.
-
-%We are making the templates classes static in order to be able to rename them, see section~\vref{sub:renaming_classes}.
 
 \codeinputfile{template-example-without-decorator.ts}{typescript}{Example of defining a template in a library implementation.}{code:libraryimpl-template}
 
