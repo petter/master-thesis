@@ -6,13 +6,41 @@
 
 In order to use the PTS compiler you will need to have node and npm installed on your computer.
 
+If you want to install the compiler globally you can do the following:
+
+\begin{minted}{bash}
+    $ npm install -g pts-lang
+\end{minted}
+
+This will give you access to the PTS compiler CLI through the command \codeword{pts-lang}.
+By not specifying any command line arguments you get a helpful text describing how to use the compiler;
+
+\begin{minted}{text}
+$ pts-lang
+Options:
+      --help                      Show help                        [boolean]
+      --version                   Show version number              [boolean]
+  -i, --input                     Name of the input file [string] [required]
+  -o, --output                    Name of the output file           [string]
+  -v, --verbose                   Show extra information during
+                                  transpilation                    [boolean]
+  -t, --targetLanguage, --target  Target language of the transpiler
+                                       [choices: "js", "ts"] [default: "js"]
+  -r, --run                            [boolean] [required] [default: false]
+
+Missing required argument: input
+\end{minted}
+
+If you are using PTS for a specific project it might be better to set it up as a project dependency in npm.
+This will not require you to install it globally, it will stay contained in the npm project.
+
 Initialize the project:
 
 \begin{minted}{bash}
-    mkdir <project name>
-    cd <project name>
-    npm init -y
-    npm install pts-lang
+    $ mkdir <project name>
+    $ cd <project name>
+    $ npm init -y
+    $ npm install pts-lang
 \end{minted}
 
 Add a start and/or build script to \codeword{package.json}:
@@ -24,6 +52,13 @@ Add a start and/or build script to \codeword{package.json}:
         "build": "pts-lang -i src/index.pts -o build/index"
       }
     }
+\end{minted}
+
+The start script only runs the program, and does not emit any files, while the build script transpiles the \codeword{src/index.pts} file to JavaScript.
+If you would rather have TypeScript output you can use the \codeword{-t} flag to specify this:
+
+\begin{minted}{bash}
+    pts-lang -i src/index.pts -o build/index -t ts
 \end{minted}
 
 \subsection{A Real World Example}\label{subsec:a-real-world-example}
