@@ -2,7 +2,7 @@
 
 \section{How Can PTS Be Used?}\label{sec:how-can-this-be-used?}
 
-\subsection{Creating a PTS Project}\label{subsec:creating-a-pts-project}
+\subsection{Installing and using PTS Globally}\label{subsec:installing-and-using-pts-globally}
 
 In order to use the PTS compiler you will need to have node and npm installed on your computer.
 
@@ -31,8 +31,11 @@ Options:
 Missing required argument: input
 \end{minted}
 
+\subsection{Creating a PTS Project}\label{subsec:creating-a-pts-project}
+
 If you are using PTS for a specific project it might be better to set it up as a project dependency in npm.
 This will not require you to install it globally, it will stay contained in the npm project.
+This also means that any contributors to the project do not have to worry about installing PTS, as it is taken care of by npm.
 
 Initialize the project:
 
