@@ -166,6 +166,7 @@ I suggest that before class merging that the AST nodes representing classes or \
 Class nodes can be transformed to containing a body of attribute nodes, instead of general AST nodes, and the attribute declarations will be transformed to a pair of the name of the attribute, and the old AST representation of the attribute.
 This will enable us to perform smarter merges, as we have easy access to the contained attributes.
 For class declarations this will enable us to give better error messages when merging classes resulting in duplicate attribute declarations, and for \codeword{addto} this enables us to replace the attributes that will be overridden.
-This was attempted in the implementation, but had to be discarded because of the time constraint.
+
+This more robust implementation was attempted, but had to be discarded because I ran out of time.
 The attempted implementation can be found under the experimental branch in the GitHub repository, \url{https://github.com/petter/pts/tree/experimental}.
 This implementation also tries to achieve better representations for templates and packages to contain these new class representations.
