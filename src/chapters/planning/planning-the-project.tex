@@ -129,14 +129,16 @@ That being said it will probably be a lot easier to do semantic analysis in a fo
 
 \subsection{Making a Custom Compiler}\label{subsec:making-a-custom-compiler}
 
+% TODO: utover hva "target" skal være, så svarer du vel egentlig ikke på dette i resten av avsnittet.
+
 Making a custom compiler for PTS might seem like a hard task, but let us dig deeper into what this entails.
 Firstly we need to consider what the target should be.
 Normally a compiler would output some sort of byte code, like Java byte code in the Java compiler.
 Many compilers also produce native code.
-Native code is pretty much out of the image for our implementation as we still want to stay in the same ecosystem, namely the browser.
+Producing native code is not an option for our implementation as we still want to stay in the same ecosystem, namely the browser.
 We could possibly also produce WebAssembly byte code, however there are a lot of constructs in TypeScript/JavaScript that do not translate to WebAssembly, such as working with the DOM\@.
-Since both of these are out of the picture we could either produce TypeScript or JavaScript.
-Producing TypeScript is possibly the easiest way to go, as most of PTS is TypeScript.
+Since neither of these are valid options we could either produce TypeScript or JavaScript.
+Producing TypeScript is possibly the easiest way to go, as most of PTS is already TypeScript.
 And producing TypeScript also means that we could run the resulting program through the TypeScript compiler to produce JavaScript.
 
 Having TypeScript as the target for our compiler also means that we can ignore most parts of the language and mainly focus on the PT specifics.

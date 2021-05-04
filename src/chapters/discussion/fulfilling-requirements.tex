@@ -19,7 +19,11 @@ Fulfilling the requirement of parallel extension requires us to be able to merge
 To understand how this requirement can be fulfilled it is important to understand how the requirement could fail to be fulfilled.
 A failure to fulfill the requirement would be that making additions in parallel would fail to compile, or create an otherwise incorrect program.
 Failure to compile might of course not always be a bad thing, there are certain scenarios where we do want the compiler to throw an error.
-There are mainly two scenarios where we would like the compilation to fail for additions, trying to make an addition to a non-existent class, and trying to reference non-existent attributes in a class.
+There are mainly two scenarios where we would like the compilation to fail for additions:
+\begin{itemize}
+    \item trying to make an addition to a non-existent class, and
+    \item trying to reference non-existent attributes in a class.
+\end{itemize}
 
 The first scenario where our compiler should fail is when we are making additions to a non-existent class.
 This will be caught in the class merging part of our compiler.
@@ -33,7 +37,7 @@ Our approach for dealing with this is pretty much by not dealing with it, and in
 We will then instead discover any inconsistencies in the type-checking stage of the compiler.
 In the aforementioned listing it is of course pretty easy to examine class \codeword{A} to see if it contains an attribute \codeword{h}, however it might not always be this easy.
 In a more complicated example where we are in the process of merging several classes and additions it might prove a tougher task to see if the addition would result in a type-safe class.
-So as long as we are able to perform the addition we can instead assume that it is working as intended and instead let the TypeScript compiler check if it is type-safe, after the addition has been performed.
+So as long as we are able to perform the addition we can assume that it is working as intended and instead let the TypeScript compiler check if it is type-safe, after the addition has been performed.
 
 \begin{code}{typescript}{An example showing a program that should fail during compilation, where we are trying to reference a non-existent attribute, \codeword{h}, in an addition to class \codeword{A}.}{lst:pts-parallel-extension-non-existent-attribute}
     template T {
@@ -55,9 +59,9 @@ So as long as we are able to perform the addition we can instead assume that it 
 \end{code}
 
 Now that we understand when we want compilation to fail let us look at where we do not want it to fail, when we have a valid parallel extension.
-One such way it could fail is if we tried to check if the addition contains any invalid references or type errors.
+One way it could result in an unwanted failure is if we tried to check if the addition contains any invalid references or type errors.
 This could commonly happen if we are trying to check the addition's references to the declared class.
-However, as discussed above, checking if a reference to an attribute is valid is quite tricky, and in our implementation instead leave this up to the TypeScript compiler.
+However, as discussed above, checking if a reference to an attribute is valid is quite tricky, and in our implementation instead leaves this up to the TypeScript compiler.
 By doing this we will not incorrectly throw any false-negatives when it comes to parallel extensions.
 This approach does unfortunately come with some downsides.
 By not addressing the issue at the addition stage it makes it harder to give informative error messages when invalid references do occur, however this was a tradeoff that was beneficial for this project.
@@ -118,10 +122,9 @@ Because of the heritage merging we can with confidence say that we have fulfille
 
 In order to be able to fulfill the renaming requirement our implementation should be able to rename classes and their attributes.
 This renaming should result in a program where not only the declarations have been renamed, but also all references.
-Listing~\vref{lst:pts-renaming} shows an example program of renaming in PTS, where we are renaming a class, \codeword{A}, and the class' attribute, \codeword{i}.
-We can see in the resulting program that the identifier in the declaration of both the class and the attribute has changed, but so has the references to these in the constructor of the class and references in another class, \codeword{B}\@.
+Listing~\vref{lst:pts-renaming} shows a program with an example of renaming in PTS, where we are renaming a class, \codeword{A}, and the class' attribute, \codeword{i}.
+We can see in the resulting program that the identifier in the declaration of both the class and the attribute has changed, as well ts he references to these in the constructor of the class and references in another class, \codeword{B}\@.
 The renaming has also not wrongly renamed other references that are similar in naming, such as the parameter of the constructor of class \codeword{A}\@.
-This simple example works as expected, however there are also scenarios where the renaming does not work as expected.
 
 \begin{code}{typescript}{Example of renaming in PTS.}{lst:pts-renaming}
     // PTS
@@ -161,14 +164,18 @@ This simple example works as expected, however there are also scenarios where th
     }
 \end{code}
 
-% TODO diskuter rundt strukturell typing og potensiell usikkerhet rundt hvilken deklarasjon en bruksforekomst forholder seg til.
-Since TypeScript is a structurally typed language we can run into scenarios where a rename could and should result in an invalid program.
+Because of TypeScript's structural type system, renaming will have to work a bit differently than it would in a nominally typed language.
+In nominal PT, all references are always renamed.
+In structural PT we could end up with programs where some references can not be renamed, as some variables might not be directly tied with a class.
 Listing~\vref{lst:pts-renaming-problem} showcases this problem.
 The problem arises in the \codeword{a} attribute of class \codeword{B} in template \codeword{T}.
 This has been declared to be a variable expecting an object where there exists an attribute \codeword{i}.
 \codeword{a} is initialised with an object of the class \codeword{A}.
 This is fine in template \codeword{T}, however when \codeword{T} is instantiated in package \codeword{P}, and \codeword{A}'s attribute \codeword{i} is renamed to \codeword{j}, this is no longer the case.
-Since an object of \codeword{A} no longer contains an attribute \codeword{i}, this is no longer valid.
+The \codeword{a} variable in class \codeword{B} is not a direct reference to class \codeword{A}, and we can thus not rename the reference to the attribute \codeword{i}.
+Since an object of \codeword{A} no longer contains an attribute \codeword{i}, this is no longer a valid value for variable \codeword{a}.
+
+
 
 \begin{code}{typescript}{Example showcasing the problem of having renaming in a structural language. In class \codeword{B} we have an attribute, \codeword{a}, that expects an object that contains an attribute \codeword{i}. The attribute is initialized with an \codeword{A} object. This is fine in template \codeword{T} as \codeword{A} contains an attribute \codeword{i}, however when class \codeword{A}'s attribute is renamed in the instantiation in package \codeword{P} then an object of \codeword{A} is no longer valid as a value, since it no longer contains an attribute \codeword{i}. This is an instance where we can't just rename the references to \codeword{i}, since this reference isn't explicitly related to \codeword{A}.}{lst:pts-renaming-problem}
     // PTS
@@ -205,6 +212,29 @@ It was more important to get a working prototype, than support all scenarios wit
 This is something I would of course have liked to take into consideration if I had more time to spend on the implementation.
 Deciding the type of variables is something that possibly would have come for cheaper if I had opted for a fork of the TypeScript compiler as my approach.
 This is something we will come back to in~\vref{subsec:result-approach}.
+
+Nominal PT however is also not perfect in this regard, as we can run into issues with renamings of interfaces' attributes.
+If a class implements an interface, and we in a later instantiation rename the interfaces' attributes, and not the attributes of the implementing class, we could end up with a program where the class no longer fulfills the requirement of the interface.
+In listing~\vref{lst:nominal-pt-interface-problem} we can see this problem in action, where after a rename of interface \codeword{I}'s method \codeword{f}, the class \codeword{A} no longer implements the interface properly.
+This is of course also a problem in structural PT, and can potentially be an even bigger problem as we would not necessarily have an explicit relation between the interface and the class, and could therefore also not properly describe the error to the programmer.
+
+\begin{code}{java}{Example showing how a renaming of an interfaces' attributes could result in an invalid program.}{lst:nominal-pt-interface-problem}
+    template T {
+        interface I {
+            void f();
+        }
+
+        class A implements I {
+            void f() { ... }
+        }
+    }
+
+    package P {
+        inst T with I => I (f() -> g());
+        // Error: A is not abstract and does not
+        // override abstract method f() in I
+    }
+\end{code}
 
 \subsubsection{Multiple Uses}\label{subsubsec:pts-multiple-uses}
 
