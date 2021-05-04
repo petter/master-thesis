@@ -77,18 +77,16 @@ The goal of this project is to extend TypeScript with the Package Templates lang
 
 \subsection{Preprocessor for the TypeScript Compiler}\label{subsec:preprocessor-for-the-typescript-compiler}
 
-% TODO
-%\red{Tenker vi må diskutere hva en preprosessor er her. Det jeg gjør i min implementasjon er nok en slags preprosessering, men jeg gjør også mer enn en typisk preprosessor. Kan vi si at en preprosessor er noe som gjør en transformasjon på kildekoden, uten "kunnskap" om det underliggende språket. Jobber bare med det som tekst? Gjør ikke noen semantisk sjekk, osv. I så fall er det ikke mulig å implementere som PP, da blant annet renaming krever en kunnskap til det underliggende språket, men instansiering kan nok gjøres gjennom PP.}
 Could we implement the PT specific features in a preprocessor?
 In order to understand this we need to understand what a preprocessor is.
-A preprocessor is often used in combination with a compiler, where the preprocessor often prepares the source files for compilation, such as removing comments, expanding macros (such as \codeword{\#include} in C), and other smaller transformations.
-One distinct difference between a preprocessor and a compiler is that the preprocessor works on the source code as a piece of text, with no knowledge of the underlying programming language, while the compiler often has knowledge about the language of the program.
-This means that the compiler is able to perform more advanced tasks, such as semantic analysis.
+There are a lot of different definitions for preprocessors, but they are generally something that makes a source file ready for the compiler, through some simple transformations.
+I will here define a preprocessor as a "dumb" compiler.
+Where a compiler generally works on the source file as a tree, requiring knowledge of the underlying programming language, performing advanced tasks such as semantic analysis, a preprocessor works on the source file as a piece of text, without knowledge of the language, performing simple textual transformations such as removing comments, expanding macros (such as \codeword{\#include} in C), etc.
 
-So the question becomes, can we transform a PTS program to TypeScript by just doing textual transformations, and no semantic analysis.
+So the question becomes, can we transform a PTS program to TypeScript by just doing textual transformations, and not having to rely on performing more advanced tasks such as semantic analysis.
 We would most likely be able to implement parts of PT with a preprocessor such as simple instantiation without renaming.
 However, as we mentioned in section~\vref{sec:typescript-vs-javascript} we will need to do some type-checking in order to find the correct references when renaming, we can't just rename everything that is textually equal.
-This means that we will need something more advanced than a preprocessor to implement the features of PT\@.
+This means that we will need an understanding of the underlying programming language, something more advanced than a preprocessor to implement the features of PT\@.
 
 \subsection{TypeScript Compiler Plugin/Transform}\label{subsec:typescript-compiler-plugin}
 
@@ -151,7 +149,11 @@ The rest of the language can be outputted pretty much as is, since our language 
 While it would be great to be able to implement Package Templates as an internal DSL in TypeScript, it would seem that this is not a suitable approach.
 Even though we were able to modify the prototype of the classes in the templates, and effectively achieve some form of renaming, we were not able to rename the references.
 This means that we won't be able to use the renaming to its fullest potential, and are thus not able to implement it as an internal DSL\@.
-On top of this, while we were able to reproduce certain PT functionality such as simple instantiations and class merging, it seems to be ... % TODO hvorfor er det ikke nais
+On top of this, while we were able to reproduce certain PT functionality such as simple instantiations and class merging, the fact that we are not able to change the syntax of the language, and having to define templates as classes of classes leads to a quite ugly DSL, which could also potentially be hard for the programmer to grasp.
+
+Making a preprocessor tot the TypeScript compiler in order to implement the features of PT would presumably make the implementation time short.
+However, as we learned, in order to safely rename classes and attributes we need something more powerful than a simple preprocessor.
+If we were to look at the core of PT, without the renaming mechanism this would likely be the easiest approach.
 
 Making a TypeScript compiler plugin would seemingly also be a good approach, in the future.
 As we discussed the official TypeScript compiler, nor any of its alternatives, does not have proper support for plugins that would alter the syntax of the language.
