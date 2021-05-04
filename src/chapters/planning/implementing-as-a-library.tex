@@ -71,8 +71,7 @@ Listing~\vref{lst:lib-rename-problem} shows how this can be a problem, where the
     x.f(); // ReferenceError: A is not defined
 \end{code}
 
-Attribute renaming would most likely be possible in a similar manner, where we could change the prototype~\footnote{The prototype of a class is an object which objects of the class inherit their methods from. See~\url{https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes}.} of the class.
-Seeing as we are not able to fully rename classes by doing this we will not be looking further into this.
+Attribute renaming can be done similarly, where we could alter the prototype of the class to rename attributes, however this would also lead to the same problems as with class renaming, where refereances would not be changed.
 
 \subsubsection{Instantiating Templates}\label{subsubsec:instantiating-templates}
 
@@ -84,11 +83,11 @@ An example of this can be seen in listing~\vref{code:libraryimpl-template-inst}.
 
 The instantiation will only contain references to the instantiated templates classes, while PT instantiations make textual copies of the templates content.
 Only having references to the original template could mean that if a template that has been instantiated is later renamed, then the instantiated template might lose some of its references.
-We could possibly avoid circumvent this by getting the textual representation of the class, through the class' \codeword{toString}, and then use \codeword{eval} to evaluate the class declaration.
+We could possibly circumvent this by getting the textual representation of the class, through the class' \codeword{toString}, and then use \codeword{eval} to evaluate the class declaration.
 
 \subsubsection{Merging Classes}
 
-For merging of types you would use the built-in declaration merging~\cite{declerationmerging}.
+For merging of types we would use the built-in declaration merging~\cite{declerationmerging}.
 Implementation merging is also possible because JavaScript has open classes.
 For implementation merging you would create an empty class which has the type of the merged declarations, and then assign the fields and methods from the merging classes to this class.
 There are several libraries that supports class merging, such as mixin-js~\cite{mixinjs}.
