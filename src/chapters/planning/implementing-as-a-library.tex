@@ -1,16 +1,21 @@
-\subsection{Implementing PT as a TypeScript Library}\label{subsec:implementing-pt-as-a-ts-library}
+\subsection{Implementing PT as an internal DSL}\label{subsec:implementing-pt-as-a-ts-library}
 
 % Tror Groovy bruker "meta-classes" til å oppnå gjenbruk og renaming av klasser. Vi kan bruke prototyper til å oppnå lignende i JS.
 
 One of the first approaches we need to check out is if we are able to achieve the functionality of PT, without having to create a compiler.
-Instead of creating a compiler, that would likely be a complicated and time-consuming task, we could potentially get away with implementing the features of PT within TypeScript itself.
+Instead of creating a compiler, that would likely be a complicated and time-consuming task, we could potentially get away with implementing the features of PT within TypeScript itself through making a small internal DSL\footnote{While most programming languages are made to be general purpose, DSLs, or Domain Specific Languages, are languages created to solve very specific problems withing certain domains. An internal DSL (or embedded DSLs as Hudak calls them) are languages based on an existing programming language, but "tailoring it [...] to the domain of interest"~\cite{Hudak1997}.}.
 In~\cite{groovypt}, Axelsen and Krogdahl shows how they were able to implement PT in Groovy by utilizing the languages' meta-programming capabilities.
-We will in this section therefore try to achieve something similar in TypeScript.
-While Groovy seems to have better meta-programming capabilities, it would seem that we are able to achieve
+We will in this section therefore see if we are able to achieve something similar in TypeScript.
 
-%This would entail creating an internal DSL\footnote{Internal DSLs are domain specific languages that can be used inside} for defining templates and a library for achieving the functionality of PT, such as instantiating, renaming and class merging.
-%This approach would presumably be an easier task than having to create a compiler, and it could potentially make it easier to use, as the programmer would not have to install a compiler in order to get the PT functionality.
-%In order to implement PT we need to be able to handle the following:
+While Groovy seemingly have better meta-programming capabilities, it would seem that we might still be able to achieve some of the same features in TypeScript.
+For parts of the Groovy implementation Axelsen and Krogdahl utilized Groovy's meta-object protocol, where each object has a reference to its meta-class, to change and add members to classes at runtime.
+Similarly, objects in JavaScript have references to a prototype object.
+These prototypes can have members added and removed, or the entire prototype replaced, at runtime.
+Utilizing this we could potentially be able to implement PT's class merging, renaming and additions.
+We will dive deeper into this in the following sections.
+
+Since it can seem plausible to implement PT without the need of a compiler, let us look at how this can be done in practise.
+To implement PT we will need to handle the following:
 
 \begin{itemize}
     \item Defining templates
@@ -24,8 +29,8 @@ While Groovy seems to have better meta-programming capabilities, it would seem t
 For defining templates we would like a construct that can wrap our template classes in a scope.
 We will also need to be able to reference the template.
 JavaScript has three options for this, an array, an object or a class.
-It should however also be possible to inherit from classes in your own template, which rules out both arrays and objects, as there is no way of referencing other members during definition of the array/object.
-Templates should therefore be defined as classes, where each member of the template is an attribute of the template class.
+It should however also be possible to inherit from classes in your own template, which rules out both arrays and objects, as there is no way of referencing other members during definition of the array/object (without first defining them outside the construct).
+Templates could therefore be defined as classes, where each member of the template is an attribute of the template class.
 In listing~\vref{code:libraryimpl-template} we see an example of how this could be done.
 
 \codeinputfile{template-example-without-decorator.ts}{typescript}{Example of defining a template in a library implementation.}{code:libraryimpl-template}
