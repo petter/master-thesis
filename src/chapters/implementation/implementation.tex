@@ -138,3 +138,34 @@ Tree-sitter tests are simple \codeword{.txt} files split up into three sections,
 
 Started with jest, and used some time to get it to work with typescript files, however had to switch because jest doesn't handle native libraries (tree-sitter) too well.
 It \codeword{require}s the same native library several times, making the wrapping around the native program to break.
+
+
+\section{Completing the Implementation}\label{sec:completing-the-implementation}
+
+\subsection{\codeword{addto}-statements}\label{subsec:addto-statements}
+
+\codeword{addto}-statements is one of the core features of PT I was not able to finish in the allotted time.
+As of now \codeword{addto}-statements just work as any other class declaration, and will simply be merged together with the other class declarations.
+The only difference is that an \codeword{addto}-statement requires there to be at least one class declaration.
+This is to avoid the programmer running into bugs where the programmer is trying to add attributes to a non-existent class.
+
+There are mainly two ways for us to implement \codeword{addto}-statements as of now, one hacky but cheap implementation, and one more robust but expensive implementation.
+The cheap and hacky way is to simply always merge the bodies of the \codeword{addto}-statement at the bottom of the formed merged class.
+This will work because of the JavaScript's prototype-based object-orientation.
+Since the class syntax is only syntactic sugar for creating a prototype object and a constructor function, this means that any attributes that are lower down in the prototype object will override any previously declared attributes.
+So if we in a \codeword{addto}-statement wish to override an attribute we will utilize overriding of properties in objects to achieve this.
+The hacky part of the implementation is that TypeScript gives errors for duplicate declarations inside the class syntax, as this is often a sign of performing a mistake.
+In order for us to still be able to pass the type-check we will have to bypass the TypeScript compilers errors for certain lines by prefixing all attribute declarations in the bodies of \codeword{addto}-statements with a \codeword{// @ts-ignore}.
+This will unfortunately have the drawback of not having any type-checks for these function-declarations.
+
+The better more robust way to fix this will force us to make a quite severe refactor of the majority of the codebase.
+With this approach we will have to create more complicated datastructures for classes and class attributes.
+With our current implementation we are simply combining two AST trees when merging classes, not really worrying about what is contained within these trees.
+In order for us to be able to override attributes with the \codeword{addto}-statements we will have to merge the bodies of classes in a smarter way.
+I suggest that before class merging that the AST nodes representing classes or \codeword{addto}s are transformed, as well as their contained attribute declarations.
+Class nodes can be transformed to containing a body of attribute nodes, instead of general AST nodes, and the attribute declarations will be transformed to a pair of the name of the attribute, and the old AST representation of the attribute.
+This will enable us to perform smarter merges, as we have easy access to the contained attributes.
+For class declarations this will enable us to give better error messages when merging classes resulting in duplicate attribute declarations, and for \codeword{addto} this enables us to replace the attributes that will be overridden.
+This was attempted in the implementation, but had to be discarded because of the time constraint.
+The attempted implementation can be found under the experimental branch in the GitHub repository, \url{https://github.com/petter/pts/tree/experimental}.
+This implementation also tries to achieve better representations for templates and packages to contain these new class representations.
