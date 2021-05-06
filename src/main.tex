@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc,url}
 \urlstyle{sf}
-\usepackage{babel,textcomp,csquotes,duomasterforside,varioref,graphicx}
+\usepackage{babel,textcomp,csquotes,varioref,graphicx}
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage[backend=biber,style=numeric-comp]{biblatex}
@@ -11,6 +11,8 @@
 \usepackage{minted}
 \usepackage{backnaur}
 \usepackage{multicol}
+%\usepackage{duomasterforside}
+\usepackage[IFI, master, LongTitle]{mnfrontpage}
 
 \hypersetup{
     colorlinks=true,
@@ -57,9 +59,10 @@
 
 \include{diff}
 
-\duoforside[dept={Department of Informatics},
-  program={Informatics: Programming and System Architecture},
-  long]
+\mnfrontpage
+%\duoforside[dept={Department of Informatics},
+%  program={Informatics: Programming and System Architecture},
+%  long]
 
 \frontmatter{}
 
