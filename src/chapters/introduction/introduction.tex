@@ -25,21 +25,64 @@ The purpose of implementing PT in TypeScript is to look at how a language mechan
 Most interesting is probably TypeScript's structural type system, and how this mechanism will work in this context, where other implementations so far has only been conducted in nominally typed languages.
 It will also be interesting to see how PT can be used in the context of the web, with its vast variety of frameworks and libraries.
 
-\section{Structure of Thesis}\label{sec:structure-of-thesis}
+\section{Research Questions}\label{sec:research-questions}
 
-In part one of this thesis we will focus on getting to know the language mechanism Package Templates, and get a proper understanding of the programming language TypeScript and its ecosystem in chapter~\vref{ch:background}.
+Implementing Package Templates into a language like TypeScript give rise to some interesting research questions which we will try to answer in this thesis:
 
-With a proper understanding of these topics we will move on to the second part of the thesis.
-This part will focus on the implementation of the project.
-The part starts off by planning out and designing the language PTS in chapter~\vref{ch:the-language---pts}.
-PTS, short for Package Template Script, will be a superset of TypeScript with a basic implementation of the language mechanism PT\@.
-Chapter~\vref{ch:planning-the-project} will then focus on making a plan for the implementation of our programming language.
-Here we will perform a requirement analysis of the project and seek out an approach for the implementation.
-With a plan for approach and execution we will discuss the resulting implementation of the compiler in chapter~\vref{ch:implementation}.
+\begin{itemize}
+    \item \textbf{RQ1}: How does the language mechanism Package Templates fit into TypeScript?
+    \item \textbf{RQ2}: Does structural typing change how the core of Package Templates works?
+\end{itemize}
 
-In the final part of this thesis we will discuss the resulting implementation.
-Chapter~\vref{ch:discussion} will discuss the implementation, where we will look at whether our implementation fulfills the requirements of PT, and then look at how PT fits into a structurally typed langauge.
-Finally, in chapter~\vref{ch:results} we will talk about the resulting implementation and what it can be used for.
-We will also evaluate our chosen approach, and propose some potential future works within this field.
+\section{Contributions}\label{sec:contributions}
+
+This thesis' main contribution is the PTS compiler.
+It is easily accessible through the Node package manager.
+This makes it easier to try out the PTS language, but more importantly the PT language mechanism.
+Having easy access to a language with PT might make adoption of the language mechanism greater, and spark new research within the field.
+
+By making the parser for the language separated from the compiler this also contributes to making creations of tools for the language more accessible.
+While we have in this project used the parser solely for producing a parse tree for our compiler, this parser could also be used to make other tooling, such as syntax highlighting or a language server.
+
+The final contribution this thesis makes is conveying how to approach related projects.
+We show in this thesis how someone can approach extending a language by utilizing the grammar extending capabilities of tree-sitter, and how tree-sitter can be used to create a compiler.
+
+\section{Chapter Overview}\label{sec:chapter-overview}
+
+% TODO fyll inn
+
+\textbf{Chapter 2}
+
+\textbf{Chapter 3}
+
+\textbf{Chapter 4}
+
+\textbf{Chapter 5}
+
+\textbf{Chapter 6}
+
+\textbf{Chapter 7}
+
+\section{Project Source Code}\label{sec:project-source-code}
+
+The source code for the implementation of the PTS language is split up into two GitHub repositories, one for the parser of the project, and one for the compiler.
+The parser's source code can be found at \url{https://github.com/petter/tree-sitter-pts}.
+Source code for the compiler can be found at \url{https://github.com/petter/pts-lang}.
+
+
+%In part one of this thesis we will focus on getting to know the language mechanism Package Templates, and get a proper understanding of the programming language TypeScript and its ecosystem in chapter~\vref{ch:background}.
+%
+%With a proper understanding of these topics we will move on to the second part of the thesis.
+%This part will focus on the implementation of the project.
+%The part starts off by planning out and designing the language PTS in chapter~\vref{ch:the-language---pts}.
+%PTS, short for Package Template Script, will be a superset of TypeScript with a basic implementation of the language mechanism PT\@.
+%Chapter~\vref{ch:planning-the-project} will then focus on making a plan for the implementation of our programming language.
+%Here we will perform a requirement analysis of the project and seek out an approach for the implementation.
+%With a plan for approach and execution we will discuss the resulting implementation of the compiler in chapter~\vref{ch:implementation}.
+%
+%In the final part of this thesis we will discuss the resulting implementation.
+%Chapter~\vref{ch:discussion} will discuss the implementation, where we will look at whether our implementation fulfills the requirements of PT, and then look at how PT fits into a structurally typed langauge.
+%Finally, in chapter~\vref{ch:results} we will talk about the resulting implementation and what it can be used for.
+%We will also evaluate our chosen approach, and propose some potential future works within this field.
 
 % TODO litt mer

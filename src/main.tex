@@ -8,16 +8,17 @@
 \usepackage[backend=biber,style=numeric-comp]{biblatex}
 \usepackage{color}
 \usepackage{hyperref}
-\usepackage{minted}
+\usepackage[chapter]{minted}
 \usepackage{backnaur}
 \usepackage{multicol}
-%\usepackage{duomasterforside}
-\usepackage[IFI, master, LongTitle]{mnfrontpage}
+\usepackage{duomasterforside}
+\usepackage{parskip}
+%\usepackage[IFI, master, LongTitle]{mnfrontpage}
 
 \hypersetup{
     colorlinks=true,
     linktoc=all,
-    linkcolor=blue
+    linkcolor=black
 }
 
 \title{PTS (Package Template Script)}
@@ -59,16 +60,17 @@
 
 \include{diff}
 
-\mnfrontpage
-%\duoforside[dept={Department of Informatics},
-%  program={Informatics: Programming and System Architecture},
-%  long]
+%\mnfrontpage
+\duoforside[dept={Department of Informatics},
+  program={Informatics: Programming and System Architecture},
+  long]
 
 \frontmatter{}
 
 \tableofcontents{}
 %\listoffigures{}
 %\listoftables{}
+\listoflistings{}
 
 \clearpage
 \section*{Abstract}
@@ -92,7 +94,7 @@ Thank you for your constructive feedbacks.
 \mainmatter{}
 
 
-\part{Introduction}\label{part:introduction}
+\part{Introduction and Background}\label{part:introduction}
 
 \include{chapters/introduction/introduction}
 
