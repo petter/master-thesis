@@ -196,9 +196,11 @@ We could then use our Pokémon component in our application by supplying a URL f
 
 \subsection{Approach}\label{subsec:result-approach}
 
-Did I choose the right approach?
-TypeScript compiler fork might have been easier.
-
+While we were able to implement most of PT with our approach, I fear that further development to reach a complete implementation might be hindered by our chosen approach.
+This is largely because we might have to implement much of the type system in order to properly identify references.
+Instead of re-inventing the wheel, we might be better off by implementing PT in a fork of the TypeScript compiler.
+While this \textit{might} make updates harder, than with our implementation, we will most often likely be able to merge the changes to the TypeScript compiler into our fork with the help of Git.
+Greater changes to the language might of course still give us some merge conflicts, however these larger changes could as easily make our currently used approach break.
 
 \section{Future Work}\label{sec:future-work}
 
