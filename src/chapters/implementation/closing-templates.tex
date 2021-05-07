@@ -100,22 +100,19 @@ If a variable is initialized with a class instantiation then the type of the var
 However, this simple type inference might not always correctly type variables, as variables might have explicitly declared types which are not typed with the class' type, however for simplicity, and in order to not reimplement TypeScript's entire type system, we currently ignore these in the implementation.
 
 Class references are all references made to a class.
-These references can be a class declaration, instantiations of a class, usage of a class as a type, etc.
+These references are references such as class declarations, instantiations of a class, usage of a class as a type, etc.
 The \codeword{Class} class is a representation for class references.
 The class is an extension of the \codeword{Variable} class, so it can store the name of the class, however they also have references to all the variables that are instances of the class, and optionally a superclass, which is a reference to another \codeword{Class} instance.
-
-When a reference is created this is registered in the scope where it occurred.
-We can then later lookup the reference instance in the symbol table of the scope.
 
 With an understanding of what a reference is, let us look at how we can transform the AST nodes that are references.
 Transforming nodes into references mainly consists of two steps.
 
 \begin{itemize}
-    \item Transforming the declarations
+    \item Transforming declarations
     \item Transforming references
 \end{itemize}
 
-\subsubsection{Transform Declarations}
+\subsubsection{Transforming Declarations}
 
 When transforming declarations we both create the \codeword{Variable} or \codeword{Class} instance, register them in the scope they were found, and transform the identifier in the declaration to a reference.
 This reference is a special AST node.
