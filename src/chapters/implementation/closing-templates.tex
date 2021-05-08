@@ -8,7 +8,7 @@ Renaming on the other hand requires a bit more work.
 
 In order to perform renaming on an instantiation we will have to perform the following tasks.
 \begin{enumerate}
-    \item Create a correctly scoped AST.
+    \item Create a correctly scoped AST\@.
     \item Find all identifiers, member expressions, class declarations, etc., and replace them with \textit{reference nodes}\footnote{Reference nodes are AST nodes that contain a pointer to the class or attribute they are supposed to represent. This makes the task of renaming easier as we only have to worry about changing the name in one place. We will go into more detail about this in section~\vref{subsec:transforming-nodes-to-references}.}
     \item Perform the rename.
     \item Transform the scoped AST with reference nodes back to the original AST\@.
@@ -105,40 +105,54 @@ The \codeword{Class} class is a representation for class references.
 The class is an extension of the \codeword{Variable} class, so it can store the name of the class, however they also have references to all the variables that are instances of the class, and optionally a superclass, which is a reference to another \codeword{Class} instance.
 
 With an understanding of what a reference is, let us look at how we can transform the AST nodes that are references.
-Transforming nodes into references mainly consists of two steps.
+Transforming nodes into references mainly consists of two steps:
 
-\begin{itemize}
+\begin{enumerate}
     \item Transforming declarations
     \item Transforming references
-\end{itemize}
+\end{enumerate}
 
 \subsubsection{Transforming Declarations}
 
 When transforming declarations we both create the \codeword{Variable} or \codeword{Class} instance, register them in the scope they were found, and transform the identifier in the declaration to a reference.
 This reference is a special AST node.
 It is represented by the \codeword{RefNode} class.
-This class contains the same fields as other scoped AST nodes, \codeword{type} (which is always \codeword{"variable"} for reference nodes), \codeword{text}, \codeword{children} and \codeword{scope}, as well as two extra fields.
+This class contains the same fields as other scoped AST nodes, \codeword{type} (which is always \codeword{"variable"} for reference nodes), \codeword{text}, \codeword{children} and \codeword{scope}.
+In addition to these fields, the \codeword{RefNode} class contains two additional fields for dealing with references.
 The first field is a reference to the \codeword{Variable} or \codeword{Class} instance that the \codeword{RefNode} is a reference to.
 The second is a field containing the original type of the node, which is used when transforming the \codeword{RefNode}s back to the original AST\@.
 
-The task of transforming declarations requires several passes through the AST\@.
-In total we pass through the AST three times when transforming declarations, once for class declarations, once for class heritage, and once for class attribute declarations.
-This is because in order to transform some declarations we need to have access to others.
-To understand this we can look at the difference between the first and second pass.
+When we are transforming both the declarations and the references we need to pass through the AST multiple times.
+A pass through the AST will visit every node and perform a transformation.
+The task of transforming declarations requires us to do three passes through the AST:
+
+\begin{enumerate}
+    \item Class declarations
+    \item Class heritage
+    \item Class attribute declarations
+\end{enumerate}
 
 During the first pass through the AST we register and transform all class declarations, creating the \codeword{Class} instances.
+While creating the \codeword{Class} instances we also register the associated \codeword{this} as a \codeword{Variable} in the class' body scope.
 Listing~\vref{lst:transform-reference-class-decl} shows an example of how a class declaration will be transformed in this step.
 In the listing we can see that the \codeword{"type\_identifier"} node has been transformed to a \codeword{RefNode} instance.
 
+%For the second pass we register class heritage.
+%The second pass will not create new \codeword{Class} instances when stumbling upon the identifiers for the superclasses, but will rather look them up in the AST nodes' attached scope.
+%For each class declaration we visit we will look for a class heritage node containing an extends clause.
+%The extends clauses will be transformed similarly to the previous pass, but instead of creating \codeword{Class} instances we will instead look the mup in the attached scope.
+%For these class declarations with contained extends clauses we will update the class declaration's \codeword{Class} instance's superclasses with the \codeword{Class} instance found from the
 For the second pass we register class heritage.
-The second pass updates the \codeword{Class} instances' superclasses, by looking them up in the scope.
-If we had done these two steps in the same pass through the AST we might have ended up in situations where we could not find the superclass instance, as we might not have reached the declaration yet.
+Here we will visit all the class heritages and update the identifiers contained in the extends clause with \codeword{RefNode}s containing references to the appropriate \codeword{Class} instances found in the scope.
+For class declarations in which we found the class heritage nodes we will update the associated \codeword{Class} instance's superclasses.
+Setting these superclasses will ensure that later references to inherited attributes can be referenced and renamed properly.
 
-In addition to transforming class declarations, and their heritage, we also transform attribute declarations.
+The final step takes care of any class attribute declarations.
 This could have been done in the same pass as with class heritage, however it was separated to make the code more readable and the flow of the transformations more understandable.
-During this transformation we also check if there is a \codeword{new}-expression in the assignment, in order to possibly register the type of the variable.
-The current implementation only supports public field definitions.
-Other declaration types could be supported in the same manner as public field definitions, however due to a lack of time these were not implemented.
+During this transformation we also perform a very simple form of type inference by checking if there is a \codeword{new}-expression in the assignment.
+For the cases where there is a \codeword{new}-expression we assign the type of the variable to be an instance of the constructed class.
+It is worth noting that the current implementation only transform public field definitions.
+Other declaration types could be supported in the same manner as with public field definitions, however due to a lack of time these were not implemented.
 
 \begin{code}{javascript}{AST of a class declaration of class A before and after transforming the references. The values surrounded by angle brackets are references to \codeword{Scope}/\codeword{Class} instances.}{lst:transform-reference-class-decl}
     // Before transformation
@@ -173,79 +187,97 @@ Other declaration types could be supported in the same manner as public field de
                 text: 'class',
                 scope: <Scope 1>,
                 children: []
-            }, {
-                type: 'variable',
-                text: '',
-                scope: <Scope 1>,
-                children: [],
-                origType: 'type_identifier',
-                ref: <Class 1>
+            }, {                                //
+                type: 'variable',               // This node
+                text: '',                       // has been
+                scope: <Scope 1>,               // transformed
+                children: [],                   // to a RefNode
+                origType: 'type_identifier',    //
+                ref: <Class 1>                  //
             },
             ...
         ]
     }
 \end{code}
 
-\subsubsection{Transform References}
+\subsubsection{Transforming References}
 
 Transforming references also has several passes, more precisely two passes.
-The first pass is to transform the \codeword{this} keyword.
-This does not have to be done in a separate pass, however it does simplify the task since we do not have to have extra special cases in the second pass.
-The \codeword{this}-nodes are transformed to a \codeword{RefNode} like other references, however here we can set the type of the variable without working out the type of it, as \codeword{this} will always have the type of the class it is contained in.
+
+\begin{enumerate}
+    \item Transforming \codeword{this} keyword
+    \item Transforming the rest
+\end{enumerate}
+
+While transforming \codeword{this} references does not need to be done in a separate pass, it does simplify the process a little for next pass, as we do not have to worry about the \codeword{this} keyword as a special case for the other transformations.
+The \codeword{this}-nodes are transformed to a \codeword{RefNode} like all other references, and are simply a reference to the \codeword{Variable} instances for \codeword{this}, which we created in the class declaration pass.
 
 In the second pass the rest of the references are transformed.
-Currently the implementation will transform \codeword{new} expressions, member expressions, and type annotations.
-
-\codeword{new} expressions are pretty simple to transform, similar to class declarations, we can just find the identifier node and replace this by the referenced class.
-We find the class by looking it up in the scope.
-It is worth noting that this will not rename any generic type parameters.
-
-Member expressions are a bit more troublesome.
-A member expression is an expression such as \codeword{a.i} or \codeword{this.b.x}.
-This is the main reason for why we transformed \codeword{this}-expressions separately, since they can, and often do, occur in member expressions, and this saves us from checking another special case.
-A member expression consists of the object and the property.
-The property is always an identifier, while the object on the other hand can be one of three things, a \codeword{RefNode}, a member of an identifier, or another member expression.
-
-The most common member expression we can transform is a member of a \codeword{RefNode}.
-The \codeword{RefNode} here could be something like \codeword{this} or a variable, \codeword{a}.
-Here we use the type of the \codeword{Variable} instance in order to find the attribute that the member expression is referencing.
-If the attribute does not exist we throw an error, informing the programmer that there is a reference error.
-Else we can create a \codeword{RefNode} for the property part of the member expression.
-
-The second scenario for member expressions are when there is a nested member expression.
-When this is the case we can recursively call the function on the nested member expression.
-After the nested member expression has been transformed we can get the property of the nested member expression, and use this to transform the property of the initial member expression, similar to how we did it for members of \codeword{RefNode} above.
-
-The final member expression is a member expression of an identifier.
-This can happen if we are dealing with something that can't be renamed, such as \codeword{console.log}, or if we stumble upon an identifier that has not been picked up during previous transformations.
-We will in both cases try to see if we are able to find the object by looking it up in the scope.
-If we can't find it we know that its something that can't be renamed.
-If we do find it we treat it like a member of a \codeword{RefNode}.
-
-Type annotations consists of the following:
-
-\begin{itemize}
-    \item Type identifiers
-    \item Generic types
-    \item Predefiend types
-    \item Type predicates
-\end{itemize}
-
-\red{TODO: Skriv om transformation av type annotations}
+Currently, the implementation will transform \codeword{new} expressions, member expressions, and type annotations.
+These are all transformed in a pretty similar manner, where the identifier is found and looked up in the attached scope.
+If we can't find it in the scope this usually means that it is something we can't rename, and is therefore not of interest, such as \codeword{console.log}, \codeword{number}, etc.
 
 \subsection{Performing the Rename}\label{subsec:performing-the-rename}
 
 With all declarations and references transformed into reference nodes we can now perform the rename.
 For each class rename we can simply lookup the old class name in the root scope and change the reference to the new class name.
-For class attribute renames we do the same just for the enclosing classes scope.
+For class attribute renames we do a lookup on the specified class' scope.
+If the attribute can't be found in the class' scope we do a lookup in the optional superclass' scope.
+If either the superclass is missing or we can't find it in its scope either we throw an error, informing the programmer that the attempted renaming can't be performed.
 
-\subsection{Going back to the original AST}\label{subsec:going-back-to-the-original-ast}
+\subsection{Going Back to the Original AST}\label{subsec:going-back-to-the-original-ast}
 
-reference -> original with new names
-remove scope
+After we have performed the renaming we can go back to the original, simpler, AST\@.
+For most nodes this is as simple as removing the scope property.
+For \codeword{RefNode}s we have to create new AST nodes.
+Fortunately we stored the original type of the \codeword{RefNode}, which means we only need to fill in the \codeword{children} and \codeword{text} properties.
+The \codeword{children} property will always be an empty array, since all \codeword{RefNode}s are also leaf nodes.
+The \codeword{text} property will be filled with the name of the variable or class it is a reference to.
+This name can be found through the reference stored in the \codeword{RefNode} to either a \codeword{Variable} or \codeword{Class} instance.
 
-\subsection{Merging Class Declarations}\label{subsec:merging-class-declarations}
+Once we have traversed the tree and done the transformations as described we will end up with an AST tree similar to what we had initially, where all instantiation statements have been replaced by the renamed bodies of the templates they were declared to instantiate.
 
-Check if can be merged, non overlapping members.
-Override and merge addto
-Preserve hierarchy
+\subsection{Merging Classes}\label{subsec:merging-class-declarations}
+
+After we have performed the instantiation and have returned to the original AST format we can finish off the last task necessary to close a template, namely class merging.
+At this stage we will work on a package/template body which will mostly consist of a (potentially) valid TypeScript program, with the exception of possibly \codeword{addto}-statements and duplicate class declarations.
+These \codeword{addto}-statements and duplicate class declarations will in this step be merged to form new classes, and remove the final construct of PT before the body is a TypeScript program.
+Merging of classes mainly consists of performing the following tasks:
+
+\begin{itemize}
+    \item Grouping class declarations and \codeword{addto}-statements
+    \item Verify the validity of the groups
+    \item Merging the bodies of the classes
+    \item Merging the class declarations
+    \item Replace the old classes with the new
+\end{itemize}
+
+\subsubsection{Grouping Class Declarations and \codeword{addto}-statements}
+
+Before we can start merging the classes we need to first group the classes and \codeword{addto}-statements which are going to be merged together.
+We will do this through collecting all classes and \codeword{addto}-statements in the first layer of the package/template body.
+These will then be split up into groups based on the class name.
+
+\subsubsection{Verify the Validity of the Groups}
+
+In order to verify that we can indeed merge these groups together we need to validate that doing so is valid.
+This is mainly checking that there is at least one class declaration, as we can not perform additions to a non-existant class.
+
+\subsubsection{Merging the Bodies of the Classes}
+
+Now that we have groups of classes that should be merged, and these groups are valid, we can then proceed to composing new classes from these.
+The first step to this is to create the new bodies of the new classes.
+This task is relatively simple as we just combine the AST nodes contained within each class declaration's or \codeword{addto}-statement's body.
+
+
+\subsubsection{Merging the Class Declarations}
+
+Merging of class declarations is similar to merging the bodies, however we here instead merge the class heritage.
+That is if there are classes with class heritage we will merge the optional \codeword{extends} and \codeword{implements} clauses.
+As well as combining the extending classes and implemented interfaces we also insert comma nodes between each member.
+This step might produce class declarations with multiple superclass, however this will be picked up by the type-checking step later on.
+
+\subsubsection{Replace the Old Classes With the New}
+
+Now that we have composed new classes from the merging of the old classes we can insert these back into the AST.
+In order to somewhat resemble the original program we replace the first class declaration within the group with the new class, while all other members of the group are removed from the AST\@.
