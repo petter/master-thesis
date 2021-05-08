@@ -202,6 +202,33 @@ Instead of re-inventing the wheel, we might be better off by implementing PT in 
 While this \textit{might} make updates harder, than with our implementation, we will most often likely be able to merge the changes to the TypeScript compiler into our fork with the help of Git.
 Greater changes to the language might of course still give us some merge conflicts, however these larger changes could as easily make our currently used approach break.
 
+\section{Addressing Research Questions}\label{sec:adressing-research-questions}
+
+
+\paragraph{RQ1: How does the language mechanism Package Templates fit into TypeScript and the web ecosystem?}
+
+
+
+\paragraph{RQ2: Does structural typing change how the core of Package Templates works?}
+
+Most of the functionality of Package Template stay the same in a structurally typed language as they do in a nominally typed language.
+The most notable deviation is the renaming mechanism.
+While we still rename all valid references, it is worth noting that what a reference is will differ in a structurally typed language.
+
+In nominal PT, all variables that are instantiated with an object of a class, will also have some explicit relation to the class.
+A variable in nominal PT will likely have either the class (or a superclass) as the type, or an interface.
+For the case of the variable having the class as the type the relation to itself is obviously there.
+For interface or superclass as the type the relation must explicitly be declared in the class' heritage.
+If the class' attributes are renamed we will either be able to rename the variables references to these attributes if the renaming was applied to the class or any of its superclasses, or at least give a detailed error message for when the renaming was applied to the interface.
+
+In structural PT, variables instantiated with an object of a class might not have the same explicit relation to the constructed class.
+A variable in a structurally typed language might be typed with a structure that the class conforms to.
+However, this conformity might break after a renaming has been applied to the class.
+In these cases we will not be able to rename the variables type, nor any of the variables references to the possibly renamed attributes, since these do not have the same explicit relation to the class.
+
+\paragraph{RQ3: Will having PT in a structurally typed language have any notable benefits over having it in a nominally typed language?}
+
+
 \section{Conclusion}\label{sec:result-conclusion}
 
 % Hva har vi gjort?
