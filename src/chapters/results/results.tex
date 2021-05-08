@@ -205,11 +205,11 @@ Greater changes to the language might of course still give us some merge conflic
 \section{Addressing Research Questions}\label{sec:adressing-research-questions}
 
 
-\paragraph{RQ1: How does the language mechanism Package Templates fit into TypeScript and the web ecosystem?}
+\subsubsection{RQ1: How does the language mechanism Package Templates fit into TypeScript and the web ecosystem?}
 
 
 
-\paragraph{RQ2: Does structural typing change how the core of Package Templates works?}
+\subsubsection{RQ2: Does structural typing change how the core of Package Templates works?}
 
 Most of the functionality of Package Template stay the same in a structurally typed language as they do in a nominally typed language.
 The most notable deviation is the renaming mechanism.
@@ -226,8 +226,18 @@ A variable in a structurally typed language might be typed with a structure that
 However, this conformity might break after a renaming has been applied to the class.
 In these cases we will not be able to rename the variables type, nor any of the variables references to the possibly renamed attributes, since these do not have the same explicit relation to the class.
 
-\paragraph{RQ3: Will having PT in a structurally typed language have any notable benefits over having it in a nominally typed language?}
+\subsubsection{RQ3: Will having PT in a structurally typed language have any notable benefits over having it in a nominally typed language?}
 
+As we talked about in section~\vref{subsec:which-better-fits-pt?} there are some benefits of hosting PT in a structurally typed language.
+Structural typing does fit nicely in with the theme of Package Templates, namely re-use.
+A structural type system gives the programmer a flexibility that nominal type systems can not offer to the same extent.
+One of the strongest points for structural typing is how it enables us to easily use third-party libraries without necessarily having to alter our classes.
+Say we have implemented a graph library in PT and later on wanted to use some third-party graph utility library.
+This library might take a graph as input and do some calculations such as finding the shortest path between nodes in the graph.
+In structural typing, as long as our graph implementation is structurally equal to the type of the input we can pass it with no problems.
+In a nominally typed language we might have to alter our implementation to explicitly declare that our classes implement some interfaces from the library.
+It might at worst not even be possible if the graph utility library has typed their input with classes instead of interfaces.
+This is of course one of the strengths of PT in the first place, being able to add implementing interfaces to a class without altering the original implementation or merging classes if possible, however the fact that we would not have to perform this step in a structurally typed language could arguably be seen as a benefit.
 
 \section{Conclusion}\label{sec:result-conclusion}
 
