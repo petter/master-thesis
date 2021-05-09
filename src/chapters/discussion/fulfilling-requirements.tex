@@ -305,7 +305,7 @@ In order to fulfill the requirement of class merging we will have to be able to 
 A failure to fulfill this requirement could be that a resulting program would contain two different class declarations, where these should have been merged.
 This could occur if we had for instance not respected the renaming of a class at the time class merging, that is if we had renamed a class to be merged, but this was not picked up during class merging.
 Our implementation of class merging has been made so that it is essentially unaware of the instantiation and renaming steps, it is done as a separate step after these actions have been performed.
-What this means is that after performing all instantiations, with optional renamings, we can momentarily end up with several class declaration, which would be an invalid TypeScript program, however before the closing of templates step is done we will merge all class declarations and \codeword{addto}-statements.
+What this means is that after performing all instantiations, with optional renamings, we can momentarily end up with several class declarations for the same class, which would be an invalid TypeScript program, however before the closing of templates step is done we will merge the class declarations and \codeword{addto}-statements representing the same class, forming new classes.
 The resulting program could of course still be an invalid TypeScript program, as the merge of classes could lead to erroneous code, such as duplicate function declarations, however this is not a result of an invalid implementation, but rather an error as a product of an invalid input program.
 The class merging step, will merge classes without checking their bodies, as these will be picked up in the type-checking step later on.
 By separating the logic of instantiations and renaming, as we have done, we should minimize the potential for an invalid implementation of class merging.
@@ -334,6 +334,16 @@ Here we merge two classes with the same name, \codeword{A}, which has two differ
 \end{code}
 
 \subsubsection{Collection-level Type-checking}\label{subsubsec:implementation-collection-level-type-checking}
+
+To fulfill this requirement our implementation just needs to perform a type-check on each package/template individually.
+In the type-checking step of our compiler we do just this, and we therefore fulfill this requirement.
+
+However, as we previously touched upon in section~\vref{subsec:why-typescript-verifying-templates}, TypeScript's type system is unsound.
+What this means is that TypeScript's type-system will not be able to pick up all type errors.
+With an unsound type-check, can we truly say we have fulfilled the requirement of collection-level type-checking?
+
+In the proposal of PT, Java is used as the host language.
+Java has also been shown to have an unsound type system~\cite{java-unsound}, so we could argue that if the requirement is fulfilled in PT, then our unsound type-check should also fulfill the requirement.
 
 \subsection{Conclusion}\label{subsec:requirements-conclusion}
 
