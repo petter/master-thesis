@@ -71,6 +71,14 @@
 \section*{Abstract}
 \addcontentsline{toc}{section}{Abstract}
 
+In this thesis we will explore how TypeScript can be extended with an additional language mechanism for re-use and adaptation, namely Package Templates.
+We will look at how Package Templates, which was initially designed for a nominally typed language, will work in a structurally typed language like TypeScript, and what differences this makes for its usage.
+
+Package Templates, or as it was originally called, Generic Packages, is a language mechanism first proposed by Krogdahl in 2001.
+The language mechanism gives the programmer the opportunity to create collections of classes, interfaces and enums which can later be re-used and adapted.
+These collections can be instantiated inside new collections, where the mechanism allows for renaming classes and its attributes, as well as merging members of the instantiated collections.
+This enables the programmer to write general collections for concepts such as graphs and lists, and later adapt these to new domains with additional concepts forming collections for domains such as road systems between cities.
+
 \cleardoublepage
 
 \section*{Acknowledgements}
