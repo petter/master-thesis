@@ -98,15 +98,17 @@ Very slow compiler/PP because of the chosen implementation, with tree traverser 
 
 \section{Testing}\label{sec:testing}
 
-Testing has been an essential part throughout the development of the compiler.
+Testing has been an essential tool throughout the development of the compiler.
 After the initial prototype of the compiler was running I continued onward with test driven development.
 This allows me to write up tests for all the features of the language, and run them concurrently as I make the changes to the implementation.
 
-The cycle
-
 \subsection{Lexer and Parser}\label{subsec:testing-lexer-and-parser}
 
+For testing the lexer and parser I used the built in testing framework.
 Tree-sitter tests are simple \codeword{.txt} files split up into three sections, the name of the test, the code that should be parsed, and the expected parse tree in \textit{S-expressions}\footnote{S-expressions are textual representations for tree-structured data. See~\cite{sexprs} for additional information and examples}.
+These files are placed in the \codeword{corpus} folder, and will be automatically executed when running \codeword{tree-sitter test}.
+Listing~\vref{lst:tree-sitter-grammar-test} shows an example of a tree-sitter grammar test.
+This example is taken from the source code to the PTS parser, where we have a test so see that template declarations are being parsed correctly.
 
 \begin{code}{typescript}{Example of tree-sitter grammar test}{lst:tree-sitter-grammar-test}
     ===========================
@@ -133,13 +135,46 @@ Tree-sitter tests are simple \codeword{.txt} files split up into three sections,
 
 \end{code}
 
-\subsection{Transpiler}\label{subsec:testing-transpiler}
+\subsection{Compiler}\label{subsec:testing-transpiler}
 
-Started with jest, and used some time to get it to work with typescript files, however had to switch because jest doesn't handle native libraries (tree-sitter) too well.
-It \codeword{require}s the same native library several times, making the wrapping around the native program to break.
+For testing the implementation of our compiler I chose to make similar tests to those used in the parser.
+I used the test framework AVA\footnote{https://github.com/avajs/ava} to run my tests.
+I chose to structure my tests into separate files under the \codeword{__test__} folder.
+This is not a strict requirement for AVA, but helps structure the project more nicely.
+All my tests for the compiler are implementation tests, where I transpile a program and check that the output is equal to the exepected output.
+AVA has helper methods for this where I can use the \codeword{is} function to check that two strings are equal to each other.
+On differing strings an informative error is logged, with the differences between the actual results and the expected results.
 
+Listing~\vref{lst:ava-test} shows one of the tests from the source code of the compiler, where we similarily to the tree-sitter test we saw before, check that a closed template is working as expected.
+Instead of providing a parse tree as the expected result, we instead provide an expected program as the string.
+Since templates are not supposed to produce any code after being transpiled, we therefore also expect this program to be an empty string.
+
+\begin{code}{typescript}{Example of a test for the PTS compiler}{lst:ava-test}
+    import test from 'ava';
+    import transpile from '../src';
+
+    test('Transpiles closed templates to nothing', (t) => {
+        const program = `
+    template P {
+        class A {
+            i = 0;
+        }
+    }
+    `;
+
+    const expected = ``;
+    const result = transpile(program, { emitFile: false, targetLanguage: 'ts' });
+
+    t.is(result, expected);
+    });
+\end{code}
 
 \section{Completing the Implementation}\label{sec:completing-the-implementation}
+
+Due to the restricted time allotted for this project I was unfortunately not able to finish the compiler.
+In order to finish the compiler we would have to implement the \codeword{addto}-statement properly, and be able to properly handle all declarations and references, so that these can be renamed as expected.
+We are also currently not supporting splitting up the program into several files, this would also have to be dealt with in a complete implementation.
+In the following sections we discuss how this could be carried out.
 
 \subsection{\codeword{addto}-statements}\label{subsec:addto-statements}
 
@@ -172,8 +207,19 @@ This implementation also tries to achieve better representations for templates a
 
 \subsection{Supporting all Attribute Declarations}\label{subsec:supporting-all-attribute-declarations}
 
-Only supports public field definitions and simple function declarations, don't think the function syntax for instance works.
+As of now we only support public field definitions, such as \codeword{a = 2} for instance, and simple function declarations, such as \codeword{f() { ... }}.
+There are of course more ways that attributes can be declared, such as the function syntax, however this was not prioritized during implementation.
+I believe that the task of implementing the remaining attribute types will not be a too expensive task, as these could be implemented similarly as with the already implemented attribute declarations.
+If someone ought to finish this task the TypeScript grammar is very useful for finding all the different possibilities that an attribute could be declared.
 
 \subsection{Supporting all References}\label{subsec:supporting-all-references}
 
-\subsection{Properly Handling Types}\label{subsec:properly-handling-types}
+This task is probably the hardest to finish off.
+In order to support all reference types we would presumably have to do more advanced semantic analysis of the program than we are currently doing.
+One should then ask themselves if it is worth it to continue on with this approach, or if starting off fresh with a fork of the TypeScript compiler would be a better choice, as we would likely get the semantic analysis for free.
+
+\subsection{Supporting Multi File Programs}\label{subsec:supporting-multi-file-programs}
+
+This could likely be implemented by reading all files that are declared in the import part of the main program.
+We could then replace the import statement of templates with the contained templates.
+This could however of course lead to duplicate template names, so a complete implementation might have to offer some template aliasing on import to circumvent this.
