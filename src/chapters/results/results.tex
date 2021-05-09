@@ -1,5 +1,9 @@
 \chapter{Results}\label{ch:results}
 
+In this thesis we have discussed the approach to the project and the implementation of the compiler for the PTS language, as well as evaluated the implementation and discussed the consequences of having a structurally typed language as the host of PT were.
+We will conclude this work by looking at how our implementation of the PTS programming language can be used in a real world example, as well as returning to our initial research questions and trying to answer these with the knowledge we have accumulated through the span of this thesis.
+After this we will look at what could have been done differently in retrospect, and finish off with proposing future works within the field.
+
 \section{How Can PTS Be Used?}\label{sec:how-can-this-be-used?}
 
 There are mainly two ways of using the PTS compiler:
@@ -23,22 +27,20 @@ If you want to install the compiler globally you can do the following:
 \end{minted}
 
 This will give you access to the PTS compiler CLI through the command \codeword{pts-lang}.
-By not specifying any command line arguments you get a helpful text describing how to use the compiler:
+By giving the \codeword{-{}-help} flag you will get some useful information for how to use the compiler.
 
 \begin{minted}{text}
-$ pts-lang
+$ pts-lang --help
 Options:
-      --help                      Show help                        [boolean]
-      --version                   Show version number              [boolean]
-  -i, --input                     Name of the input file [string] [required]
-  -o, --output                    Name of the output file           [string]
+      --help                      Show help
+      --version                   Show version number
+  -i, --input                     Name of the input file
+  -o, --output                    Name of the output file
   -v, --verbose                   Show extra information during
-                                  transpilation                    [boolean]
-  -t, --targetLanguage, --target  Target language of the transpiler
-                                       [choices: "js", "ts"] [default: "js"]
-  -r, --run                            [boolean] [required] [default: false]
-
-Missing required argument: input
+                                  transpilation
+  -t, --targetLanguage, --target  Target language for
+                                  transpilation
+  -r, --run
 \end{minted}
 
 \subsection{Creating a PTS Project}\label{subsec:creating-a-pts-project}
@@ -192,15 +194,6 @@ We could then use our Pokémon component in our application by supplying a URL f
     }
 \end{minted}
 
-\section{In Retrospect}\label{sec:in-retrospect}
-
-\subsection{Approach}\label{subsec:result-approach}
-
-While we were able to implement most of PT with our approach, I fear that further development to reach a complete implementation might be hindered by our chosen approach.
-This is largely because we might have to implement much of the type system in order to properly identify references.
-Instead of re-inventing the wheel, we might be better off by implementing PT in a fork of the TypeScript compiler.
-While this \textit{might} make updates harder, than with our implementation, we will most often likely be able to merge the changes to the TypeScript compiler into our fork with the help of Git.
-Greater changes to the language might of course still give us some merge conflicts, however these larger changes could as easily make our currently used approach break.
 
 \section{Addressing Research Questions}\label{sec:adressing-research-questions}
 
@@ -239,17 +232,36 @@ In a nominally typed language we might have to alter our implementation to expli
 It might at worst not even be possible if the graph utility library has typed their input with classes instead of interfaces.
 This is of course one of the strengths of PT in the first place, being able to add implementing interfaces to a class without altering the original implementation or merging classes if possible, however the fact that we would not have to perform this step in a structurally typed language could arguably be seen as a benefit.
 
-\section{Conclusion}\label{sec:result-conclusion}
+\section{In Retrospect}\label{sec:in-retrospect}
 
+\subsection{Approach}\label{subsec:result-approach}
 
-% Hva har vi gjort?
+While we were able to implement most of PT with our approach, I fear that further development to reach a complete implementation might be hindered by our chosen approach.
+This is largely because we might have to implement much of the type system in order to properly identify references, as we briefly discussed in section~\vref{subsec:supporting-all-references}.
+Instead of re-inventing the wheel, we might be better off by implementing PT in a fork of the TypeScript compiler.
+While this \textit{might} make updates harder, than with our implementation, we will most often likely be able to merge the changes to the TypeScript compiler into our fork with the help of Git, conflict free.
+Greater changes to the language might of course still give us some merge conflicts, however these larger changes could as easily make our currently used approach break.
 
 \section{Future Work}\label{sec:future-work}
 
-\subsection{Diamond Problem}\label{subsec:diamond-problem}
+\subsection{Finishing the PTS Compiler}\label{subsec:finishing-the-pts-compiler}
 
-essay
+As detailed in section~\vref{sec:completing-the-implementation} the implementation of the compiler was not completed, and requires some further work to complete.
+The majority of the work will presumably lie in performing more advanced semantic analysis in order to correctly identify all references.
+This could as we have pointed out either be attempted in a fork of the TypeScript compiler, or as a continuation of this compiler.
+If one is to continue on with this implementation it could be worth looking into if it is possible to use the TypeScript compiler API in order to identify references.
 
 \subsection{Improve the Compilers Error Messages}\label{subsec:compiler-with-focus-on-error-messages}
 
 As I mentioned shortly in subsection~\vref{subsec:the-ast-nodes} tree-sitter does have support for giving position of a syntax node, and this could be utilized to produce better error messages.
+In addition to giving the position of where the error occurred, it would also be helpful to give more informative error messages than we currently do.
+In our implementation errors are usually first found during the type-check phase, where we might have already instantiated templates, and renamed classes and attributes.
+We should try to make more effort to spot errors earlier rather than later.
+
+\subsection{Making Syntax Highlighting for the PTS Language}\label{subsec:making-syntax-highligthing-for-the-pts-language}
+
+By utilizing tree-sitter as our lexer/parser we could presumably pretty easily also utilize it to get syntax highlighting.
+Most modern editors and IDEs have recently been switching to tree-sitter for syntax highlighting, opposed to the traditional method of using regex to highlight code files.
+This should be as simple as writing query files for identifying keywords, operators, etc.
+Similar to how we extended the TypeScript grammar in order to create our PTS grammar, it should also be possible to extend the TypeScript highlight query files to create syntax highlighting for PTS\@.
+In the GitHub repository for the tree-sitter grammar for PTS there has been done some initial work for setting this up, but has been abandoned as implementing features for the compiler was more urgent.

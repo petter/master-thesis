@@ -139,7 +139,7 @@ This example is taken from the source code to the PTS parser, where we have a te
 
 For testing the implementation of our compiler I chose to make similar tests to those used in the parser.
 I used the test framework AVA\footnote{https://github.com/avajs/ava} to run my tests.
-I chose to structure my tests into separate files under the \codeword{__test__} folder.
+I chose to structure my tests into separate files under the \codeword{\_\_test\_\_} folder.
 This is not a strict requirement for AVA, but helps structure the project more nicely.
 All my tests for the compiler are implementation tests, where I transpile a program and check that the output is equal to the exepected output.
 AVA has helper methods for this where I can use the \codeword{is} function to check that two strings are equal to each other.
@@ -162,10 +162,13 @@ Since templates are not supposed to produce any code after being transpiled, we 
     }
     `;
 
-    const expected = ``;
-    const result = transpile(program, { emitFile: false, targetLanguage: 'ts' });
+        const expected = ``;
+        const result = transpile(
+            program,
+            { emitFile: false, targetLanguage: 'ts' }
+        );
 
-    t.is(result, expected);
+        t.is(result, expected);
     });
 \end{code}
 
