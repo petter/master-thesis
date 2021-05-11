@@ -7,14 +7,14 @@ Before we look at what TypeScript is we first need to understand JavaScript and 
 
 \subsection{JavaScript}\label{subsec:javascript}
 
-Back in the mid 90s web pages could only be static, however there was a desire to remove this limitation and make the web a more interactive platform, as it became increasingly more accessible to non-technical users.
-In order to remove this limitation, Netscape, with its Netscape Navigator browser, partnered up with Sun in order to bring the Java platform to the browser, and hired Brendan Eich to create a scripting language for the web.
-Eich was tasked to create a Scheme like language with syntax similar to Java, and the language was intended to be a companion language to Java.
-The language when it first released was called LiveScript, however it was later renamed to JavaScript.
-This has been characterized as a marketing ploy by Netscape in order to give the impression that it was a Java spin-off.
+Back in the mid-90s web pages could only be static, however, there was a desire to remove this limitation and make the web a more interactive platform, as it became increasingly more accessible to non-technical users.
+In order to remove this limitation, Netscape, with its Netscape Navigator browser, partnered up with Sun to bring the Java platform to the browser and hired Brendan Eich to create a scripting language for the web.
+Eich was tasked to create a Scheme-like language with syntax similar to Java and the language was intended to be a companion language to Java.
+The language when it first released was called LiveScript, however, it was later renamed to what we know it as today, JavaScript.
+This has been characterized as a marketing ploy by Netscape to give the impression that it was a Java spin-off.
 
 Microsoft, with its Internet Explorer, adopted the language and named it JScript.
-During this time Microsoft and Netscape would both ship new features to the language in order to increase the popularity for their respective browsers.
+During this time Microsoft and Netscape would both ship new features to the language in order to increase the popularity of their respective browsers.
 Because of this war between browsers the language was later handed over to ECMA International as a starting point for a standard specification for the language.
 This ensured that users would get the same experience across different browsers, making the web more accessible~\cite{jswikipedia}.
 
@@ -27,12 +27,12 @@ Whenever you visit a website that isn't just static information, but instead mig
 JavaScript is a programming language conforming to the ECMAScript standard.
 ECMAScript is a JavaScript standard, created by Ecma International, made to standardize the JavaScript language and ensure interoperability across different browsers.
 There is no official runtime or compiler for JavaScript as it is up to each browser to implement the languages runtime.
-When we create a JavaScript program/script for a web page we don't compile it and transfer a binary or bytecode file for the web page to execute, instead the browser takes the raw source code and interprets it\footnote{On a more technical level, JavaScript is generally just-in-time compiled in the browser.}.
+When we create a JavaScript program/script for a web page we don't compile it and transfer a binary or bytecode file for the web page to execute, instead, the browser takes the raw source code and interprets it\footnote{On a more technical level, JavaScript is generally just-in-time compiled in the browser.}.
 
 JavaScript is a multi-paradigm language, mainly consisting of object-orientation and functional programming, with a dynamic type system.
-It is object-oriented in the way that most datastructures are represented through objects, and functional in the way that it has first-class functions, where functions can be free from a class and are treated as values which can be assigned to variables and sent around as parameters.
+It is object-oriented in the way that most data structures are represented through objects, and functional in the way that it has first-class functions, where functions can be free from a class and are treated as values that can be assigned to variables and sent around as parameters.
 
-Where most object-oriented programming languages are class based, like Java, JavaScript is \textit{prototype-based}.
+Where most object-oriented programming languages are class-based, like Java, JavaScript is \textit{prototype-based}.
 What this means is that the objects are not class instances, but are rather "instances" of a prototype.
 What you would normally think of as a class instance in Java, is an object with a reference to a prototype object.
 These instances are created through constructor functions, which create an object and sets the prototype for the object.
@@ -41,19 +41,19 @@ An object in JavaScript is a "bag" of properties containing values, which are sp
 The prototype object is not special in any way, it is just another object that has contains values that can be commonly used by all objects with the same prototype, and can themselves have prototype objects.
 This is how inheritance works in JavaScript, chains of prototype objects, where the \codeword{Object} prototype is at the end of the chain, similar to how the \codeword{Object} class is at the top of the inheritance hierarchy in Java.
 The \codeword{Object} prototype has \codeword{null} as its prototype, and \codeword{null} does not have any prototype.
-When trying to access a member of an object the object itself is first checked, then its prototype, and the prototype's prototype and so on, following the chain of prototypes, until a match is found~\cite{prototypechaining}, or until there is no more prototypes to follow.
+When trying to access a member of an object the object itself is first checked, then its prototype, and the prototype's prototype and so on, following the chain of prototypes, until a match is found~\cite{prototypechaining}, or until there are no more prototypes to follow.
 Since prototypes are just objects they can as with any other object be changed at runtime or replaced by other prototypes.
 
-In ECMAScript 2015 there was introduced a class-syntax, however this is just syntactic sugar for creating the prototype object, and the associated constructor.
+In ECMAScript 2015 there was introduced a class-syntax, however, this is just syntactic sugar for creating the prototype object, and the associated constructor.
 Extending a class with this syntax is as you would expect just defining the prototype for the prototype object.
 
 \subsubsection{ECMAScript Versions}\label{subsubsec:ecmascript-versions}
 
 ECMAScript versions are generally released on a yearly basis.
 This release is in the form of a detailed document describing the language, ECMAScript, at the time of release.
-New versions will most likely include some additions to the language, but never any breaking changes\footnote{There has been occasions where there has been minor breaking changes between ECMAScript versions, but these changes happen very rarely and the affected areas are often insignificant.}.
+New versions will most likely include some additions to the language, but never any breaking changes\footnote{There have been occasions where there have been minor breaking changes between ECMAScript versions, but these changes happen very rarely and the affected areas are often insignificant.}.
 This is because the developer will not be able to control the environment on which the code will be executed since you can not be sure which ECMAScript version the client browser is using.
-Because of this lack of control over the runtime environment it is crucial that any pre-existing language features don't have breaking changes between versions.
+Because of this lack of control over the runtime environment, it is crucial that any pre-existing language features don't have breaking changes between versions.
 
 \subsubsection{Backwards Compatibility}\label{subsubsec:backwards-compatability}
 
@@ -71,7 +71,7 @@ Some popular transpilers for JS to JS transpilation are Webpack and Babel, but y
 
 \subsubsection{Node.js}\label{subsubsec:node}
 
-As of the time of writing there are mainly two ways to execute JavaScript.
+As of the time of writing, there are mainly two ways to execute JavaScript.
 You can run the program in the browser, as it was intended, or you can use a JavaScript runtime that runs on the backend, outside of the browser.
 Node.js (henceforth simply referred to as Node) is the mainstream solution for the latter.
 Node is a JavaScript runtime built on the JavaScript engine, V8, used by Chrome.
