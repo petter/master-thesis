@@ -107,10 +107,10 @@ This allows me to write up tests for all the features of the language, and run t
 For testing the lexer and parser I used the built in testing framework.
 Tree-sitter tests are simple \codeword{.txt} files split up into three sections, the name of the test, the code that should be parsed, and the expected parse tree in \textit{S-expressions}\footnote{S-expressions are textual representations for tree-structured data. See~\cite{sexprs} for additional information and examples}.
 These files are placed in the \codeword{corpus} folder, and will be automatically executed when running \codeword{tree-sitter test}.
-Listing~\vref{lst:tree-sitter-grammar-test} shows an example of a tree-sitter grammar test.
+Listing~\vref{lst:tree-sitter-grammar-test} shows an example of a Tree-sitter grammar test.
 This example is taken from the source code to the PTS parser, where we have a test so see that template declarations are being parsed correctly.
 
-\begin{code}{typescript}{Example of tree-sitter grammar test}{lst:tree-sitter-grammar-test}
+\begin{code}{typescript}{Example of Tree-sitter grammar test}{lst:tree-sitter-grammar-test}
     ===========================
     Closed template declaration
     ===========================
@@ -141,11 +141,11 @@ For testing the implementation of our compiler I chose to make similar tests to 
 I used the test framework AVA\footnote{https://github.com/avajs/ava} to run my tests.
 I chose to structure my tests into separate files under the \codeword{\_\_test\_\_} folder.
 This is not a strict requirement for AVA, but helps structure the project more nicely.
-All my tests for the compiler are implementation tests, where I transpile a program and check that the output is equal to the exepected output.
+All my tests for the compiler are implementation tests, where I transpile a program and check that the output is equal to the expected output.
 AVA has helper methods for this where I can use the \codeword{is} function to check that two strings are equal to each other.
 On differing strings an informative error is logged, with the differences between the actual results and the expected results.
 
-Listing~\vref{lst:ava-test} shows one of the tests from the source code of the compiler, where we similarily to the tree-sitter test we saw before, check that a closed template is working as expected.
+Listing~\vref{lst:ava-test} shows one of the tests from the source code of the compiler, where we similarly to the Tree-sitter test we saw before, check that a closed template is working as expected.
 Instead of providing a parse tree as the expected result, we instead provide an expected program as the string.
 Since templates are not supposed to produce any code after being transpiled, we therefore also expect this program to be an empty string.
 

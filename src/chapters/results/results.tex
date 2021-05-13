@@ -254,15 +254,15 @@ If one is to continue on with this implementation it could be worth looking into
 
 \subsection{Improve the Compilers Error Messages}\label{subsec:compiler-with-focus-on-error-messages}
 
-As I mentioned shortly in subsection~\vref{subsec:the-ast-nodes} tree-sitter does have support for giving position of a syntax node, and this could be utilized to produce better error messages.
+As I mentioned shortly in subsection~\vref{subsec:the-ast-nodes} Tree-sitter does have support for giving position of a syntax node, and this could be utilized to produce better error messages.
 In addition to giving the position of where the error occurred, it would also be helpful to give more informative error messages than we currently do.
 In our implementation errors are usually first found during the type-check phase, where we might have already instantiated templates, and renamed classes and attributes.
 We should try to make more effort to spot errors earlier rather than later.
 
 \subsection{Making Syntax Highlighting for the PTS Language}\label{subsec:making-syntax-highligthing-for-the-pts-language}
 
-By utilizing tree-sitter as our lexer/parser we could presumably pretty easily also utilize it to get syntax highlighting.
-Most modern editors and IDEs have recently been switching to tree-sitter for syntax highlighting, opposed to the traditional method of using regex to highlight code files.
+By utilizing Tree-sitter as our lexer/parser we could presumably pretty easily also utilize it to get syntax highlighting.
+Most modern editors and IDEs have recently been switching to Tree-sitter for syntax highlighting, opposed to the traditional method of using regex to highlight code files.
 This should be as simple as writing query files for identifying keywords, operators, etc.
 Similar to how we extended the TypeScript grammar in order to create our PTS grammar, it should also be possible to extend the TypeScript highlight query files to create syntax highlighting for PTS\@.
-In the GitHub repository for the tree-sitter grammar for PTS there has been done some initial work for setting this up, but has been abandoned as implementing features for the compiler was more urgent.
+In the GitHub repository for the Tree-sitter grammar for PTS there has been done some initial work for setting this up, but has been abandoned as implementing features for the compiler was more urgent.
