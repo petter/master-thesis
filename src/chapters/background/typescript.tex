@@ -72,7 +72,7 @@ Some popular transpilers for JS to JS transpilation are Webpack and Babel, but y
 \subsubsection{Node.js}\label{subsubsec:node}
 
 As of the time of writing, there are mainly two ways to execute JavaScript.
-You can run the program in the browser, as it was intended, or you can use a JavaScript runtime that runs on the backend, outside of the browser.
+You can run the program in the browser, as it was originally intended, or you can use a JavaScript runtime that runs on the backend, outside the browser.
 Node.js (henceforth simply referred to as Node) is the mainstream solution for the latter.
 Node is a JavaScript runtime built on the JavaScript engine, V8, used by Chrome.
 It is independent of the browser and can be run through a \textit{CLI} (Command-Line Interface).
@@ -95,6 +95,6 @@ These types combine other types into a new type, which is the intersection of th
 All valid JavaScript programs are also valid TypeScript programs.
 Types in TypeScript can be optional, as the type inference is powerful enough to infer most types without writing extra code.
 The type-checking can be tailored to be stricter or leaner, where you can for instance disable features such as usage of \codeword{any}-types, which are a way for the programmer to bypass the type-check for certain values.
-TypeScript has full interoperability with JavaScript, so you can adopt the language without refactoring.
+TypeScript has full interoperability with JavaScript, so you can adopt the language without needing to rewrite your entire code base.
 If you are working with a JavaScript library, but you want the safety of types, there can often be found type declaration files written by the community in the DefinitelyTyped project~\cite{tswebsite}.
 

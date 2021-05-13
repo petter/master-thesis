@@ -3,18 +3,20 @@
 % Tror Groovy bruker "meta-classes" til å oppnå gjenbruk og renaming av klasser. Vi kan bruke prototyper til å oppnå lignende i JS.
 
 One of the first approaches we need to check out is if we are able to achieve the functionality of PT, without having to create a compiler.
-Instead of creating a compiler, that would likely be a complicated and time-consuming task, we could potentially get away with implementing the features of PT within TypeScript itself through making a small internal DSL\footnote{While most programming languages are made to be general purpose, DSLs, or Domain Specific Languages, are languages created to solve very specific problems withing certain domains. An internal DSL (or embedded DSLs as Hudak calls them) are languages based on an existing programming language, but "tailoring it [...] to the domain of interest"~\cite{Hudak1997}.}.
-In~\cite{groovypt}, Axelsen and Krogdahl shows how they were able to implement PT in Groovy by utilizing the languages' meta-programming capabilities.
+Instead of creating a compiler, which would likely be a complicated and time-consuming task, we could potentially get away with implementing the features of PT within TypeScript itself through making a small internal DSL\footnote{While most programming languages are made to be general purpose, DSLs, or Domain Specific Languages, are languages created to solve very specific problems withing certain domains. An internal DSL (or embedded DSLs as Hudak calls them) are languages based on an existing programming language, but "tailoring it [...] to the domain of interest"~\cite{Hudak1997}.}.
+In~\cite{groovypt}, Axelsen and Krogdahl show how they were able to implement PT in Groovy by utilizing the languages' meta-programming capabilities.
+Stordahl also showed the possibility of implementing PT in Boo, through its meta-programming capabilities in~\cite{Stordahl2011}.
 We will in this section therefore see if we are able to achieve something similar in TypeScript.
 
-While Groovy seemingly have better meta-programming capabilities, it would seem that we might still be able to achieve some of the same features in TypeScript.
-For parts of the Groovy implementation Axelsen and Krogdahl utilized Groovy's meta-object protocol, where each object has a reference to its meta-class, to change and add members to classes at runtime.
-Similarly, objects in JavaScript have references to a prototype object.
-These prototypes can have members added and removed, or the entire prototype replaced, at runtime.
+Both Groovy and Boo have strong meta-programming capabilities, where they can perform transformations to the syntax tree during compilation.
+JavaScript and TypeScript do not have the same capabilities for meta-programming during compilation, as JavaScript is intended as an interpreted language, and TypeScript is only supposed to offer type declarations without changing any of the underlying functionality, so any compile-time transformations are not an option for our DSL\@.
+Besides the compilation transformations used for some custom syntax, Groovy gives the programmer access to the \emph{meta-object protocol}, where each object has a reference to its \emph{meta-class}, where members of a class can be added or changed at run-time.
+This was utilized by Axelsen and Krogdahl during the implementation of GroovyPT, and we could seemingly achieve something similar in TypeScript.
+Similar to Groovy's meta-classes, objects in JavaScript have references to a prototype object.
+These prototypes can have members added or removed, or the entire prototype replaced, at runtime.
 Utilizing this we could potentially be able to implement PT's class merging, renaming and additions.
 We will dive deeper into this in the following sections.
 
-Since it can seem plausible to implement PT without the need of a compiler, let us look at how this can be done in practise.
 To implement PT we will need to handle the following:
 
 \begin{itemize}

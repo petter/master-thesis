@@ -11,7 +11,7 @@
 
 Krogdahl proposed Generic Packages in 2001, which is a language mechanism aimed at "large scale code re-use in object-oriented languages"~\cite{krogdahl:GP}.
 The idea behind this mechanism is to make modules of classes, called \textit{packages}, that could later be imported and instantiated.
-This would make "textual copies" of the package body, and would also allow for further expanding the classes of the packages.
+This would make textual copies of the package body, and would also allow for further expanding the classes of the packages.
 Modularizing through Generic Packages made programming more flexible as you would easily be able to write modules with a certain functionality and be able to later import it several times when there is a need for the functionality.
 
 Generic Packages was later extended, and the mechanism is now called Package Templates (while the textual program modules themselves are simply called templates).
@@ -43,7 +43,7 @@ The contents of a package can be used as you would with a normal Java package.
 Instantiating is what really makes PT useful.
 When defining packages and templates, PT allows for including already defined templates through instantiating.
 Instantiation is done inside the body of a package (or a template) with the use of an \codeword{inst}-clause.
-Instantiating a template will make "textual copies" of the  classes, interfaces and enums from the instantiated template and insert them replacing the instantiation statement at compile time.
+Instantiating a template will make textual copies of the  classes, interfaces and enums from the instantiated template and insert them replacing the instantiation statement at compile time.
 Note that the template itself still exists and that it can be instantiated again in the same program.
 
 Listing~\vref{code:inst} shows an example of instantiating a template inside a package.
@@ -319,7 +319,7 @@ They can only be used as type references, like in the simple Tree implementation
 It is also possible to declare required classes and interfaces similarly to required types, which can be used as classes and interfaces respectively, however this will not be discussed in this thesis.
 If the reader wants to get a better understanding for required types, required classes and required interfaces I recommend reading~\cite{requiredtypes}.
 
-\subsection{Advanced Topics of PT}\label{subsec:advanced-topics-of-pt}
+\subsection{Concepts of PT}\label{subsec:advanced-topics-of-pt}
 
 With a firm understandings of the basics of PT we will now have to dig a bit deeper into some terminology and restrictions of the language mechanism.
 
@@ -333,7 +333,7 @@ An \textit{open template} on the other hand is a template which has one or more 
 Open templates will be closed at compile-time.
 The task of closing a template is that of performing the contained instantiations and additions to classes.
 Open templates can instantiate open templates, as long as these instantiations are not cyclic.
-What this means is that a template A can instantiate a template B if template B does not contain any instantiations of template A\@.
+What this means is that a template A can instantiate a template B if template B does not contain any (transitive) instantiations of template A\@.
 A template B contains an instantiation of template A if it has an instantiation of template A in its body, or contains a nested instantiation of template A\@.
 
 Packages can also be open and closed and work in the same manner as with templates, except that they can not be instantiated.

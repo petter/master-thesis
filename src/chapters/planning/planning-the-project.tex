@@ -8,13 +8,13 @@ We know we are going to be creating a programming language, a superset of TypeSc
 However, we might want to look at if creating a superset of TypeScript is the way to go, or if keeping it simple and extending JavaScript is a better call.
 We might also want to see if it is needed to create a language at all, or if we are able to create a TypeScript library which can achieve the functionality of PT instead.
 There are a lot of approaches we can take for implementing our language, so we will have to map out the requirements for our desired approach.
-Lastly we will have to look at all the different approaches we can take, and see which approach is right for this project.
+We will conclude the chapter by looking at the different approaches we can take, and see which approach is right for the project.
 
 This planning phase is crucial for the success of the project, as starting off on the wrong approach for the wrong language would set us back immensely.
 
 \section{TypeScript vs. JavaScript}\label{sec:typescript-vs-javascript}
 
-When extending TypeScript you might be asking yourself if it is truly necessary, is it better to keep it simple and just extend JavaScript instead?
+When extending TypeScript you might be asking yourself if it is truly necessary to go for TypeScript as the host language, or would it be better to keep it simple and just extend JavaScript instead?
 This is something we need to find out before going any further with the planning of our project.
 
 \subsection{Type-checking Templates}\label{subsec:why-typescript-verifying-templates}
@@ -39,12 +39,16 @@ This means that we can still run into the same issues as we would in a JavaScrip
 
 \subsection{Language Choice Conclusion}\label{subsec:langauge-choice-conclusion}
 
-Since TypeScript would enable us to perform type-checks on templates, as well as making it possible to perform safe renamings we will in this project opt to go for TypeScript as our choice of language.
+%Since TypeScript would enable us to perform type-checks on templates, as well as making it possible to perform safe renamings we will in this project opt to go for TypeScript as our choice of language.
+Package Templates has a lot of properties that are designed around strong typing, as we have discussed in the previous sections.
+However, there has previously been done research into dynamic variants of PT where the PT transformations have been done at run-time, so it is certainly possible for us to also write a dynamic variant of PT for JavaScript.
+Even though it would be possible it will likely be more beneficial for the language with a strong type system.
+This might also prove to be more interesting research, as we could rather focus on TypeScript's structural type system, than focusing on creating another dynamic variant of PT.
 % TODO kanskje litt mer her
 
 \section{What Do We Need?}\label{sec:what-do-we-need}
 
-There are a lot of approaches one can take when working with TypeScript, however due to the nature of this project there are some restrictions we have to abide by.
+There are a lot of approaches one can take when extending TypeScript, however due to the nature of this project there are some restrictions we have to abide by.
 Our approach should allow the following:
 
 \begin{itemize}
@@ -55,7 +59,7 @@ Our approach should allow the following:
 In addition to these we would also like to look for some other desirable traits for our implementation:
 
 \begin{itemize}
-    \item Loosely coupled implementation (So that new versions of typescript not necessarily breaks our implementation).
+    \item Loosely coupled implementation (So that new versions of TypeScript not necessarily breaks our implementation).
     %\item Mer? % TODO
 \end{itemize}
 

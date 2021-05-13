@@ -1,10 +1,11 @@
 \chapter{The Language - PTS}\label{ch:the-language---pts}
 
-While the majority of the semantics of PTS will be equal to that of PT, we will have to change some syntax.
+In this chapter we will introduce the programming language Package Template Script, henceforth just referred to as PTS\@.
+Here we will make decisions about the syntax of the language, whether we can keep most of the syntax of the original PT proposal, or if we will have to make some adjustments to avoid concept confusion and an ambiguous grammar.
 
 \section{Syntax}\label{sec:syntax}
 
-For the implementation of PT we need syntax for the following:
+For the implementation of PT we need a way to express the following language constructs:
 
 \begin{itemize}
     \item Defining packages (\codeword{package} in PT)
@@ -102,8 +103,8 @@ The productions for non-terminals $\bnfpn{id}$, $\bnfpn{class declaration}$, $\b
 
 Listing~\vref{lst:pts-example-inst-renaming-addto} shows an example of a program in PTS\@.
 This program showcases the basics of defining packages and templates, and how instantiation, renaming and additions can be applied in the language.
-We also have a similar program at the bottom, showing how this is done PT\@.
-While both the basic instantiation and additions stay pretty much the same, renaming do have some interesting differences.
+We also have a similar program at the bottom, showing how this is done in PT\@.
+While both the basic instantiation and additions stay pretty much the same, renaming does have some interesting differences.
 We can see that in the PT example we have to specify the signature of methods we are renaming, while in PTS example it is enough to just specify the names of the methods.
 This requirement of specifying method signature is something we could remove in PTS because of the difference between the underlying languages, as we discussed previously in section~\vref{sec:syntax}.
 
