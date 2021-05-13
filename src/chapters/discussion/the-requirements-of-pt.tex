@@ -32,8 +32,8 @@ In order to get a better understanding of what these requirements entail we will
 The parallel extension requirement is about making additions to classes in a package/template, and being able to make use of them in the same collection.
 What this means is that if we are making additions to a class, then we should be able to reference these additions in a declaration or in an addition to a separate class within the same package/template, without needing to cast it.
 We can see an example of this in listing~\vref{lst:parallel-extension}, where an addition to class \codeword{B} is referencing the added method of class \codeword{A}.
+Contrast this to how an implementation with traditional extension through subclasses of A and B would work, and the casts etc. necessary to make the call \codeword{a.someMethod()} work in that context.
 The order of additions does not affect the parallel extension.
-We could just as easily switched the positions of the additions around in this example.
 
 \begin{code}{Java}{Example of parallel extension in PT. Here we make additions to both \codeword{A} and \codeword{B} in our instantiation in package \codeword{P}, and we are able to reference the additions done to \codeword{A} in our addition to \codeword{B}. This is done without the need to cast \codeword{A}, as if the additions were present at the time of declaration.}{lst:parallel-extension}
     template T {
@@ -93,7 +93,7 @@ Each use should be kept independent of each other.
 This is an important requirement of PT as when we create a package or a template it is often designed to be re-used.
 An example of this is the graph template we created in listing~\vref{code:rename}.
 Here we bundled the minimal needed classes in order to have a working implementation for graphs.
-We then used this graph implementation to model a road systems, however we might later also want to re-use the graph implementation for modelling the sewer systems of each city, and this should not be affected by any changes we made to the graph template for our road system.
+We then used this graph implementation to model a road system, however we might later also want to re-use the graph implementation for modelling the sewer systems of each city, and this should not be affected by any changes we made to the graph template for our road system.
 
 \subsubsection{Type Parameterization}\label{subsubsec:type-parameterization}
 
@@ -107,7 +107,7 @@ We then used this graph implementation to model a road systems, however we might
 
 The requirement of type parameterization of templates works similar to how type parameterization for classes works in Java.
 Type parameterization in Java enables the programmer to assume the existence of a type during declaration of a class, and the actual type can be given when a new object of the class is created.
-Type parameters in Java can have constraints where they must extend another class or interface.
+Type parameters in Java can have constraints where the concrete type must extend another class or interface.
 Similarly, type parameterization in PT also enables the programmer to assume the existence of a type, however here the type parameter is accessible to the whole template.
 PT type parameters can also be constrained similar to Java, by giving a nominal type it should extend, however PT also allows for type constraining through structural types, by giving a structure the type should conform to.
 

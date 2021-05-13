@@ -1,6 +1,6 @@
 \section{Does PTS Fulfill The Requirements of PT?}\label{sec:does-pts-fulfill-the-requirements-of-pt?}
 
-This thesis is concerned about implementing Package Templates in TypeScript.
+This thesis is concerned with implementing Package Templates in TypeScript.
 However, in order to determine to what degree we have actually implemented PT or just created something that looks like it, we have to understand what the requirements of PT are, and if we are meeting those requirements.
 We will therefore in this chapter look at the requirements as described in~\cite{jot}.
 After getting an understanding of the requirements we are going to look at how our implementation holds up to them.
@@ -166,11 +166,11 @@ The renaming has also not wrongly renamed other references that are similar in n
 
 Because of TypeScript's structural type system, renaming will have to work a bit differently than it would in a nominally typed language.
 In nominal PT, all references are always renamed.
-In structural PT we could end up with programs where some references can not be renamed, as some variables might not be directly tied with a class.
+In structural PT we could end up with programs where some references can not be renamed, as some variables might not be directly tied to a class.
 Listing~\vref{lst:pts-renaming-problem} showcases this problem.
 The problem arises in the \codeword{a} attribute of class \codeword{B} in template \codeword{T}.
 This has been declared to be a variable expecting an object where there exists an attribute \codeword{i}.
-\codeword{a} is initialised with an object of the class \codeword{A}.
+The variable \codeword{a} is initialised with an object of the class \codeword{A}.
 This is fine in template \codeword{T}, however when \codeword{T} is instantiated in package \codeword{P}, and \codeword{A}'s attribute \codeword{i} is renamed to \codeword{j}, this is no longer the case.
 The \codeword{a} variable in class \codeword{B} is not a direct reference to class \codeword{A}, and we can thus not rename the reference to the attribute \codeword{i}.
 Since an object of \codeword{A} no longer contains an attribute \codeword{i}, this is no longer a valid value for variable \codeword{a}.
@@ -213,7 +213,7 @@ This is something I would of course have liked to take into consideration if I h
 Deciding the type of variables is something that possibly would have come for cheaper if I had opted for a fork of the TypeScript compiler as my approach.
 This is something we will come back to in~\vref{subsec:result-approach}.
 
-Nominal PT however is also not perfect in this regard, as we can run into issues with renamings of interfaces' attributes.
+PT for the nominally typed language Java is also not perfect in this regard, as we can run into issues with renamings of interfaces' attributes.
 If a class implements an interface, and we in a later instantiation rename the interfaces' attributes, and not the attributes of the implementing class, we could end up with a program where the class no longer fulfills the requirement of the interface.
 In listing~\vref{lst:nominal-pt-interface-problem} we can see this problem in action, where after a rename of interface \codeword{I}'s method \codeword{f}, the class \codeword{A} no longer implements the interface properly.
 This is of course also a problem in structural PT, and can potentially be an even bigger problem as we would not necessarily have an explicit relation between the interface and the class, and could therefore also not properly describe the error to the programmer.
@@ -307,7 +307,7 @@ This could occur if we had for instance not respected the renaming of a class at
 Our implementation of class merging has been made so that it is essentially unaware of the instantiation and renaming steps, it is done as a separate step after these actions have been performed.
 What this means is that after performing all instantiations, with optional renamings, we can momentarily end up with several class declarations for the same class, which would be an invalid TypeScript program, however before the closing of templates step is done we will merge the class declarations and \codeword{addto}-statements representing the same class, forming new classes.
 The resulting program could of course still be an invalid TypeScript program, as the merge of classes could lead to erroneous code, such as duplicate function declarations, however this is not a result of an invalid implementation, but rather an error as a product of an invalid input program.
-The class merging step, will merge classes without checking their bodies, as these will be picked up in the type-checking step later on.
+The class merging step will merge classes without checking their bodies, as these will be picked up in the type-checking step later on.
 By separating the logic of instantiations and renaming, as we have done, we should minimize the potential for an invalid implementation of class merging.
 
 Listing~\vref{lst:req-class-merging-example} shows a program with class merging, and the resulting program from a compilation of the PTS program.

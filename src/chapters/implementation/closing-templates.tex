@@ -1,21 +1,23 @@
 The task of closing open packages and templates is what most of the implementation is focused around.
 It is the task of performing the declared instantiations and altering the declared classes through \codeword{addto}-statements.
-This step is cruicial as it will make each package/template a valid TypeScript program and make the program ready for code generation.
+This step is crucial as it will make each package/template a valid TypeScript program and make the program ready for code generation.
 
-For instantiations without renaming the task is fairly simple.
+For the most basic instantiations that don't lead to any renaming, performing additions to classes, or merging of classes, the task is fairly simple.
 We merely have to find the referenced template, and replace the instantiation statement with the body of said template.
-Renaming on the other hand requires a bit more work.
+However, to support proper instantiation, the task becomes a bit more advanced.
 
-In order to perform renaming on an instantiation we will have to perform the following tasks.
+In order to support instantiation of templates, with all the concepts related to it, we will have to do some additional steps.
+For each instantiation statement we will have to perform the following steps on the body of the instantiated template.
+
 \begin{enumerate}
-    \item Create a correctly scoped AST\@.
-    \item Find all identifiers, member expressions, class declarations, etc., and replace them with \textit{reference nodes}\footnote{Reference nodes are AST nodes that contain a pointer to the class or attribute they are supposed to represent. This makes the task of renaming easier as we only have to worry about changing the name in one place. We will go into more detail about this in section~\vref{subsec:transforming-nodes-to-references}.}
-    \item Perform the rename.
-    \item Transform the scoped AST with reference nodes back to the original AST\@.
-    \item Merge class declarations and apply \codeword{addto} statements.
+    \item Create a correctly scoped AST
+    \item Transform nodes to \textit{reference nodes}\footnote{Reference nodes are AST nodes that contain a pointer to the class or attribute they are supposed to represent. This makes the task of renaming easier as we only have to worry about changing the name in one place. We will go into more detail about this in section~\vref{subsec:transforming-nodes-to-references}.}
+    \item Perform the rename
+    \item Go back to the original AST
+    \item Merge classes
 \end{enumerate}
 
-If the template body is also open we would have to close it as well.
+If the template that is being instantiated is not closed, we will perform the same steps to all the nested instantiations in a depth-first manner.
 We want to close the nested templates before closing the upper templates, as renaming at the top level should affect all members from the nested instantiations.
 
 Finally, once all templates have been closed we will have to perform class merging and apply any additions to classes.
@@ -44,7 +46,7 @@ In order to get a better understanding of this we will go through each step of c
 %    FUNCTION
 %\end{code}
 
-\subsection{Scoping}\label{subsec:inst-scoping}
+\subsection{Create a correctly scoped AST}\label{subsec:inst-scoping}
 
 This step of closing templates works on the body of a copy of the instantiated template.
 In order to be able to rename classes and class attributes we first need to create correct scopes in which the renaming can be applied.
@@ -85,19 +87,20 @@ This new scope is then given to all nodes beneath this node, until we reach anot
 
 At the end of this traversal we have an AST where every node has a reference to the scope its in.
 
-\subsection{Transforming Nodes to References}\label{subsec:transforming-nodes-to-references}
+\subsection{Transforming Nodes to Reference Nodes}\label{subsec:transforming-nodes-to-references}
 
 In order to rename a class or an attribute we need to find all references to the class or attribute.
 That is what this step is supposed to do, find all references and group these together, so that a rename can be performed.
 A reference in our program can either be a variable or a class reference.
 
 A variable reference can be a class attribute or any other variable declaration.
-Even though we call it a variable reference this does also cover functions, however both variables and functions share the same namespace, so there is essentially no difference between them, unlike Java where methods and variables can have the same name.
+Even though we call it a variable reference this does also cover functions.
+We don't need a different representation for functions, since functions in JavaScript are values which are assigned to a variable, and therefore share the same namespace, unlike Java where methods and variables can have the same name.
 These references are represented by a \codeword{Variable} class.
 The class contains the name of the attribute, and optionally what type it is.
-The type of a variable in our implementation is set through a very simple type-inference (relative to TypeScripts type system), where we only look at if there is a \codeword{new}-expression assigned to the variable at declaration.
+The type of a variable in our implementation is set through a very simple type-inference (relative to TypeScript's type system), where we only look at if there is a \codeword{new}-expression assigned to the variable at declaration.
 If a variable is initialized with a class instantiation then the type of the variable is an object of that class.
-However, this simple type inference might not always correctly type variables, as variables might have explicitly declared types which are not typed with the class' type, however for simplicity, and in order to not reimplement TypeScript's entire type system, we currently ignore these in the implementation.
+However, this simple type inference might not always correctly type variables, as variables might have explicitly declared types which are not typed with the class' type, however for simplicity, and in order to not reimplement TypeScript's entire type system, we currently ignore these in the implementation (though we will still perform a full type-check at a later stage in the compiler).
 
 Class references are all references made to a class.
 These references are references such as class declarations, instantiations of a class, usage of a class as a type, etc.
@@ -151,7 +154,7 @@ The final step takes care of any class attribute declarations.
 This could have been done in the same pass as with class heritage, however it was separated to make the code more readable and the flow of the transformations more understandable.
 During this transformation we also perform a very simple form of type inference by checking if there is a \codeword{new}-expression in the assignment.
 For the cases where there is a \codeword{new}-expression we assign the type of the variable to be an instance of the constructed class.
-It is worth noting that the current implementation only transform public field definitions.
+It is worth noting that the current implementation only transforms public field definitions.
 Other declaration types could be supported in the same manner as with public field definitions, however due to a lack of time these were not implemented.
 
 \begin{code}{javascript}{AST of a class declaration of class A before and after transforming the references. The values surrounded by angle brackets are references to \codeword{Scope}/\codeword{Class} instances.}{lst:transform-reference-class-decl}
@@ -217,15 +220,15 @@ Currently, the implementation will transform \codeword{new} expressions, member 
 These are all transformed in a pretty similar manner, where the identifier is found and looked up in the attached scope.
 If we can't find it in the scope this usually means that it is something we can't rename, and is therefore not of interest, such as \codeword{console.log}, \codeword{number}, etc.
 
-\subsection{Performing the Rename}\label{subsec:performing-the-rename}
+\subsection{Perform the Rename}\label{subsec:performing-the-rename}
 
 With all declarations and references transformed into reference nodes we can now perform the rename.
-For each class rename we can simply lookup the old class name in the root scope and change the reference to the new class name.
+For each class rename we can simply look up the old class name in the root scope and change the reference to the new class name.
 For class attribute renames we do a lookup on the specified class' scope.
 If the attribute can't be found in the class' scope we do a lookup in the optional superclass' scope.
 If either the superclass is missing or we can't find it in its scope either we throw an error, informing the programmer that the attempted renaming can't be performed.
 
-\subsection{Going Back to the Original AST}\label{subsec:going-back-to-the-original-ast}
+\subsection{Go back to the Original AST}\label{subsec:going-back-to-the-original-ast}
 
 After we have performed the renaming we can go back to the original, simpler, AST\@.
 For most nodes this is as simple as removing the scope property.
@@ -237,7 +240,7 @@ This name can be found through the reference stored in the \codeword{RefNode} to
 
 Once we have traversed the tree and done the transformations as described we will end up with an AST tree similar to what we had initially, where all instantiation statements have been replaced by the renamed bodies of the templates they were declared to instantiate.
 
-\subsection{Merging Classes}\label{subsec:merging-class-declarations}
+\subsection{Merge Classes}\label{subsec:merging-class-declarations}
 
 After we have performed the instantiation and have returned to the original AST format we can finish off the last task necessary to close a template, namely class merging.
 At this stage we will work on a package/template body which will mostly consist of a (potentially) valid TypeScript program, with the exception of possibly \codeword{addto}-statements and duplicate class declarations.

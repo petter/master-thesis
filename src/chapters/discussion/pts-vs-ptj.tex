@@ -25,8 +25,8 @@ In listing~\vref{lst:structural-typing-example} we see a structurally typed prog
 This program also has the exact same declarations as in listing~\vref{lst:nominal-typing-example}, that is classes \codeword{A}, \codeword{B}, and \codeword{C} and the function \codeword{g}.
 In this program both type \codeword{B} and type \codeword{C} are a subtype of type \codeword{A}, since they both contain all members of type \codeword{A}.
 Not necessarily the same implementation as in class \codeword{A}, but the same types as in type \codeword{A}.
-This is one of the sole differences between nominal and structural typing, types can conform to other types without having to explicitly state that they should.
-Type \codeword{C} is an example of this, while it does not have a subclass relation to class \codeword{A}, nor implement any common interface, it still conforms to the type of \codeword{A}.
+This is one of the biggest differences between nominal and structural typing, types can conform to other types without having to explicitly state that they should.
+Type \codeword{C} is an example of this, while it does not have a subclass relation to class \codeword{A}, nor implement any common nominal interface, it still conforms to the type of \codeword{A}.
 The result of this is that all three usages of function \codeword{g} are valid in a structural type system, while consuming \codeword{C} was illegal in the nominal example.
 
 
@@ -66,7 +66,7 @@ The result of this is that all three usages of function \codeword{g} are valid i
     g(new C()); // Ok, because C is structurally equal to A
 \end{code}
 
-\subsection{Advantages of Nominal Types}\label{subsec:advantages-of-nominal-types}
+\subsection{Advantages of Nominal Type Systems}\label{subsec:advantages-of-nominal-types}
 
 \subsubsection{Subtypes}\label{subsubsec:subtypes}
 
@@ -122,7 +122,7 @@ This makes it cheap and easy to do runtime type checks, like in upcasting or doi
 It is also easier to check sub-type relations in nominal type systems, even though you might still have to do a structural comparison, you only have to perform this once per type~\cite{tapl}.
 % TODO: Skriv mere
 
-\subsection{Advantages of Structural Types}\label{subsec:advantages-of-structural-types}
+\subsection{Advantages of Structural Type Systems}\label{subsec:advantages-of-structural-types}
 
 \subsubsection{Tidier and More Elegant}\label{subsubsec:tidier-and-more-elegant}
 

@@ -1,4 +1,4 @@
-\chapter{Results}\label{ch:results}
+\chapter{Concluding Remarks}\label{ch:results}
 
 In this thesis we have discussed the approach to the project and the implementation of the compiler for the PTS language, as well as evaluated the implementation and discussed the consequences of having a structurally typed language as the host of PT were.
 We will conclude this work by looking at how our implementation of the PTS programming language can be used in a real world example, as well as returning to our initial research questions and trying to answer these with the knowledge we have accumulated through the span of this thesis.
@@ -15,7 +15,7 @@ There are mainly two ways of using the PTS compiler:
 
 In the following sections we will look at how you can use install and use it for both approaches.
 
-The PTS compiler requires you to have Node and NPM installed on your computer.
+The PTS compiler requires you to have Node and npm installed on your computer.
 
 \subsection{Installing and Using PTS Globally}\label{subsec:installing-and-using-pts-globally}
 
@@ -46,13 +46,13 @@ Options:
 \subsection{Creating a PTS Project}\label{subsec:creating-a-pts-project}
 
 If you are using PTS for a specific project it might be better to set it up as a project dependency in npm.
-When installed in a npm project the CLI is available to use through npm scripts or through accessing it directly from the \codeword{node\_modules} folder in your project.
+When installed in an npm project the CLI is available to use through npm scripts or through accessing it directly from the \codeword{node\_modules} folder in your project.
 The compiler can also be access through the API by importing it as with any other npm package.
 
-Installing it inside a npm project will not require you to install it globally, as it will stay contained in the project.
+Installing it inside an npm project will not require you to install it globally, as it will stay contained in the project.
 This also means that any contributors of the project will not have to worry about installing PTS, as it will be installed when the project is set up.
 
-To initialize an NPM project you can do the following:
+To initialize an npm project you can do the following:
 
 \begin{minted}{bash}
     $ mkdir <project name>
@@ -96,14 +96,14 @@ We will try to create a simple web application for displaying a Pokémon.
 To do this we will use one of the most popular web frameworks, React.
 
 React is a web framework developed by Facebook.
-It makes creating scalable web projects easier to handle, through enabling the programmer to modularize collections of elements into "components".
+It aims to make creating scalable web projects easier to handle, through enabling the programmer to modularize collections of elements into "components".
 These components are often created to make re-use of common elements easier, such as creating a styled button with certain features, or we could create a component to represent the entire web application.
 
 Displaying one specific Pokémon can be pretty simple, however we would like to create a React component that can display information and a picture of any Pokémon.
 We do not want to have to write down information about all Pokémon, so we will fetch this information from an API, more specifically the PokéAPI (\url{https://pokeapi.co/}).
 This API lets us fetch data from all Pokémon.
 
-We will start of with the task of fetching data.
+We will start off with the task of fetching data.
 As this is something you commonly want to do in web applications it might be a good idea to separate this logic into a separate template:
 
 \begin{minted}{typescript}

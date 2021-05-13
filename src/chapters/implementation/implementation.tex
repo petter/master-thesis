@@ -45,7 +45,7 @@ This AST will then be used to perform the PT transformations.
 We will then use this AST to close any open packages and templates, and finally use the transformed tree for code generation.
 After all packages and templates have been closed we can type-check each individual package/template to validate the type-safety of our program.
 Given a valid type-safe program we can then move on to code generation.
-The target language for our code generation will mainly be TypeScript, however we will also offer to transpile the TypeScript into JavaScript.
+The target language for our code generation will mainly be TypeScript, however we will also offer to target JavaScript, as we can easily produce JavaScript code through using the TypeScript compiler.
 
 \begin{figure}
    \centering
@@ -90,11 +90,6 @@ Running our produced source code through the Prettier formatter produces a nicel
 The TypeScript output is probably the best target for understanding what the PT mechanism does, however it might not be the best output for production use.
 Since the only officially supported language for the web is JavaScript we will also be implementing this as a target for code generation.
 This is fortunately also a relatively simple task, as we already depend on the TypeScript compiler, and since we are able to produce TypeScript source code, we can use this to produce JavaScript output.
-
-\section{Notes on Performance}\label{sec:notes-on-performance}
-
-Very slow compiler/PP because of the chosen implementation, with tree traverser for every step.
-
 
 \section{Testing}\label{sec:testing}
 
@@ -174,10 +169,10 @@ Since templates are not supposed to produce any code after being transpiled, we 
 
 \section{Completing the Implementation}\label{sec:completing-the-implementation}
 
-Due to the restricted time allotted for this project I was unfortunately not able to finish the compiler.
-In order to finish the compiler we would have to implement the \codeword{addto}-statement properly, and be able to properly handle all declarations and references, so that these can be renamed as expected.
-We are also currently not supporting splitting up the program into several files, this would also have to be dealt with in a complete implementation.
-In the following sections we discuss how this could be carried out.
+While the implementation for most of the language is to an extent complete, we did not have enough time to implement everything.
+What still remains to be implemented are handling \codeword{addto}-statements properly, and handling all declaration and reference types.
+We are also currently not supporting splitting up the program into several files.
+In the following sections we discuss how implementing these features could be carried out.
 
 \subsection{\codeword{addto}-statements}\label{subsec:addto-statements}
 

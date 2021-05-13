@@ -24,7 +24,7 @@ The node type is a string representing the rule which produced the node.
 An AST node with a node type value of \codeword{"class\_declaration"} for instance is a class declaration node.
 
 The text field of an AST node contains the textual representation/code for the node and its children.
-A class declaration node for instance would of course contain the class declaration ("\codeword{class A extend B \{}"), but also the entire body of the class.
+A class declaration node for instance would of course contain the class declaration ("\codeword{class A extends B \{}"), but also the entire body of the class.
 This text field is really only useful for leaf nodes, as this would for instance contain the value of a number, string, etc.
 
 Finally, the children field is, as the name would suggest, a list of all the children of the node.
