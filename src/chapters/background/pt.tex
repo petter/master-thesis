@@ -12,7 +12,7 @@
 Krogdahl proposed Generic Packages in 2001, which is a language mechanism aimed at "large scale code re-use in object-oriented languages"~\cite{krogdahl:GP}.
 The idea behind this mechanism is to make modules of classes, called \textit{packages}, that could later be imported and instantiated.
 This would make "textual copies" of the package body, and would also allow for further expanding the classes of the packages.
-Modularizing through Generic Packages made the programming more flexible as you would easily be able to write modules with a certain functionality and be able to later import it several times when there is a need for the functionality.
+Modularizing through Generic Packages made programming more flexible as you would easily be able to write modules with a certain functionality and be able to later import it several times when there is a need for the functionality.
 
 Generic Packages was later extended, and the mechanism is now called Package Templates (while the textual program modules themselves are simply called templates).
 The system is not fully implemented and there exists a number of proposals for extending it.
@@ -24,11 +24,11 @@ In this section we will look at the syntax of Package Templates (further referre
 \subsubsection{Defining packages and package templates}
 
 \emph{Packages} are defined by a set of classes similar to a normal Java package.
-Package templates (later just templates for short), are defined similarly except for using the keyword \emph{template}.
+\emph{Package templates} (later just \emph{templates} for short), are defined similarly except for using the keyword \codeword{template} instead of \codeword{package}.
 Listing~\vref{code:basicPT} shows an example of defining packages and templates.
 The contents of a package can be used as you would with a normal Java package.
 
-\begin{code}{java}{Defining a package P and a template T}{code:basicPT}
+\begin{code}{java}{Defining a package \codeword{P} and a template \codeword{T}}{code:basicPT}
     package P {
         interface I { ... }
         class A extends I { ... }
@@ -45,10 +45,12 @@ When defining packages and templates, PT allows for including already defined te
 Instantiation is done inside the body of a package (or a template) with the use of an \codeword{inst}-clause.
 Instantiating a template will make "textual copies" of the  classes, interfaces and enums from the instantiated template and insert them replacing the instantiation statement at compile time.
 Note that the template itself still exists and that it can be instantiated again in the same program.
+
 Listing~\vref{code:inst} shows an example of instantiating a template inside a package.
 The resulting package \codeword{P} will then have the classes \codeword{A} and \codeword{B} from template \codeword{T} and its own class \codeword{C}.
+Note that class C can reference class A and B as if they were defined in the same package, which they essentially are after the instantiation.
 
-\begin{code}{java}{Instantiating template T in package P. Note that class C can reference class A and B as if they were defined in the same package, which they essentially are after the instantiation.}{code:inst}
+\begin{code}{java}{Instantiating template \codeword{T} in package \codeword{P}}{code:inst}
 // Before compile time instantiation of T
 template T {
     class A { ... }
@@ -79,8 +81,8 @@ During instantiation it is possible to rename classes (as well as interfaces and
 Here and henceforth we will be using the term class attributes to describe the union of both the fields and the methods of a class.
 Renaming is a part of the instantiation of templates, and will only affect the copy made for this instantiation, and it is done for the copy before it replaces the \codeword{inst}-statement.
 Renaming is denoted by an optional \codeword{with}-clause at the end of the \codeword{inst}-statement.
-In the \codeword{with}-clause one can rename classes using the following fat arrow syntax, \codeword{A => B}, where class \codeword{A} is renamed to \codeword{B}, and rename class attributes with a similar arrow syntax, \codeword{i -> j}, where the attribute \codeword{i} is renamed to \codeword{j}.
-For method renaming you have to give the signature of the method so that it is possible to distinguish between overloaded versions, i.e. \codeword{m1(int) -> m2(int)}.
+In the \codeword{with}-clause one can rename classes using the following fat arrow syntax, \codeword{A => B}, where class \codeword{A} is renamed to \codeword{B}, and rename class attributes with a similar thin arrow syntax, \codeword{i -> j}, where the attribute \codeword{i} is renamed to \codeword{j}.
+For method renaming, the signature of the method has to be given, so that it is possible to distinguish between overloaded versions, i.e. \codeword{m1(int) -> m2(int)}.
 On a more technical level the compiler will find the class or attribute declaration that is going to be renamed, and then find all name occurrences bound to this declaration and rename these.
 
 Field renaming comes after the class renaming enclosed by a set of parentheses.
