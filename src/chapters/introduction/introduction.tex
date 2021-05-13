@@ -13,18 +13,18 @@ Since then further proposals have been made to the language mechanism, and it is
 
 TypeScript is a superset of JavaScript, the programming language of the web.
 It extends JavaScript with the addition of static type definitions.
-These type definitions serve as documentation and helps you validate that your program is working correctly~\cite{tswebsite}.
+These type definitions serve as documentation and helps validate that your program is type-safe~\cite{tswebsite}.
 
-This thesis will look at how Package Templates can be implemented in TypeScript.
-Here we will discuss the different approaches that can be taken when working with a project such as this, and how an implementation like this can be carried out.
+This thesis will explore how Package Templates can be implemented in TypeScript.
+Here we will discuss the different approaches that can be taken when working with a project such as this, and how such an implementation can be carried out.
 
-The purpose of implementing PT in TypeScript is to look at how a language mechanism like PT would suit into a language like TypeScript.
+The purpose of implementing PT in TypeScript is to look at how this language mechanism would it into a language like TypeScript.
 Most interesting is probably TypeScript's structural type system, and how this mechanism will work in this context, where other implementations in statically typed languages so far has only been conducted in nominally typed languages.
 It will also be interesting to see how PT can be used in the context of the web, with its vast variety of frameworks and libraries.
 
 \section{Research Questions}\label{sec:research-questions}
 
-As we shortly touched on in the introduction, an implementation of Package Template in a language like TypeScript gives rise to some interesting research questions:
+As we briefly touched upon in the introduction, an implementation of Package Template in a language like TypeScript gives rise to some interesting research questions:
 
 \begin{itemize}
     \item \textbf{RQ1}: How does the language mechanism Package Templates fit into TypeScript and the web ecosystem?
@@ -35,8 +35,8 @@ As we shortly touched on in the introduction, an implementation of Package Templ
 \section{Contributions}\label{sec:contributions}
 
 This thesis' main contribution is the PTS compiler.
-It is easily accessible through the Node package manager.
-This makes it easier to try out the PTS language, but more importantly the PT language mechanism.
+It is easily accessible through the Node Package Manager.
+This makes it easy to try out the PTS language, but more importantly the PT language mechanism.
 Having easy access to a language with PT might make adoption of the language mechanism greater, and spark new research within the field.
 
 By making the parser for the language separated from the compiler this also contributes to making creations of tools for the language more accessible.
@@ -57,19 +57,20 @@ Here we will look at the grammar of the language as well as an example program.
 
 \textbf{Chapter 4} is focused around the planning phase of the project.
 This planning will make a decision to whether or not we will need to go for TypeScript as our host language, or if we could opt for the simpler underlying language, JavaScript.
-We will look at the requirements for our project and look at the different approaches we could use to implement PTS, as well as making a decision for which approach is the most suitable for our project.
+We will look at the requirements for our project and look at the different approaches we could use to implement PTS, as well as making a decision for which approach is the most beneficial for our project.
 
-\textbf{Chapter 5} is all about the implementation of our compiler for PTS\@.
+\textbf{Chapter 5} is all about the implementation of our compiler for the PTS programming language.
 Here we will look at the methodology used during the implementation phase, as well as going into detail about how the compiler was implemented.
 As the compiler is not fully implemented we will also talk about what remains to be implemented, and how this could be implemented to complete the implementation.
 % TODO kanskje noe om limitations?
 
 \textbf{Chapter 6} is the first chapter of the results part of the thesis.
-Here we will discuss and evaluate the PTS programming language, whether it is a "true" implementation of PT, and how PT is affected by a structurally typed language.
+Here we will discuss and evaluate the PTS programming language, checking whether it is a "true" implementation of PT, and how PT is affected by a structurally typed language.
 
 \textbf{Chapter 7} will look at our results.
-We will look at how our contribution, the PTS language, can be installed and used.
-We will finish the chapter by looking at some proposals for future works within this field.
+Here we will look at how our contribution, the PTS programming language, can be installed and use.
+We will also revisit the research questions we introduced previously, and answer them with the knowledge we have gained in the span of this work.
+Finally, we will conclude the chapter, and the thesis, by looking at what could have been done better in retrospect, and some proposals for future works within this field.
 
 \section{Project Source Code}\label{sec:project-source-code}
 
