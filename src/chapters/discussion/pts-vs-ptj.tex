@@ -13,7 +13,7 @@ They are the norm in mainstream programming languages, such as Java, C, and C++.
 A type could be \codeword{A} or \codeword{Tree}, and checking whether an object conforms to a type restriction, is to check that the type restriction is referring to the same named type, or a subtype.
 Structural types on the other hand are not tied to the name of the type, but to the structure of the object.
 These are not as common in mainstream programming languages, but are very prominent in research literature.
-However, in more recent (mainstream) programming languages, such as Go, TypeScript and Julia (at least for implicit typing), structural typing is becoming more and more common.
+However, in more recent (mainstream) programming languages, such as Go and TypeScript, structural typing is becoming more and more common.
 A type in a structurally typed programming language is often defined as a record, and could for example be \codeword{\{ name:~string \}}.
 
 In listing~\vref{lst:nominal-typing-example} we can see an example of a nominally typed program in a Java-like language.
@@ -25,7 +25,7 @@ In listing~\vref{lst:structural-typing-example} we see a structurally typed prog
 This program also has the exact same declarations as in listing~\vref{lst:nominal-typing-example}, that is classes \codeword{A}, \codeword{B}, and \codeword{C} and the function \codeword{g}.
 In this program both type \codeword{B} and type \codeword{C} are a subtype of type \codeword{A}, since they both contain all members of type \codeword{A}.
 Not necessarily the same implementation as in class \codeword{A}, but the same types as in type \codeword{A}.
-This is one of the biggest differences between nominal and structural typing, types can conform to other types without having to explicitly state that they should.
+This is one of the major differences between nominal and structural typing, types can conform to other types without having to explicitly state that they should.
 Type \codeword{C} is an example of this, while it does not have a subclass relation to class \codeword{A}, nor implement any common nominal interface, it still conforms to the type of \codeword{A}.
 The result of this is that all three usages of function \codeword{g} are valid in a structural type system, while consuming \codeword{C} was illegal in the nominal example.
 
@@ -59,7 +59,7 @@ The result of this is that all three usages of function \codeword{g} are valid i
 
 \begin{code}{Java}{Example of a structurally typed program in a Java-like language}{lst:structural-typing-example}
     // Given the same class definitions and
-    // the same consumer as in the example above.
+    // the same consumer as in the previous listing.
     // Would result in the following
     g(new A()); // Ok
     g(new B()); // Ok
@@ -126,12 +126,10 @@ It is also easier to check sub-type relations in nominal type systems, even thou
 
 \subsubsection{Tidier and More Elegant}\label{subsubsec:tidier-and-more-elegant}
 
-Structural types carry with it all the information needed to understand its meaning.
-This is often seen as an advantage over nominal typing as the programmer arguably only has to look at the type to understand it, while in nominal typing you would often have to look at the implementation or documentation to understand the type, as the type itself is part of a global collection of names~\cite{tapl}.
+% TODO Eyvind synes dette er litt for subjektivt og preachy, bør finne noe annet.
 
-% \subsubsection{Advanced Features}\label{subsubsec:advanced-type-features}
-%
-% Type abstractions (parametric polymorphism, ADTs, user-defined type operators, functors, etc), these do not fit nice into nominal type systems.
+Structural types carry with it all the information needed to understand its meaning.
+This is often seen as an advantage over nominal typing as the programmer arguably only has to look at the type to understand its meaning, while in nominal typing you would often have to look at the implementation or documentation to understand the type, as the type itself is part of a global collection of names~\cite{tapl}.
 
 \subsubsection{More General Functions/Classes}\label{subsubsec:more-general-functions}
 
@@ -151,7 +149,11 @@ It is worth noting that the advantage of types conforming to each other without 
 Structurally written programs can be prone to \textit{spurious subsumption}, that is consuming a structurally equal type where it should not be consumed.
 An example of this can be seen in listing~\vref{lst:spurious-subsumption}.
 
-\begin{code}{typescript}{Example of spurious subsumption in TypeScript. Here the function \codeword{double} will consume an object that has a \codeword{calculate} attribute. The intended use is to consume something that does a calculation on the object and returns a number which will be doubled, while the unintended use example in this case does some unexpected side-effect and returns a number as a status code. The unintended object can be consumed by the \codeword{double} function as it is conforms to the signature of the function, while in a nominally typed system this can be avoided to a much larger extent.}{lst:spurious-subsumption}
+Here the function \codeword{double} will consume an object that has a \codeword{calculate} attribute.
+The intended use is to consume something that does a calculation on the object and returns a number which will be doubled, while the unintended use example in this case does some unexpected side effect and returns a number as a status code.
+The unintended object can be consumed by the \codeword{double} function as it is conforms to the signature of the function, while in a nominally typed system this can be avoided to a much larger extent.
+
+\begin{code}{typescript}{Example of spurious subsumption in TypeScript}{lst:spurious-subsumption}
     function double(o: {calculate: () => number}) {
         return o.calculate() * 2
     }
@@ -162,12 +164,19 @@ An example of this can be seen in listing~\vref{lst:spurious-subsumption}.
         calculate: () => 4
     }
 
+    // function calculate also returns number, but as a status code
     const unintended = {
         calculate: () => {
             doSomeSideEffect();
             return 1;
         }
     }
+
+    double(vector); // Ok, intended
+
+    double(unintended); // Not intended use,
+                        // but it is type-safe to do so.
+
 \end{code}
 
 %\subsection{What Difference Does This Make For PT?}\label{subsec:what-difference-does-this-make-for-pt?}
@@ -179,7 +188,7 @@ An example of this can be seen in listing~\vref{lst:spurious-subsumption}.
 \subsection{Which Better Fits PT?}\label{subsec:which-better-fits-pt?}
 
 With the addition of required types in PT the language mechanism now has to utilize structural typing, independent of the underlying language's type system.
-Using structural typing was seen as a necessity for required types as this would give the mechanism the its required flexibility.
+Using structural typing was seen as a necessity for required types as this would give the mechanism its required flexibility.
 One could therefore argue that a structural type system is a better fit for Package Templates as it would remove the confusion of dealing with two different styles of typing in a single program, and make the language mechanism feel more like a first class citizen of the host language.
 
 Another advantage for having structural typing for PT is that it can help strengthen one of the main concepts of Package Templates, namely re-use.
@@ -191,7 +200,7 @@ In listing~\vref{lst:problems-with-structural-pt} we see an example of a program
 The renaming resulted in class \codeword{Consumable} no longer conforming to the signature of function \codeword{f} in class \codeword{Consumer}.
 PT does not support changing the signature of functions so there is no way for us to be able to make the \codeword{Consumable} class conform.
 In order to avoid running into this problem we might consider disallowing inline type declaration.
-This would force listing~\vref{lst:problems-with-structural-pt} to give an interface as the type for the formal parameter, \codeword{consumable}.
+This would force us to give an interface as the type for the formal parameter, \codeword{consumable}.
 We could then also rename the members of the interface in order to once again make the \codeword{Consumable} class conform to the signature of function \codeword{f}.
 
 It is worth noting that the problem of renaming causing programs to break is not something unique to structural typing, this can also occur in nominally typed programs.

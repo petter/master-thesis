@@ -263,8 +263,11 @@ These will then be split up into groups based on the class name.
 
 \subsubsection{Verify the Validity of the Groups}
 
-In order to verify that we can indeed merge these groups together we need to validate that doing so is valid.
-This is mainly checking that there is at least one class declaration, as we can not perform additions to a non-existant class.
+Before we can merge these groups together, we first need to check that doing so is valid.
+This consists of checking that there is at least one class declaration in each group, as we can not perform additions to a non-existent class.
+
+As we discussed earlier in section~\vref{subsubsec:avoiding-indirect-multiple-inheritance} another requirement we should check before merging these classes is that if some classes in a group have external superclasses, then these superclasses need to be the same in order to avoid indirect multiple-inheritance.
+However, we will not trouble ourselves by checking this, as this will be picked up in the type-check stage of our compiler anyways.
 
 \subsubsection{Merging the Bodies of the Classes}
 
@@ -272,13 +275,15 @@ Now that we have groups of classes that should be merged, and these groups are v
 The first step to this is to create the new bodies of the new classes.
 This task is relatively simple as we just combine the AST nodes contained within each class declaration's or \codeword{addto}-statement's body.
 
+The \codeword{addto}-statements would require some more advanced merging in order to support overriding methods, however this was not implemented due to the restricted time of the project.
+This will be discussed further in section~\vref{sec:completing-the-implementation}.
+
 
 \subsubsection{Merging the Class Declarations}
 
 Merging of class declarations is similar to merging the bodies, however we here instead merge the class heritage.
-That is if there are classes with class heritage we will merge the optional \codeword{extends} and \codeword{implements} clauses.
-As well as combining the extending classes and implemented interfaces we also insert comma nodes between each member.
-This step might produce class declarations with multiple superclass, however this will be picked up by the type-checking step later on.
+That is if there are classes with class heritage we will merge the optional \codeword{extends} and \codeword{implements} clauses, inserting comma nodes between each member.
+This step might produce class declarations with multiple superclass, however this will be picked up by the type-check later on.
 
 \subsubsection{Replace the Old Classes With the New}
 

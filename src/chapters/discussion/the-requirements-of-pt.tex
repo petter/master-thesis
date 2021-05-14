@@ -3,7 +3,6 @@
 
 In~\cite{jot} the authors discuss requirements of a desired language mechanism for re-use and adaptation through collections of classes.
 They then present a proposal for Package Templates, which to a large extent fulfills all the desired requirements.
-% In order for us to be satisfied to call our implementation of the language mechanism Package Templates, we will also have to meet these requirements.
 These requirements can therefore be used to evaluate our implementation and determine whether our implementation can be classified as a valid implementation of Package Templates.
 
 The requirements presented in the paper were the following:
@@ -30,9 +29,9 @@ In order to get a better understanding of what these requirements entail we will
 % With  this  property  we  can  conveniently  specify  directly: “n.firstEdge().length = 5;”, as firstEdge is typed with the extended Edge class.
 
 The parallel extension requirement is about making additions to classes in a package/template, and being able to make use of them in the same collection.
-What this means is that if we are making additions to a class, then we should be able to reference these additions in a declaration or in an addition to a separate class within the same package/template, without needing to cast it.
+What this means is that if we are making additions to a class, then we should be able to reference these additions in a declaration or in an addition to a separate class within the same package/template, without having to use casting to access the new members.
 We can see an example of this in listing~\vref{lst:parallel-extension}, where an addition to class \codeword{B} is referencing the added method of class \codeword{A}.
-Contrast this to how an implementation with traditional extension through subclasses of A and B would work, and the casts etc. necessary to make the call \codeword{a.someMethod()} work in that context.
+Contrast this to how an implementation with traditional extension through subclasses of \codeword{A} and \codeword{B} would work, and the casts etc. necessary to make the call \codeword{a.someMethod()} work in that context.
 The order of additions does not affect the parallel extension.
 
 \begin{code}{Java}{Example of parallel extension in PT. Here we make additions to both \codeword{A} and \codeword{B} in our instantiation in package \codeword{P}, and we are able to reference the additions done to \codeword{A} in our addition to \codeword{B}. This is done without the need to cast \codeword{A}, as if the additions were present at the time of declaration.}{lst:parallel-extension}
@@ -88,8 +87,8 @@ The renaming requirement states that PT should enable us to rename the names of 
 % The compiler should be able to check that each use implies a different set of classes as if they are defined in separate hierarchies.
 %
 % - - In  a  program  we  may  need  the  basic  graph  structure  for  different  purposes.
-PT should be allow us to use packages/templates multiple times for different purposes in the same program, and any additions or renamings should not affect any of the other uses.
-Each use should be kept independent of each other.
+PT should allow us to use packages/templates multiple times for different purposes in the same program, and any additions or renamings should not affect any of the other uses.
+Each use should be independent of each other.
 This is an important requirement of PT as when we create a package or a template it is often designed to be re-used.
 An example of this is the graph template we created in listing~\vref{code:rename}.
 Here we bundled the minimal needed classes in order to have a working implementation for graphs.

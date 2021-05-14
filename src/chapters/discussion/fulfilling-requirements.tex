@@ -18,6 +18,7 @@ For each requirement we will be looking at a program in PTS which showcases the 
 Fulfilling the requirement of parallel extension requires us to be able to merge or make extensions to classes, and be able to reference these additions within the same package/template, in the same or in a different class.
 To understand how this requirement can be fulfilled it is important to understand how the requirement could fail to be fulfilled.
 A failure to fulfill the requirement would be that making additions in parallel would fail to compile, or create an otherwise incorrect program.
+
 Failure to compile might of course not always be a bad thing, there are certain scenarios where we do want the compiler to throw an error.
 There are mainly two scenarios where we would like the compilation to fail for additions:
 \begin{itemize}
@@ -39,7 +40,7 @@ In the aforementioned listing it is of course pretty easy to examine class \code
 In a more complicated example where we are in the process of merging several classes and additions it might prove a tougher task to see if the addition would result in a type-safe class.
 So as long as we are able to perform the addition we can assume that it is working as intended and instead let the TypeScript compiler check if it is type-safe, after the addition has been performed.
 
-\begin{code}{typescript}{An example showing a program that should fail during compilation, where we are trying to reference a non-existent attribute, \codeword{h}, in an addition to class \codeword{A}.}{lst:pts-parallel-extension-non-existent-attribute}
+\begin{code}{typescript}{An example program that should fail during compilation, where we are trying to reference a non-existent attribute, \codeword{h}, in an addition to class \codeword{A}.}{lst:pts-parallel-extension-non-existent-attribute}
     template T {
         class A {
             function f() {
@@ -61,7 +62,7 @@ So as long as we are able to perform the addition we can assume that it is worki
 Now that we understand when we want compilation to fail let us look at where we do not want it to fail, when we have a valid parallel extension.
 One way it could result in an unwanted failure is if we tried to check if the addition contains any invalid references or type errors.
 This could commonly happen if we are trying to check the addition's references to the declared class.
-However, as discussed above, checking if a reference to an attribute is valid is quite tricky, and in our implementation instead leaves this up to the TypeScript compiler.
+However, as discussed above, checking if a reference to an attribute is valid is quite tricky, and in our implementation we instead leave this up to the TypeScript compiler in the type-check stage.
 By doing this we will not incorrectly throw any false-negatives when it comes to parallel extensions.
 This approach does unfortunately come with some downsides.
 By not addressing the issue at the addition stage it makes it harder to give informative error messages when invalid references do occur, however this was a tradeoff that was beneficial for this project.
@@ -70,13 +71,14 @@ By not addressing the issue at the addition stage it makes it harder to give inf
 
 In order to fulfill the hierarchy preservation requirement we have to preserve all super-/subclass relations after additions and merges have been applied.
 Listing~\vref{lst:pts-hierarchy-preservation} shows a program, and the resulting TypeScript program after compilation, which fulfills the requirement of hierarchy preservation.
-This one example fulfills the requirement as class \codeword{B} is still a subclass to class \codeword{A} after both a merge and an addition is made to \codeword{B}.
+This one example fulfills the requirement as class \codeword{B} is still a subclass of class \codeword{A} after both a merge and an addition is made to \codeword{B}.
+
 As we talked about briefly in section~\vref{subsec:merging-class-declarations} when we merge classes we make sure to also merge their class heritage, combining the extending classes and implementing interfaces of the different classes.
 This means that we might end up with instances where we are extending multiple different classes, however this will then be picked up in the type-checking stage of the compiler.
 If we had not merged class heritage, we could have ended up breaking the inheritance hierarchy in the aforementioned listing, as we could have for example ended up with class \codeword{C}'s heritage, which does not have a superclass.
 Because of the heritage merging we can with confidence say that we have fulfilled the requirement of hierarchy preservation, as we always preserve all super-/subclass relations.
 
-\begin{code}{typescript}{Example showcasing a program where the super-/subclass relation between classes \codeword{A} and \codeword{B} is preserved after additions and class merging have been applied. We can see the resulting TypeScript program at the bottom of the listing, where the semantics are as expected.}{lst:pts-hierarchy-preservation}
+\begin{code}{typescript}{Example showcasing the preservation of super-/subclass relations}{lst:pts-hierarchy-preservation}
     // PTS
     template T1 {
         class A {
@@ -123,10 +125,10 @@ Because of the heritage merging we can with confidence say that we have fulfille
 In order to be able to fulfill the renaming requirement our implementation should be able to rename classes and their attributes.
 This renaming should result in a program where not only the declarations have been renamed, but also all references.
 Listing~\vref{lst:pts-renaming} shows a program with an example of renaming in PTS, where we are renaming a class, \codeword{A}, and the class' attribute, \codeword{i}.
-We can see in the resulting program that the identifier in the declaration of both the class and the attribute has changed, as well ts he references to these in the constructor of the class and references in another class, \codeword{B}\@.
+We can see in the resulting program that the identifier in the declaration of both the class and the attribute has changed, as well as the references to these in the constructor of the class and references in another class, \codeword{B}\@.
 The renaming has also not wrongly renamed other references that are similar in naming, such as the parameter of the constructor of class \codeword{A}\@.
 
-\begin{code}{typescript}{Example of renaming in PTS.}{lst:pts-renaming}
+\begin{code}{typescript}{Example of renaming in PTS}{lst:pts-renaming}
     // PTS
     template T {
         class A {
@@ -207,7 +209,7 @@ Since an object of \codeword{A} no longer contains an attribute \codeword{i}, th
 
 The aforementioned listing shows how we would like the compilation result to look like, however this is not the result the current implementation produces.
 TypeScript's type system can be quite complicated, and due to a lack of time I chose to ignore most of the type declarations.
-The current implementation would have treated the attribute \codeword{a} as an \codeword{A}-variable, since it is being initialized with an object of \codeword{A}, and therefore have renamed later references to \codeword{a.i} to \codeword{a.j}.
+The current implementation would have treated the attribute \codeword{a} as an \codeword{A}-variable, since it is being initialized with an object of \codeword{A}, and therefore have renamed later references of \codeword{a.i} to \codeword{a.j}.
 It was more important to get a working prototype, than support all scenarios with different type signatures.
 This is something I would of course have liked to take into consideration if I had more time to spend on the implementation.
 Deciding the type of variables is something that possibly would have come for cheaper if I had opted for a fork of the TypeScript compiler as my approach.
@@ -301,19 +303,22 @@ Required types do of course have a lot of advantages such as making it possible 
 
 %TODO Les over og finpuss på dette
 
-In order to fulfill the requirement of class merging we will have to be able to merge classes through instantiating two or more templates containing a class with a common name, or through renaming a class at instantiating leading to two classes having the same name.
+In order to fulfill the requirement of class merging we will have to be able to merge classes through instantiating two or more templates containing a class with a common name, or through renaming a class at instantiation leading to two classes having the same name.
 A failure to fulfill this requirement could be that a resulting program would contain two different class declarations, where these should have been merged.
 This could occur if we had for instance not respected the renaming of a class at the time class merging, that is if we had renamed a class to be merged, but this was not picked up during class merging.
 Our implementation of class merging has been made so that it is essentially unaware of the instantiation and renaming steps, it is done as a separate step after these actions have been performed.
-What this means is that after performing all instantiations, with optional renamings, we can momentarily end up with several class declarations for the same class, which would be an invalid TypeScript program, however before the closing of templates step is done we will merge the class declarations and \codeword{addto}-statements representing the same class, forming new classes.
+What this entails is that after performing all instantiations, with optional renamings, we can momentarily end up with several class declarations for the same class, which would be an invalid TypeScript program, however before the closing of templates step is done we will merge the class declarations and \codeword{addto}-statements representing the same class, forming new classes.
 The resulting program could of course still be an invalid TypeScript program, as the merge of classes could lead to erroneous code, such as duplicate function declarations, however this is not a result of an invalid implementation, but rather an error as a product of an invalid input program.
 The class merging step will merge classes without checking their bodies, as these will be picked up in the type-checking step later on.
-By separating the logic of instantiations and renaming, as we have done, we should minimize the potential for an invalid implementation of class merging.
+By separating the logic of instantiations (and renaming) and class merging, as we have done, we should minimize the potential for an invalid implementation of class merging.
 
 Listing~\vref{lst:req-class-merging-example} shows a program with class merging, and the resulting program from a compilation of the PTS program.
-Here we merge two classes with the same name, \codeword{A}, which has two different
+In the program we instantiate the same template twice, but rename the only attribute, so that the resulting program doesn't contain duplicate declarations.
+The instantiations will produce one class \codeword{A} with the attribute \codeword{i} and another class \codeword{A} with the attribute \codeword{j}.
+These are then merged together during compilation.
+The resulting program is as expected a single class \codeword{A} with both attributes.
 
-\begin{code}{typescript}{Example of a program with class merging, where we merge two classes, \codeword{A}, with attributes, \codeword{i} and \codeword{j}, respectively. The resulting program shown at the bottom is as expected a merge of the two classes.}{lst:req-class-merging-example}
+\begin{code}{typescript}{Example of class merging in PTS, where we merge two classes, \codeword{A}, with attributes, \codeword{i} and \codeword{j}, respectively}{lst:req-class-merging-example}
     // PTS
     template T {
         class A {

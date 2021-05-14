@@ -19,7 +19,7 @@ For the implementation of PT we need a way to express the following language con
 
 \codeword{template}, \codeword{addto}, and \codeword{inst} are all not in use nor reserved in the ECMAScript standard or in TypeScript, and can therefore be used in \plname{} without any issues.
 
-The keyword \codeword{package} in TS/ES is, as of yet, not in use, however the ECMAScript standard has reserved it for future use.
+The keyword \codeword{package} in TS/JS is, as of yet, not in use, however the ECMAScript standard has reserved it for future use.
 In order to "future proof" our implementation we should avoid using this reserved keyword, as it could have some conflicts with a potential future implementation of packages in ECMAScript.
 It could also be beneficial to not share the keyword in order to avoid creating confusion between the future ES packages and PT Packages.
 \codeword{module} is also a keyword that could be used to describe a PT package, however this is already used in the ES standard, and should therefore also be avoided in order to avoid confusion.
@@ -35,7 +35,7 @@ We could opt to choose one of these for renaming in PTS as well, however in orde
 The \codeword{with} keyword is currently in use in JavaScript for \codeword{with}-statements~\cite{with-statement}.
 With it being a statement, we could still use it and not end up with an ambiguous grammar, however as with previous keywords, we will avoid using it in order to minimize concept confusion.
 Instead of this we will contain our instantiation renamings inside a block-scope (\codeword{\{ \}}).
-Field renamings for a class will remain the same as in PT, being enclosed in parentheses (\codeword{( )}).
+Field renamings for a class will remain the same as in PT, being enclosed in a set of parentheses (\codeword{( )}).
 
 Another change we will make to renaming is to remove the requirement of having to specify the signature of the method being renamed.
 This was necessary in PT as Java supports overloading, which means that several methods could have the same name, or a method and a field.
@@ -47,14 +47,14 @@ Now that we have made our choices for keywords and operators we can look at the 
 
 PTS is an extension of TypeScript, and the grammar is therefore also an extension of the TypeScript grammar.
 There is no published official TypeScript grammar (other than interpreting it from the implementation of the TypeScript compiler), however up until recently there used to be a TypeScript specification~\cite{tsspec}.
-This TypeScript specification was deprecated as it proved a to great a task to keep updated with the ever-changing nature of the language.
+This TypeScript specification was deprecated as it proved a too great a task to keep updated with the ever-changing nature of the language.
 However, most of the essential parts are still the same.
 The PTS grammar is therefore based on the TypeScript specification, and on the ESTree Specification~\cite{estreespec}.
 
-In figure~\vref{fig:pts-grammar} we can see the PTS BNF grammar.
+In figure~\vref{fig:pts-grammar} we can see the BNF grammar for our language.
 This is not the full grammar for PTS, as I have only included any additions or changes to the original TypeScript/JavaScript grammars.
 More specifically the non-terminal $\bnfpn{declaration}$ is an extension of the original grammar, where we also include package and template declarations as legal declarations.
-The productions for non-terminals $\bnfpn{id}$, $\bnfpn{class declaration}$, $\bnfpn{interface declaration}$, and $\bnfpn{class body}$ are also from the original grammar.
+The non-terminals $\bnfpn{id}$, $\bnfpn{class declaration}$, $\bnfpn{interface declaration}$, and $\bnfpn{class body}$ are also from the original grammar.
 
 \begin{figure}
     \begin{bnf*}
@@ -105,8 +105,7 @@ Listing~\vref{lst:pts-example-inst-renaming-addto} shows an example of a program
 This program showcases the basics of defining packages and templates, and how instantiation, renaming and additions can be applied in the language.
 We also have a similar program at the bottom, showing how this is done in PT\@.
 While both the basic instantiation and additions stay pretty much the same, renaming does have some interesting differences.
-We can see that in the PT example we have to specify the signature of methods we are renaming, while in PTS example it is enough to just specify the names of the methods.
-This requirement of specifying method signature is something we could remove in PTS because of the difference between the underlying languages, as we discussed previously in section~\vref{sec:syntax}.
+We can see that in the PT example we have to specify the signature of methods we are renaming, while in the PTS example it is enough to just specify the names of the methods.
 
 \begin{code}{typescript}{An example program with instantiation, renaming, and addition-classes in PTS vs. PT}{lst:pts-example-inst-renaming-addto}
     // PTS

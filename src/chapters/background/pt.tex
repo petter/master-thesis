@@ -48,7 +48,7 @@ Note that the template itself still exists and that it can be instantiated again
 
 Listing~\vref{code:inst} shows an example of instantiating a template inside a package.
 The resulting package \codeword{P} will then have the classes \codeword{A} and \codeword{B} from template \codeword{T} and its own class \codeword{C}.
-Note that class C can reference class A and B as if they were defined in the same package, which they essentially are after the instantiation.
+Note that class \codeword{C} can reference class \codeword{A} and \codeword{B} as if they were defined in the same package, which they essentially are after the instantiation.
 
 \begin{code}{java}{Instantiating template \codeword{T} in package \codeword{P}}{code:inst}
 // Before compile time instantiation of T
@@ -146,16 +146,18 @@ package P {
 }
 \end{code}
 
-\subsubsection{Additions to a template}\label{subsubsec:additions}
+\subsubsection{Additions to a class}\label{subsubsec:additions}
 
-When instantiating a template you can also add attributes to the classes of the template, as well as extending the class' implemented interfaces and this will only apply to the current copy.
-These additions are written inside an \codeword{addto}-clause.
+When instantiating a template you can also add attributes to the classes of the template, as well as extending the class' implemented interfaces.
+These additions will only apply to the currently instantiated copy.
+Additions are written inside an \codeword{addto}-clause.
 Extending the class with additional attributes is done in the body of the clause, like you would in a normal Java class.
 If an addition has the same signature as an already existing method from the instantiated template class, then the addition will override the existing method, similarly to traditional inheritance.
+
 Listing~\vref{lst:simple-addto} shows an example of adding attributes to an instantiated class.
 The resulting class \codeword{A} in package \codeword{P} would have the field \codeword{i} and the methods \codeword{someMethod} and \codeword{someOtherMethod}.
 
-\begin{code}{java}{Adding new attributes to the instantiated class A in package P}{lst:simple-addto}
+\begin{code}{java}{Adding new attributes to the instantiated class \codeword{A} in package \codeword{P}}{lst:simple-addto}
     template T {
         class A {
             void someMethod() { ... }
@@ -180,9 +182,9 @@ This class can log the state of a class given that the class implements some int
 If we want to be able to log the state of our Graph implementation, from~\vref{code:rename}, then the Graph class would need to implement the \codeword{Loggable} interface.
 We can't do this at the declaration of the Graph template, as we do not have access to the interface at the time of declaration.
 By using \codeword{addto} however we are able to add the \codeword{Loggable} interface and the \codeword{log} method to the Graph class.
-You can also achieve the same functionality through class merging, which we will look at in section~\vref{subsubsec:merging-classes}.
+You can also achieve the same functionality through class merging, which we will look at in the following section.
 
-\begin{code}{java}{Adding the \codeword{Loggable} interface to the Graph class from listing~\vref{code:rename}, making it compatible with our logger implementation.}{lst:addto-interface}
+\begin{code}{java}{Adding the \codeword{Loggable} interface to the \codeword{Graph} class from listing~\vref{code:rename}, making it compatible with our logger implementation.}{lst:addto-interface}
     template Logger {
         interface Loggable {
             String log();
@@ -206,11 +208,6 @@ You can also achieve the same functionality through class merging, which we will
     }
 \end{code}
 
-% TODO: Uklart hva dette betyr
-% The extension of classes using the \codeword{addto}-clause is done independently for each class, ignoring any inheritance-relations.
-% If there is a class \codeword{A} with a subclass \codeword{B}, they can both get extensions independently of each other.
-% Any extensions made to class \codeword{A} would of course still be inherited to class \codeword{B}, as with normal Java inheritance.
-
 
 \subsubsection{Merging classes}\label{subsubsec:merging-classes}
 
@@ -226,7 +223,7 @@ In listing~\vref{code:renameclassmerging} we see an example of renaming class \c
 Renaming these two classes to the same name will force these classes to be merged in package \codeword{P}.
 The result of this merge is a new class \codeword{C} with the attributes of both classes.
 The two classes \codeword{A} and \codeword{B}, from templates \codeword{T1} and \codeword{T2} respectively, no longer exists in package \codeword{P}, but have formed the new class \codeword{C}, which is a union of both.
-Any pointers typed with the old \codeword{A} or \codeword{B} will now be typed as the new merged class \codeword{C}.
+Any pointers typed with the old \codeword{A} or \codeword{B} will now be typed with the new merged class \codeword{C}.
 
 \begin{code}{java}{Instantiation with class merging through renaming}{code:renameclassmerging}
 template T1 {
@@ -251,8 +248,8 @@ package P {
 
 Required types in PT gives the programmer extra flexibility when declaring templates.
 They are generic types declared at the template level, which can be substituted at instantiation.
-If a template instantiates another template with a required type, but does give an actual parameter for the required type, then the required type is propagated to the template it's being instantiated into.
-When a template with required types is instantiated in a package, then all the required types needs an actual parameter.
+If a template instantiates another template with a required type, but does not give an actual parameter for the required type, then the required type is propagated to the template it is being instantiated into.
+When a template with required types is instantiated in a package, then all the required types needs actual parameters.
 
 Required types can then be used throughout the template, similar to how you would use generics in a Java class.
 The most basic required type can be seen below.
@@ -263,7 +260,7 @@ The most basic required type can be seen below.
 
 Here \codeword{R} is a required type for which any class or interface can be substituted at instantiation.
 Required types can be constrained using both nominal types, such as classes and interfaces, and structural types, constraining the type to have certain attributes.
-Below we can see examples of defining different required types with different types of constraints, where the first has a simple nominal type constraint, the second having a similar structural constraint, and the third having both a nominal and structural constraint.
+Below we can see examples of declaring required types with different types of constraints, where the first has a simple nominal type constraint, the second having a structural constraint, and the third having both a nominal and structural constraint.
 
 \begin{minted}{java}
     template T {
@@ -297,7 +294,7 @@ We could then instantiate the template, \codeword{T}, giving classes or interfac
 \end{minted}
 
 Required types as presented above can not be used as classes or interfaces, that is you cannot create a new object of the type or implement the type as an interface for a class, as they can be substituted with both.
-They can only be used as type references, like in the simple Tree implementation example below.
+They can only be used as type references, like in the simple \codeword{Tree} implementation example below.
 
 \begin{minted}{java}
     template Tree {
@@ -328,13 +325,13 @@ With a firm understandings of the basics of PT we will now have to dig a bit dee
 A \textit{closed template} is a template that does not contain any instantiation statements nor any additions to classes, it comprises only classes, interfaces and enums.
 The body of a closed template in Java is simply a Java program.
 Closed templates are self-contained units that can be separately type-checked~\cite{Axelsen2012}.
-An \textit{open template} on the other hand is a template which has one or more instantiations or \codeword{addto}-statements in its body.
+An \textit{open template} on the other hand is a template which do contain one or more instantiations or \codeword{addto}-statements in its body.
 
 Open templates will be closed at compile-time.
 The task of closing a template is that of performing the contained instantiations and additions to classes.
 Open templates can instantiate open templates, as long as these instantiations are not cyclic.
-What this means is that a template A can instantiate a template B if template B does not contain any (transitive) instantiations of template A\@.
-A template B contains an instantiation of template A if it has an instantiation of template A in its body, or contains a nested instantiation of template A\@.
+What this means is that a template \codeword{A} can instantiate a template \codeword{B} if template \codeword{B} does not contain any (transitive) instantiations of template \codeword{A}\@.
+A template \codeword{B} contains an instantiation of template \codeword{A} if it has an instantiation of template \codeword{A} in its body, or contains a nested instantiation of template \codeword{A}\@.
 
 Packages can also be open and closed and work in the same manner as with templates, except that they can not be instantiated.
 

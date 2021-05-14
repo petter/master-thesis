@@ -1,6 +1,6 @@
 \chapter{Concluding Remarks}\label{ch:results}
 
-In this thesis we have discussed the approach to the project and the implementation of the compiler for the PTS language, as well as evaluated the implementation and discussed the consequences of having a structurally typed language as the host of PT were.
+In this thesis we have discussed the approach to the project and the implementation of the compiler for the PTS language, as well as evaluated the implementation and discussed the consequences of having a structurally typed language as the host of PT\@.
 We will conclude this work by returning to our initial research questions and trying to answer these with the knowledge we have accumulated through the span of this thesis.
 After this we will have a look at what could have been done differently in retrospect, and finish off with proposing future works within the field.
 
@@ -8,7 +8,7 @@ After this we will have a look at what could have been done differently in retro
 \section{Addressing Research Questions}\label{sec:adressing-research-questions}
 
 
-\subsubsection{RQ1: How does the language mechanism, Package Templates, fit into TypeScript and the web ecosystem?}
+\subsubsection{RQ1: How does the language mechanism, Package Templates, fit into TypeScript?}
 
 \red{Tenker at dette spørsmålet blir litt for bredt, og at svaret fort blir litt for subjektivt, så tenker nok å fjerne dette spørsmålet. Web bruker jo for tiden også særdeles lite klasser, da de fleste heller velger å uttrykke seg gjennom den funksjonelle delen av JS/TS, så det passer kanskje egentlig ikke så bra inn heller.}
 
@@ -30,7 +30,7 @@ A variable in a structurally typed language might be typed with a structure that
 However, this conformity might break after a renaming has been applied to the class.
 In these cases we will not be able to rename the variables type, nor any of the variables references to the possibly renamed attributes, since these do not have the same explicit relation to the class.
 
-\subsubsection{RQ3: Will having PT in a structurally typed language have any notable benefits or disadvantages over having it in a nominally typed language?}
+\subsubsection{RQ3: Will having PT in a structurally typed language have any notable advantages or disadvantages over having it in a nominally typed language?}
 
 As we discussed in section~\vref{subsec:which-better-fits-pt?} there are some benefits of hosting PT in a structurally typed language.
 Structural typing does fit nicely in with the theme of Package Templates, namely re-use.
@@ -53,7 +53,7 @@ While we were able to implement most of PT with our approach, I fear that furthe
 This is largely because we might have to implement much of the type system in order to properly identify references, as we briefly discussed in section~\vref{subsec:supporting-all-references}.
 Instead of re-inventing the wheel, we might be better off by implementing PT in a fork of the TypeScript compiler.
 While this \textit{might} make updates harder, than with our implementation, we will most often likely be able to merge the changes to the TypeScript compiler into our fork with the help of Git, conflict free.
-Greater changes to the language might of course still give us some merge conflicts, however these larger changes could as easily make our currently used approach break.
+Greater changes to the language might of course still give us some merge conflicts, however these larger changes could also make our currently used approach break.
 
 \section{Future Work}\label{sec:future-work}
 

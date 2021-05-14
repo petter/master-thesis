@@ -3,6 +3,8 @@
 
 \chapter{Using PTS}\label{ch:using-pts}
 
+% TODO litt mer introduksjon her
+
 There are mainly two ways of using the PTS compiler:
 
 \begin{itemize}
@@ -10,7 +12,7 @@ There are mainly two ways of using the PTS compiler:
     \item Creating a PTS project
 \end{itemize}
 
-In the following sections we will look at how you can use install and use it for both approaches.
+In the following sections we will look at how you can install and use it for both approaches.
 
 The PTS compiler requires you to have Node and npm installed on your computer.
 
@@ -44,7 +46,7 @@ Options:
 
 If you are using PTS for a specific project it might be better to set it up as a project dependency in npm.
 When installed in an npm project the CLI is available to use through npm scripts or through accessing it directly from the \codeword{node\_modules} folder in your project.
-The compiler can also be access through the API by importing it as with any other npm package.
+The compiler can also be accessed through the API by importing it as with any other npm package.
 
 Installing it inside an npm project will not require you to install it globally, as it will stay contained in the project.
 This also means that any contributors of the project will not have to worry about installing PTS, as it will be installed when the project is set up.
@@ -63,8 +65,7 @@ With a project set up you can install the PTS compiler as following:
     $ npm install pts-lang
 \end{minted}
 
-With the PTS compiler installed in the project you can then set up some scripts to start and/or build the project.
-This can be done by adding scripts to the project's \codeword{package.json}.
+With the PTS compiler installed in the project you can then set up some scripts in your project's \codeword{package.json} to start and/or build the project.
 Below you can see an example of a section of a \codeword{package.json} file with scripts for running and building a file:
 
 \begin{minted}{json}
@@ -90,15 +91,15 @@ Now that we understand how to get PTS set up, let us look at how it can be used 
 The most common use of TypeScript is to create web applications.
 Let us look at how PTS can help make this task easier for the programmer.
 We will try to create a simple web application for displaying a Pokémon.
-To do this we will use one of the most popular web frameworks, React.
+To do this we will use one of the most popular web frameworks, React\footnote{\url{https://reactjs.org/}}.
 
-React is a web framework developed by Facebook.
-It aims to make creating scalable web projects easier to handle, through enabling the programmer to modularize collections of elements into "components".
+React is a web framework developed by Facebook\footnote{\url{https://www.facebook.com/}}.
+It aims to make creating scalable web projects easier to handle, through enabling the programmer to modularize collections of elements into \emph{components}.
 These components are often created to make re-use of common elements easier, such as creating a styled button with certain features, or we could create a component to represent the entire web application.
 
 Displaying one specific Pokémon can be pretty simple, however we would like to create a React component that can display information and a picture of any Pokémon.
-We do not want to have to write down information about all Pokémon, so we will fetch this information from an API, more specifically the PokéAPI (\url{https://pokeapi.co/}).
-This API lets us fetch data from all Pokémon.
+We do not want to have to write down information about all Pokémon, so we will fetch this information from an API, more specifically the PokéAPI\footnote{\url{https://pokeapi.co/}}.
+This API lets us fetch data about all Pokémon.
 
 We will start off with the task of fetching data.
 As this is something you commonly want to do in web applications it might be a good idea to separate this logic into a separate template:
@@ -180,6 +181,7 @@ We will do this inside of a package, so that this will produce an output:
     }
 \end{minted}
 
+% TODO beskriv hvorfor PT var nyttig her
 We could then use our Pokémon component in our application by supplying a URL for the Pokémon to display, as seen below:
 
 \begin{minted}{typescript}

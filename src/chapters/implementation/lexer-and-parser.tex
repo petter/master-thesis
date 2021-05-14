@@ -13,10 +13,10 @@ This is important because we want to keep our grammar loosely coupled with the T
 Because our language will be extending TypeScript we would like to utilize the TypeScript compiler as much as we can.
 The TypeScript compiler will help us perform the type-checking for our compiler, as well as producing JavaScript output.
 Therefore we need to be able to interact with the TypeScript compiler somehow.
-The TypeScript compiler has two main interfaces for interaction, through the command-line interface or using the compiler API\@.
+The TypeScript compiler has two main interfaces for interaction, through the command-line or using the compiler API\@.
 Optimally we would like to use the compiler API as this is the easiest way for us to perform type-checking and compilation.
-The catch is however that the only supported languages for the compiler API is JavaScript and TypeScript.
-Therefore a desired attribute for our choice of parser generator is that it offers a runtime library in either JavaScript or TypeScript, so that all of our implementation can be done in the same language, and not have to work with command-line interfaces programmatically.
+The catch is however that the only supported languages for the compiler API are JavaScript and TypeScript.
+Therefore a desired attribute for our choice of parser generator is that it offers a runtime library in either JavaScript or TypeScript, so that all of our implementation can be done in the same language, and not have to work with command-line interface programmatically.
 
 \subsubsection{ANTLR4}\label{subsubsec:antlr}
 
@@ -46,25 +46,25 @@ In order to extend a grammar we would have to change the produced parser to incl
 Although this could possibly be automated by a script, it seems too hacky of a solution to consider.
 
 On top of this Bison does not have a runtime library in JavaScript/TypeScript.
-There do exist some ports/clones of Bison for JavaScript, such as \href{http://zaa.ch/jison/}{Jison} and \href{http://canna71.github.io/Jacob/}{Jacob}, however to my knowledge these also lack the functionality of extending grammars.
+There do exist some ports/clones of Bison for JavaScript, such as Jison\footnote{\url{https://zaa.ch/jison/}} and Jacob\footnote{\url{https://canna71.github.io/Jacob/}}, however to my knowledge these also lack the functionality of extending grammars.
 
 \subsubsection{Tree-sitter}\label{subsubsec:tree-sitter}
 
-\href{https://tree-sitter.github.io/tree-sitter/}{Tree-sitter} is a fairly new parser generator tool, compared to the others in this list.
+Tree-sitter\footnote{\url{https://tree-sitter.github.io/tree-sitter/}} is a fairly new parser generator tool, compared to the others in this list.
 It aims to be general, fast, robust and dependency-free~\cite{tree-sitter}.
-The tool has been garnering a lot of traction the last couple of years, and is being used by Github, VS Code and Atom to name a few.
+The tool has been garnering a lot of traction the last couple of years, and is being used by GitHub, VS Code and Atom to name a few.
 It has mainly been used in language servers and syntax highlighting, however it should still work fine for our compiler since it does produce a parse tree.
 
 Although it isn't a documented feature, Tree-sitter does allow for extending grammars.
 Extending a grammar works much like in ANTLR, where you get almost a superclass relation to the grammar.
 One difference from ANTLR though is that it does allow for referencing the grammar we are extending during rule overriding.
-This makes it easier and more robust to extend rules than in ANTLR.
+This makes it easier and more robust to extend rules than in ANTLR\@.
 
 Tree-sitter also has a runtime library for TypeScript, which makes it easier for us to use it in our implementation than the previous candidates.
 
 Another cherry on top is that Tree-sitter is becoming one of the mainstream ways of syntax highlighting in modern editors and IDEs, which means that we could utilize the same grammar to get syntax highlighting for our language.
 
-All this makes Tree-sitter stand out as the best candidate for our project.
+All this makes Tree-sitter stand out as the best candidate for our project, and will move on with implementing our grammar in Tree-sitter.
 
 \subsubsection{Implementing Our Grammar in Tree-sitter}
 

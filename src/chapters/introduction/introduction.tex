@@ -13,7 +13,7 @@ Since then further proposals have been made to the language mechanism, and it is
 
 TypeScript is a superset of JavaScript, the programming language of the web.
 It extends JavaScript with the addition of static type definitions.
-These type definitions are used for type-checking the program at compilation, as well as documentation for the program~\cite{tswebsite}.
+These type definitions are used for type-checking the program at compilation, as well as serving as documentation for the program~\cite{tswebsite}.
 
 This thesis will explore how Package Templates can be implemented in TypeScript.
 Here we will discuss the different approaches that can be taken when working with a project such as this, and how such an implementation can be carried out.
@@ -27,15 +27,15 @@ It will also be interesting to see how PT can be used in the context of the web,
 As we briefly touched upon in the introduction, an implementation of Package Templates in a language like TypeScript gives rise to some interesting research questions:
 
 \begin{itemize}
-    \item \textbf{RQ1}: How does the language mechanism Package Templates fit into TypeScript and its ecosystem?
+    \item \textbf{RQ1}: How does the language mechanism Package Templates fit into TypeScript?
     \item \textbf{RQ2}: Does structural typing change how the core of Package Templates works?
-    \item \textbf{RQ3}: Will having PT in a structurally typed language have any notable benefits or disadvantages over having it in a nominally typed language?
+    \item \textbf{RQ3}: Will having PT in a structurally typed language have any notable advantages or disadvantages over having it in a nominally typed language?
 \end{itemize}
 
 \section{Contributions}\label{sec:contributions}
 
 This thesis' main contribution is the PTS compiler.
-It is easily accessible through the Node Package Manager.
+It is easily accessible through the Node Package Manager, henceforth referred to as \emph{npm}.
 This makes it easy to try out the PTS language, but more importantly the PT language mechanism.
 Having easy access to a language with PT might make adoption of the language mechanism greater, and spark new research within the field.
 
@@ -43,7 +43,7 @@ By making the parser for the language separate from the compiler this also contr
 While we have in this project used the parser solely for producing a parse tree for our compiler, this parser could also be used to make other tooling, such as syntax highlighting or a language server.
 
 The final contribution this thesis makes is conveying how to approach related projects.
-We show in this thesis how someone can approach extending a language by utilizing the grammar extending capabilities of Tree-sitter, a general-purpose parser generator with great capabilities for extending grammars, and how Tree-sitter can be used to create a compiler.
+We show in this thesis how someone can approach extending a language by utilizing the grammar extending capabilities of the general-purpose parser generator, Tree-sitter, and how Tree-sitter can be used as the parser for a compiler.
 
 \section{Chapter Overview}\label{sec:chapter-overview}
 

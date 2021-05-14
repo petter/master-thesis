@@ -5,7 +5,7 @@
 
 Before we start the implementation of our language we first need to do some planning.
 We know we are going to be creating a programming language, a superset of TypeScript with the addition of Package Templates.
-However, we might want to look at if creating a superset of TypeScript is the way to go, or if keeping it simple and extending JavaScript is a better call.
+However, we might want to look at if creating a superset of TypeScript is the way to go, or if keeping it simple and extending JavaScript is a better option.
 We might also want to see if it is needed to create a language at all, or if we are able to create a TypeScript library which can achieve the functionality of PT instead.
 There are a lot of approaches we can take for implementing our language, so we will have to map out the requirements for our desired approach.
 We will conclude the chapter by looking at the different approaches we can take, and see which approach is right for the project.
@@ -52,7 +52,7 @@ There are a lot of approaches one can take when extending TypeScript, however du
 Our approach should allow the following:
 
 \begin{itemize}
-    \item The ability to add custom syntax (access to the tokenizer / parser)
+    \item The ability to add custom syntax (access to the tokenizer/parser)
     \item Enable us to do semantic analysis.
 \end{itemize}
 
@@ -70,7 +70,7 @@ Before jumping into a project of this magnitude it is important to find out what
 The goal of this project is to extend TypeScript with the Package Templates language mechanism, this could be achieved by one of the following methods:
 
 \begin{itemize}
-    \item Implementing as a library
+    \item Implementing as an internal DSL
     \item Making a preprocessor for the TypeScript compiler
     \item Making a compiler plugin/transform
     \item Making a fork of the TypeScript compiler
@@ -99,9 +99,9 @@ The plugins for the TypeScript compiler is, as the TypeScript compiler wiki spec
 However, there are alternatives that do enable compile time plugins/transformers;
 
 \begin{itemize}
-    \item ts-loader~\cite{tsloadergithub}, for the webpack ecosystem
-    \item Awesome Typescript Loader~\cite{awesometypescriptloadergithub}, for the webpack ecosystem.
-    \item ts-node~\cite{tsnodegithub}, REPL/runtime
+    \item ts-loader\footnote{\url{https://github.com/TypeStrong/ts-loader}}, for the webpack ecosystem
+    \item Awesome Typescript Loader\footnote{\url{https://github.com/s-panferov/awesome-typescript-loader}}, for the webpack ecosystem.
+    \item ts-node\footnote{\url{https://github.com/TypeStrong/ts-node}}, REPL/runtime
 \end{itemize}
 
 Unfortunately all of the above do not support adding custom syntax, as they only work on the AST produced by the TypeScript compiler.
@@ -119,9 +119,6 @@ This is all hidden away from the user, as this custom parser is a dependency of 
 
 Seeing as we have to make a fork of the parser in order to solve our problem, the upkeep will not be as cheap as first anticipated.
 However, being able to have most of the logic loosely coupled with the compiler core it will still make it easier to keep updated than through a fork of the TypeScript compiler.
-
-% TODO: Er det støttet å bruke flere plugins med forskjellige parsere?
-% E.g. babel-plugin-typescript + vårt babel plugin?
 
 \subsection{TypeScript Compiler Fork}\label{subsec:typescript-compiler-fork}
 
@@ -159,14 +156,14 @@ On top of this, while we were able to reproduce certain PT functionality such as
 
 Making a preprocessor to the TypeScript compiler in order to implement the features of PT would presumably make the implementation time short.
 However, as we learned, in order to safely rename classes and attributes we need something more powerful than a simple preprocessor.
-If we were to look at the core of PT, without the renaming mechanism this would likely be the easiest approach.
+If we were to look at the core of PT, without the renaming mechanism this would likely be the easiest approach, however, since we are aiming to implement the renaming mechanism this makes this approach not viable for the project.
 
 Making a TypeScript compiler plugin would seemingly also be a good approach, in the future.
-As we discussed the official TypeScript compiler (and its alternatives) does not have proper support for plugins that can alter the syntax of the language.
+However, as we discussed previously, the official TypeScript compiler (and its alternatives) does not have proper support for plugins that can alter the syntax of the language.
 Due to this we are not able to implement the features of PT, since these would require us to add extra syntax.
 For the time being this makes this approach not viable, however, if in the future this would be supported it might prove a good approach for doing tasks such as these.
 
-Implementing PT into the TypeScript compiler would likely lead to the most robust implementation, however the sheer size of the TypeScript compiler makes this approach undesirable.
+Implementing PT in a fork of the TypeScript compiler would likely lead to the most robust implementation, however the sheer size of the TypeScript compiler makes this approach undesirable.
 I fear that this approach would be too time costly for this project, and might lead to an incomplete implementation as a result of this.
 A similar project has been performed by Isene in~\cite{Isene2018}, where they implemented PT in C\# by extending the Roslyn compiler.
 Here Isene suggested that a project of this size was better fit for a group of two.

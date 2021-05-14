@@ -3,7 +3,7 @@
 
 \chapter{Implementation}\label{ch:implementation}
 
-In this chapter we are going to look at the implementation for our compiler for PTS, as described in chapter~\vref{ch:the-language---pts}.
+In this chapter we are going to look at the implementation of our compiler for PTS programming language, as described in chapter~\vref{ch:the-language---pts}.
 Before looking at the implementation we will first be discussing the methodology used during development.
 
 \section{Methodology}\label{sec:methodology}
@@ -22,7 +22,7 @@ I started off by creating a rough MVP (Minimum Viable Product), only implementin
 This MVP made me understand the project and requirements better, and also gave the project some new requirements.
 After the initial iteration I decided to adopt a test-driven development approach.
 I made tests for the features I had already implemented and then continued to make tests for the next functionality goal.
-This was done in order to gain more confidence in the compiler, as well as helping me spot any erroneous code earlier rather than later, which makes fixing it less costly.
+This was done in order to gain more confidence in the compiler, as well as helping me spot any erroneous code earlier rather than later, which makes fixing them less costly.
 All of this resulted in a better development cycle, making refactoring and implementation of new features a breeze.
 When adding new features or refactoring some tests will undoubtedly fail, and before moving on I made sure that all the tests were passing again.
 
@@ -42,8 +42,8 @@ An overview of our architecture can be seen in figure~\vref{fig:compiler-overvie
 The first part of the compiler, namely the lexing and parsing will take a source file and transform it into a parse tree.
 Our compiler will then take this parse tree and transform it into a simpler abstract syntax tree (AST).
 This AST will then be used to perform the PT transformations.
-We will then use this AST to close any open packages and templates, and finally use the transformed tree for code generation.
-After all packages and templates have been closed we can type-check each individual package/template to validate the type-safety of our program.
+We will use this AST to close any open packages and templates, and finally use the transformed tree for code generation.
+Before code generation we will perform a type-check step, where we validate the type-safety of each package/template individually, to ensure an overall type-safe program.
 Given a valid type-safe program we can then move on to code generation.
 The target language for our code generation will mainly be TypeScript, however we will also offer to target JavaScript, as we can easily produce JavaScript code through using the TypeScript compiler.
 
@@ -80,11 +80,11 @@ If no errors were thrown we have a type-safe package/template, and we can then p
 \section{Code Generation}\label{sec:code-generation}
 
 After performing these steps we can finally produce the output.
-Producing TypeScript output is a pretty simple task.
+Producing TypeScript output is a relatively simple task.
 By traversing the AST we can concatenate the text from each leaf node with whitespace between each leaf node's resulting textual representation.
-This will produce quite ugly, unformatted code, but as long as the contents of the closed packages and templates are valid typescript programs this will also produce a valid typescript program.
+This will produce quite ugly, unformatted code, but as long as the contents of the closed packages and templates are valid TypeScript programs, then the generated code will be so as well.
 In order to make it more readable we perform an extra step before writing the output to the specified file, a formatting step.
-There are a lot of TypeScript formatters out there, but we will be using \textit{Prettier}\footnote{A code formatter for the web ecosystem. See~\url{https://prettier.io/}.} for our implementation as it is relatively simple to use.
+For formatting our generated code we will be using \textit{Prettier}\footnote{A code formatter for the web ecosystem. See~\url{https://prettier.io/}.} for our implementation as it is relatively simple to use.
 Running our produced source code through the Prettier formatter produces a nicely formatted, readable output.
 
 The TypeScript output is probably the best target for understanding what the PT mechanism does, however it might not be the best output for production use.
@@ -102,8 +102,9 @@ This allows me to write up tests for all the features of the language, and run t
 For testing the lexer and parser I used the built in testing framework.
 Tree-sitter tests are simple \codeword{.txt} files split up into three sections, the name of the test, the code that should be parsed, and the expected parse tree in \textit{S-expressions}\footnote{S-expressions are textual representations for tree-structured data. See~\cite{sexprs} for additional information and examples}.
 These files are placed in the \codeword{corpus} folder, and will be automatically executed when running \codeword{tree-sitter test}.
+
 Listing~\vref{lst:tree-sitter-grammar-test} shows an example of a Tree-sitter grammar test.
-This example is taken from the source code to the PTS parser, where we have a test so see that template declarations are being parsed correctly.
+This example is taken from the source code of the PTS parser, where we test template declarations.
 
 \begin{code}{typescript}{Example of Tree-sitter grammar test}{lst:tree-sitter-grammar-test}
     ===========================
@@ -133,9 +134,9 @@ This example is taken from the source code to the PTS parser, where we have a te
 \subsection{Compiler}\label{subsec:testing-transpiler}
 
 For testing the implementation of our compiler I chose to make similar tests to those used in the parser.
-I used the test framework AVA\footnote{https://github.com/avajs/ava} to run my tests.
+I used the test framework AVA\footnote{\url{https://github.com/avajs/ava}} to run my tests.
 I chose to structure my tests into separate files under the \codeword{\_\_test\_\_} folder.
-This is not a strict requirement for AVA, but helps structure the project more nicely.
+This is not a strict requirement for AVA, but helps structure the project.
 All my tests for the compiler are implementation tests, where I transpile a program and check that the output is equal to the expected output.
 AVA has helper methods for this where I can use the \codeword{is} function to check that two strings are equal to each other.
 On differing strings an informative error is logged, with the differences between the actual results and the expected results.
@@ -169,24 +170,22 @@ Since templates are not supposed to produce any code after being transpiled, we 
 
 \section{Completing the Implementation}\label{sec:completing-the-implementation}
 
-While the implementation for most of the language is to an extent complete, we did not have enough time to implement everything.
+While we have a working compiler for most of the language, we did not have enough time to implement all the desired functionality.
 What still remains to be implemented are handling \codeword{addto}-statements properly, and handling all declaration and reference types.
 We are also currently not supporting splitting up the program into several files.
 In the following sections we discuss how implementing these features could be carried out.
 
 \subsection{\codeword{addto}-statements}\label{subsec:addto-statements}
 
-\codeword{addto}-statements is one of the core features of PT I was not able to finish in the allotted time.
-As of now \codeword{addto}-statements just work as any other class declaration, and will simply be merged together with the other class declarations.
-The only difference is that an \codeword{addto}-statement requires there to be at least one class declaration.
-This is to avoid the programmer running into bugs where the programmer is trying to add attributes to a non-existent class.
+\codeword{addto}-statements are one of the core features of PT I was not able to finish in time.
+As of now \codeword{addto}-statements for the most part work as intended, however the method overriding capabilities of \codeword{addto}-statements was not implemented.
 
-There are mainly two ways for us to implement \codeword{addto}-statements as of now, one hacky but cheap implementation, and one more robust but expensive implementation.
+There are mainly two ways for us to finish the implementation of \codeword{addto}-statements as of now, one hacky but cheap implementation, and one more robust but expensive implementation.
 The cheap and hacky way is to simply always merge the bodies of the \codeword{addto}-statement at the bottom of the formed merged class.
 This will work because of the JavaScript's prototype-based object-orientation.
 Since the class syntax is only syntactic sugar for creating a prototype object and a constructor function, this means that any attributes that are lower down in the prototype object will override any previously declared attributes.
 So if we in a \codeword{addto}-statement wish to override an attribute we will utilize overriding of properties in objects to achieve this.
-The hacky part of the implementation is that TypeScript gives errors for duplicate declarations inside the class syntax, as this is often a sign of performing a mistake.
+The hacky part of the implementation is that TypeScript gives errors for duplicate declarations inside the class syntax, as this is often a sign of an erroneous program.
 In order for us to still be able to pass the type-check we will have to bypass the TypeScript compilers errors for certain lines by prefixing all attribute declarations in the bodies of \codeword{addto}-statements with a \codeword{// @ts-ignore}.
 This will unfortunately have the drawback of not having any type-checks for these function-declarations.
 
@@ -194,8 +193,8 @@ The better more robust way to fix this will force us to make a quite severe refa
 With this approach we will have to create more complicated datastructures for classes and class attributes.
 With our current implementation we are simply combining two AST trees when merging classes, not really worrying about what is contained within these trees.
 In order for us to be able to override attributes with the \codeword{addto}-statements we will have to merge the bodies of classes in a smarter way.
-I suggest that before class merging that the AST nodes representing classes or \codeword{addto}s are transformed, as well as their contained attribute declarations.
-Class nodes can be transformed to containing a body of attribute nodes, instead of general AST nodes, and the attribute declarations will be transformed to a pair of the name of the attribute, and the old AST representation of the attribute.
+I suggest that before class merging, the AST nodes representing classes or \codeword{addto}s are transformed, as well as their contained attribute declarations.
+Class nodes can be transformed to a node containing a body of attribute nodes, instead of general AST nodes, and the attribute declarations will be transformed to a pair of the name of the attribute, and the old AST representation of the attribute.
 This will enable us to perform smarter merges, as we have easy access to the contained attributes.
 For class declarations this will enable us to give better error messages when merging classes resulting in duplicate attribute declarations, and for \codeword{addto} this enables us to replace the attributes that will be overridden.
 
@@ -203,21 +202,21 @@ This more robust implementation was attempted, but had to be discarded because I
 The attempted implementation can be found under the experimental branch in the GitHub repository, \url{https://github.com/petter/pts/tree/experimental}.
 This implementation also tries to achieve better representations for templates and packages to contain these new class representations.
 
-\subsection{Supporting all Attribute Declarations}\label{subsec:supporting-all-attribute-declarations}
+\subsection{Supporting All Attribute Declarations}\label{subsec:supporting-all-attribute-declarations}
 
-As of now we only support public field definitions, such as \codeword{a = 2} for instance, and simple function declarations, such as \codeword{f() { ... }}.
-There are of course more ways that attributes can be declared, such as the function syntax, however this was not prioritized during implementation.
+As of now we only support public field definitions, such as \codeword{a = 2} for instance, and simple function declarations, such as \codeword{f() \{ ... \}}.
+There are of course more ways that attributes can be declared, such as the function syntax, \codeword{function f() \{ ... \}}, however this was not prioritized during implementation.
 I believe that the task of implementing the remaining attribute types will not be a too expensive task, as these could be implemented similarly as with the already implemented attribute declarations.
 If someone ought to finish this task the TypeScript grammar is very useful for finding all the different possibilities that an attribute could be declared.
 
-\subsection{Supporting all References}\label{subsec:supporting-all-references}
+\subsection{Supporting All References}\label{subsec:supporting-all-references}
 
 This task is probably the hardest to finish off.
-In order to support all reference types we would presumably have to do more advanced semantic analysis of the program than we are currently doing.
+In order to support all reference types we would presumably have to do more advanced semantic analysis of the program than we are currently doing, in order to correctly identify references.
 One should then ask themselves if it is worth it to continue on with this approach, or if starting off fresh with a fork of the TypeScript compiler would be a better choice, as we would likely get the semantic analysis for free.
 
 \subsection{Supporting Multi File Programs}\label{subsec:supporting-multi-file-programs}
 
 This could likely be implemented by reading all files that are declared in the import part of the main program.
 We could then replace the import statement of templates with the contained templates.
-This could however of course lead to duplicate template names, so a complete implementation might have to offer some template aliasing on import to circumvent this.
+This could however of course lead to duplicate template names, so a complete implementation might have to offer some template aliasing on imports to circumvent this.
