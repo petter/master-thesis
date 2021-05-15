@@ -59,7 +59,7 @@ So as long as we are able to perform the addition we can assume that it is worki
     }
 \end{code}
 
-Now that we understand when we want compilation to fail let us look at where we do not want it to fail, when we have a valid parallel extension.
+Now that we understand when we want compilation to fail let us look at where we do not want it to fail, namely when we have a valid parallel extension.
 One way it could result in an unwanted failure is if we tried to check if the addition contains any invalid references or type errors.
 This could commonly happen if we are trying to check the addition's references to the declared class.
 However, as discussed above, checking if a reference to an attribute is valid is quite tricky, and in our implementation we instead leave this up to the TypeScript compiler in the type-check stage.
@@ -67,16 +67,18 @@ By doing this we will not incorrectly throw any false-negatives when it comes to
 This approach does unfortunately come with some downsides.
 By not addressing the issue at the addition stage it makes it harder to give informative error messages when invalid references do occur, however this was a tradeoff that was beneficial for this project.
 
+Our implementation handles parallel extension as expected, it fails when it should fail and succeeds when it should succeed.
+It also doesn't produce any false-negative failures, failing where it shouldn't fail or succeeding when it should fail.
+Therefore our implementation fulfills the requirement of parallel extension.
+
+
+
 \subsubsection{Hierarchy Preservation}\label{subsubsec:pts-hierarchy-preservation}
 
 In order to fulfill the hierarchy preservation requirement we have to preserve all super-/subclass relations after additions and merges have been applied.
-Listing~\vref{lst:pts-hierarchy-preservation} shows a program, and the resulting TypeScript program after compilation, which fulfills the requirement of hierarchy preservation.
-This one example fulfills the requirement as class \codeword{B} is still a subclass of class \codeword{A} after both a merge and an addition is made to \codeword{B}.
-
-As we talked about briefly in section~\vref{subsec:merging-class-declarations} when we merge classes we make sure to also merge their class heritage, combining the extending classes and implementing interfaces of the different classes.
-This means that we might end up with instances where we are extending multiple different classes, however this will then be picked up in the type-checking stage of the compiler.
-If we had not merged class heritage, we could have ended up breaking the inheritance hierarchy in the aforementioned listing, as we could have for example ended up with class \codeword{C}'s heritage, which does not have a superclass.
-Because of the heritage merging we can with confidence say that we have fulfilled the requirement of hierarchy preservation, as we always preserve all super-/subclass relations.
+Listing~\vref{lst:pts-hierarchy-preservation} shows a program, and the resulting TypeScript program after compilation, which adheres to the requirement of hierarchy preservation.
+In the example class \codeword{B} is still a subclass of class \codeword{A} after both a merge and an addition is made to \codeword{B}, which is what we expect.
+However, this doesn't prove that our implementation will fulfill the requirement of hierarchy preservation, let us dig deeper into how our implementation handles these scenarios.
 
 \begin{code}{typescript}{Example showcasing the preservation of super-/subclass relations}{lst:pts-hierarchy-preservation}
     // PTS
@@ -119,6 +121,12 @@ Because of the heritage merging we can with confidence say that we have fulfille
         k = 0;
     }
 \end{code}
+
+As we talked about briefly in section~\vref{subsec:merging-class-declarations} when we merge classes we make sure to also merge their class heritage, combining the extending classes and implementing interfaces of the different classes.
+This means that we might end up with instances where we are extending multiple different classes, however this will then be picked up in the type-checking stage of the compiler.
+If we had not merged class heritage, we could have ended up breaking the inheritance hierarchy in the aforementioned listing, as we could have for example ended up with class \codeword{C}'s heritage, which does not have a superclass.
+Because of the heritage merging we can with confidence say that we have fulfilled the requirement of hierarchy preservation, as we always preserve all super-/subclass relations.
+
 
 \subsubsection{Renaming}\label{subsubsec:pts-renaming}
 
@@ -220,6 +228,9 @@ If a class implements an interface, and we in a later instantiation rename the i
 In listing~\vref{lst:nominal-pt-interface-problem} we can see this problem in action, where after a rename of interface \codeword{I}'s method \codeword{f}, the class \codeword{A} no longer implements the interface properly.
 This is of course also a problem in structural PT, and can potentially be an even bigger problem as we would not necessarily have an explicit relation between the interface and the class, and could therefore also not properly describe the error to the programmer.
 
+As we have discussed, renaming does work to some extent, but will also in a lot of cases not work because of the implementations' lack of handling explicit types.
+The renaming requirement is therefore only partially fulfilled.
+
 \begin{code}{java}{Example showing how a renaming of an interfaces' attributes could result in an invalid program.}{lst:nominal-pt-interface-problem}
     template T {
         interface I {
@@ -275,6 +286,8 @@ We can see from the resulting program after a successful compilation that this i
     }
 \end{code}
 
+From the aforementioned listing we can see that re-using templates will be kept independent of each other, and we therefore fulfill the requirement of multiple uses.
+
 \subsubsection{Type Parameterization}\label{subsubsec:pts-type-parameterization}
 
 The type parameterization requirement is something the implementation does not fulfill.
@@ -300,8 +313,6 @@ Required types do of course have a lot of advantages such as making it possible 
 \end{code}
 
 \subsubsection{Class Merging}\label{subsubsec:pts-class-merging}
-
-%TODO Les over og finpuss på dette
 
 In order to fulfill the requirement of class merging we will have to be able to merge classes through instantiating two or more templates containing a class with a common name, or through renaming a class at instantiation leading to two classes having the same name.
 A failure to fulfill this requirement could be that a resulting program would contain two different class declarations, where these should have been merged.
@@ -337,6 +348,11 @@ The resulting program is as expected a single class \codeword{A} with both attri
         j = 0;
     }
 \end{code}
+
+Because of our separation of logic between the instantiations and the class merging we will always catch all merged classes, as long as the instantiation process was successful.
+The fulfillment of this requirement therefore relies heavily on the fulfillment of the renaming requirement.
+As we discussed earlier, the renaming requirement is only partially fulfilled, however the only important feature of renaming for this requirement is that the class declarations are always renamed correctly, which they are.
+Therefore the class merging requirement is fulfilled.
 
 \subsubsection{Collection-level Type-checking}\label{subsubsec:implementation-collection-level-type-checking}
 
