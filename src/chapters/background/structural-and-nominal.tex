@@ -1,0 +1,64 @@
+\section{Structural and Nominal Type Systems}\label{sec:structural-and-nominal-type-systems}
+
+Throughout this thesis we will have a major focus on the underlying type systems of traditional PT in Java, and our implementation of PT in TypeScript.
+Java has what we call a \emph{nominal} type system, while TypeScript has a \emph{structural} type system.
+
+Nominal is defined as "being something in name only, and not in reality" in the Oxford dictionary.
+Nominal types are as the name suggest, types in name only, and not in the structure of the object.
+They are the norm in mainstream programming languages, such as Java, C, and C++.
+A type could be \codeword{A} or \codeword{Tree}, and checking whether an object conforms to a type restriction, is to check that the type restriction is referring to the same named type, or a subtype.
+
+Structural types on the other hand are not tied to the name of the type, but to the structure of the object.
+These are not as common in mainstream programming languages, but are very prominent in research literature.
+However, in more recent (mainstream) programming languages, such as Go and TypeScript, structural typing is becoming more and more common.
+A type in a structurally typed programming language is often defined as a record, and could for example be \codeword{\{ name:~string \}}.
+
+In listing~\vref{lst:nominal-typing-example} we can see an example of a nominally typed program in a Java-like language.
+Here \codeword{B} is a subtype of \codeword{A}, while \codeword{C} is not.
+This is due to nominally typed programs having the requirement of explicitly naming its subtype relations, through e.g.\ a subclass-relation.
+Because of this we can see that at the bottom of the listing the first two statements pass, since both \codeword{A} and \codeword{B} are of type \codeword{A}, while the last statement fails (typically at compile time), as \codeword{C} is not of type \codeword{A}.
+
+In listing~\vref{lst:structural-typing-example} we see a structurally typed program.
+This program also has the exact same declarations as in listing~\vref{lst:nominal-typing-example}, that is classes \codeword{A}, \codeword{B}, and \codeword{C} and the function \codeword{g}.
+In this program both type \codeword{B} and type \codeword{C} are a subtype of type \codeword{A}, since they both contain all members of type \codeword{A}.
+Not necessarily the same implementation as in class \codeword{A}, but the same types as in type \codeword{A}.
+This is one of the major differences between nominal and structural typing, types can conform to other types without having to explicitly state that they should.
+Type \codeword{C} is an example of this, while it does not have a subclass relation to class \codeword{A}, nor implement any common nominal interface, it still conforms to the type of \codeword{A}.
+The result of this is that all three usages of function \codeword{g} are valid in a structural type system, while consuming \codeword{C} was illegal in the nominal example.
+
+
+\begin{code}{Java}{Example of a nominally typed program in a Java-like language}{lst:nominal-typing-example}
+    // Given the following class definitions for A, B and C:
+    class A {
+        void f() {
+            ...
+        }
+    }
+
+    class B extends A {
+        ...
+    }
+
+    class C {
+        void f() {
+            ...
+        }
+    }
+
+    // And a consumer with the following type:
+    void g(A a) { ... }
+
+    // Would result in the following
+    g(new A()); // Ok
+    g(new B()); // Ok
+    g(new C()); // Error, C not of type A
+\end{code}
+
+\begin{code}{Java}{Example of a structurally typed program in a Java-like language}{lst:structural-typing-example}
+    // Given the same class definitions and
+    // the same consumer as in the previous listing.
+    // Would result in the following
+    g(new A()); // Ok
+    g(new B()); // Ok
+    g(new C()); // Ok, because C is structurally equal to A
+\end{code}
