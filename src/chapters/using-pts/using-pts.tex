@@ -3,8 +3,7 @@
 
 \chapter{Using PTS}\label{ch:using-pts}
 
-% TODO litt mer introduksjon her
-
+Now that we have a working implementation of our compiler for PTS, let us look into how we could install and use it.
 There are mainly two ways of using the PTS compiler:
 
 \begin{itemize}
@@ -12,9 +11,10 @@ There are mainly two ways of using the PTS compiler:
     \item Creating a PTS project
 \end{itemize}
 
-In the following sections we will look at how you can install and use it for both approaches.
+In the following sections we will look at how you can install and use the compiler for both approaches.
 
 The PTS compiler requires you to have Node and npm installed on your computer.
+For instructions on installing Node and npm I refer the reader to the npm documentations\footnote{\url{https://docs.npmjs.com/downloading-and-installing-node-js-and-npm}}.
 
 \section{Installing and Using PTS Globally}\label{sec:installing-and-using-pts-globally}
 
@@ -84,9 +84,12 @@ If you would rather have TypeScript output you can use the \codeword{-t} flag to
     pts-lang -i src/index.pts -o build/index -t ts
 \end{minted}
 
-\section{A Real World Example}\label{sec:a-real-world-example}
+\section{A "Real World" Example}\label{sec:a-real-world-example}
 
-Now that we understand how to get PTS set up, let us look at how it can be used in a real world example, and how this enables the programmer to modularize the code base even further giving great flexibility.
+Now that we understand how to get PTS set up, let us look at how it could be used in a real world example, and how PT enables the programmer to modularize the code base even further giving great flexibility.
+Note that the following example will not work with the current state of the compiler as it doesn't handle member expressions containing call expressions, such as \codeword{f().i}.
+Properly handling these types of member expressions would require us to analyse the function for its return type.
+The example serves as an example of how PTS could be useful given a more complete implementation for a real world problem.
 
 The most common use of TypeScript is to create web applications.
 Let us look at how PTS can help make this task easier for the programmer.
@@ -142,7 +145,7 @@ We will do this inside of a package, so that this will produce an output:
 
 \begin{minted}{typescript}
     pack Pokemon {
-        inst FetchJson { FetchJson -> Pokemon };
+        inst FetchJSON { FetchJSON -> Pokemon };
         inst StateLogger { StateLogger -> Pokemon };
         addto Pokemon {
             render() {
@@ -177,7 +180,6 @@ We will do this inside of a package, so that this will produce an output:
                 )
             }
         }
-
     }
 \end{minted}
 
