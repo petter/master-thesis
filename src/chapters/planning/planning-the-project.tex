@@ -40,10 +40,16 @@ This means that we can still run into the same issues as we would in a JavaScrip
 \subsection{Language Choice Conclusion}\label{subsec:langauge-choice-conclusion}
 
 %Since TypeScript would enable us to perform type-checks on templates, as well as making it possible to perform safe renamings we will in this project opt to go for TypeScript as our choice of language.
-Package Templates has a lot of properties that are designed around strong typing, as we have discussed in the previous sections.
-However, there has previously been done research into dynamic variants of PT where the PT transformations have been done at run-time, so it is certainly possible for us to also write a dynamic variant of PT for JavaScript.
-Even though it would be possible it will likely be more beneficial for the language with a strong type system.
-This might also prove to be more interesting research, as we could rather focus on TypeScript's structural type system, than focusing on creating another dynamic variant of PT.
+
+There has previously been done research into dynamic variants of PT, where the PT transformations have been done mostly at run-time, so it is certainly a possibility for us to also write a dynamic variant of PT for JavaScript.
+However, as we discussed above, Package Templates has a lot of properties that are designed around strong typing, and we would therefore benefit from hosting PT in a strongly typed language like TypeScript.
+This will likely also prove to be more interesting research, as we could rather focus on TypeScript's structural type system, than focusing on creating another dynamic variant of PT\@.
+Because of these reasons we will in this thesis look at how Package Templates can be implemented into TypeScript.
+
+%Package Templates has a lot of properties that are designed around strong typing, as we have discussed in the previous sections.
+%However, there has previously been done research into dynamic variants of PT where the PT transformations have been done at run-time, so it is certainly possible for us to also write a dynamic variant of PT for JavaScript.
+%Even though it would be possible it will likely be more beneficial for the language with a strong type system.
+%This might also prove to be more interesting research, as we could rather focus on TypeScript's structural type system, than focusing on creating another dynamic variant of PT\@.
 % TODO kanskje litt mer her
 
 \section{What Do We Need?}\label{sec:what-do-we-need}
@@ -53,16 +59,21 @@ Our approach should allow the following:
 
 \begin{itemize}
     \item The ability to add custom syntax (access to the tokenizer/parser)
-    \item Enable us to do semantic analysis.
+    \item Enable us to do semantic analysis
 \end{itemize}
 
 In addition to these we would also like to look for some other desirable traits for our implementation:
 
 \begin{itemize}
-    \item Loosely coupled implementation (So that new versions of TypeScript not necessarily breaks our implementation).
+    \item Loosely coupled implementation
     %\item Mer? % TODO
 \end{itemize}
 
+Having a loosely coupled implementation might mean different things in different approaches.
+Generally we want our PT specific part of the implementation to stay loosely coupled with the TypeScript specific parts.
+In a TypeScript compiler fork this would for instance be pretty much unachievable, since the PT implementation would likely have to change some of the TypeScript implementation.
+If we are able to simply write a preprocessor to the TypeScript compiler however, this would be fulfill the requirement, as we could transform the PT specific parts of the language before letting the TypeScript compiler deal with the rest of the program.
+Having the implementation as loosely coupled as possible would make our implementation cheaper to maintain, as updates to the TypeScript compiler would likely not break our implementation, as it should not be affected by the TypeScript specifics.
 
 \section{Approach}\label{sec:choosing-the-right-approach}
 
@@ -137,7 +148,7 @@ Firstly we need to consider what the target should be.
 Normally a compiler would output some sort of byte code, like Java byte code in the Java compiler.
 Many compilers also produce native code.
 Producing native code is not an option for our implementation as we still want to stay in the same ecosystem, namely the browser.
-We could possibly also produce WebAssembly byte code, however there are a lot of constructs in TypeScript/JavaScript that do not translate to WebAssembly, such as working with the DOM\@.
+We could possibly produce WebAssembly byte code, however there are a lot of constructs in TypeScript/JavaScript that do not translate to WebAssembly, such as working with the DOM\@.
 Since neither of these are valid options we could either produce TypeScript or JavaScript.
 Producing TypeScript is possibly the easiest way to go, as most of PTS is already TypeScript.
 And producing TypeScript also means that we could run the resulting program through the TypeScript compiler to produce JavaScript.
@@ -176,6 +187,16 @@ As with the approach of implementing PT in a fork of the TypeScript compiler thi
 If we were able to write a plugin for the parsing step of Babel this might prove a viable option, however as of now there are no plans of supporting this.
 
 Our last approach is creating a custom compiler.
-As discussed previously, if we are able to % TODO
+As we discussed, if our compiler can simply target TypeScript for code generation, then the custom compiler approach might be a valid option.
+Having TypeScript as the target means that most of the language's constructs can be ignored, since most of the PTS language is simply TypeScript code, we can output most of the code as is.
+The only transformations our compiler will need to do will be the PT specific transformations, such as replacing instantiation statements with the bodies of the instantiated templates.
+As it is a custom compiler we will be able to fulfill our requirements, since we do have access to the parser, so we can add new syntax, and we are able to perform semantic analysis.
+For the desired trait of being loosely coupled we could likely fulfill this as well with this approach.
+Since we will only be doing PT specific transformations in the compiler, this means that most of our compiler will stay loosely coupled with TypeScript.
+The one part of our compiler that might not be able to stay as loosely coupled as we would like is the lexer/parser.
+We will need parse the TypeScript parts of the PTS program in order to perform most of the PT specific transformations, such as renaming classes.
+However, some parser generators do allow for importing or extending grammars, so we might be able to at least partially stay loosely coupled.
+We will look more into this in chapter~\vref{ch:implementation}.
 
-With the planning done we can jump into the implementation.
+It would seem that the most beneficial approach for our project is to write a custom compiler, since the other options were either not able to fulfill the requirements of our project, or ,in the case of implementing PT in a fork of the TypeScript compiler, too great a task for one person alone.
+With having made a choice for the approach, we can look at the implementation of our compiler.
