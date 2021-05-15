@@ -181,7 +181,6 @@ We will do this inside of a package, so that this will produce an output:
     }
 \end{minted}
 
-% TODO beskriv hvorfor PT var nyttig her
 We could then use our Pokémon component in our application by supplying a URL for the Pokémon to display, as seen below:
 
 \begin{minted}{typescript}
@@ -192,4 +191,8 @@ We could then use our Pokémon component in our application by supplying a URL f
         }
     }
 \end{minted}
+
+In this example PT helped us split up our component into several smaller modules.
+This enables us to later re-use these common pieces of functionality, fetching data and logging, in other components, which will make our project more scalable, and aids in shortening development time.
+Modularizing these concepts also helped make the implementation of our Pokémon component less cluttered, which makes the readability of the code better.
 
