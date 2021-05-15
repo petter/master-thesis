@@ -2,7 +2,7 @@ The task of closing open packages and templates is what most of the implementati
 It is the task of performing the declared instantiations and altering the declared classes through \codeword{addto}-statements.
 This step is crucial as it will make each package/template a valid TypeScript program and make the program ready for code generation.
 
-For the most basic instantiations that don't lead to any renaming, performing additions to classes, or merging of classes, the task is fairly simple.
+For the most basic instantiations that doesn't lead to any renaming, performing additions to classes, or merging of classes, the task is fairly simple.
 We merely have to find the referenced template, and replace the instantiation statement with the body of said template.
 However, to support proper instantiation, the task becomes a bit more advanced.
 
@@ -11,7 +11,7 @@ For each instantiation statement we will have to perform the following steps on 
 
 \begin{enumerate}
     \item Create a correctly scoped AST
-    \item Transform nodes to \textit{reference nodes}\footnote{Reference nodes are AST nodes that contain a pointer to the class or attribute they are supposed to represent. This makes the task of renaming easier as we only have to worry about changing the name in one place. We will go into more detail about this in section~\vref{subsec:transforming-nodes-to-references}.}
+    \item Transform nodes to reference nodes{}
     \item Perform the rename
     \item Go back to the original AST
     \item Merge classes
@@ -46,7 +46,7 @@ In order to get a better understanding of this we will go through each step of c
 %    FUNCTION
 %\end{code}
 
-\subsection{Create a correctly scoped AST}\label{subsec:inst-scoping}
+\subsection{Create a Correctly Scoped AST}\label{subsec:inst-scoping}
 
 This step of closing templates works on the body of a copy of the instantiated template.
 In order to be able to rename classes and class attributes we first need to create correct scopes in which the renaming can be applied.
@@ -89,9 +89,12 @@ At the end of this traversal we have an AST where every node has a reference to 
 
 \subsection{Transforming Nodes to Reference Nodes}\label{subsec:transforming-nodes-to-references}
 
-In order to rename a class or an attribute we need to find all references to the class or attribute.
-That is what this step is supposed to do, find all references and group these together, so that a rename can be performed.
-A reference in our program can either be a variable or a class reference.
+
+In order to rename a class or an attribute we also need to find all references to the class or attribute and rename these.
+To make this easier we have in this implementation instead transformed all references to \textit{reference nodes}.
+Reference nodes are AST nodes that contain a pointer to the class or attribute they are supposed to represent.
+This makes the task of renaming easier as we only have to worry about changing the name in one place.
+A reference can be either a variable reference or a class reference.
 
 A variable reference can be a class attribute or any other variable declaration.
 Even though we call it a variable reference this does also cover functions.
@@ -228,7 +231,7 @@ For class attribute renames we do a lookup on the specified class' scope.
 If the attribute can't be found in the class' scope we do a lookup in the optional superclass' scope.
 If either the superclass is missing or we can't find it in its scope either we throw an error, informing the programmer that the attempted renaming can't be performed.
 
-\subsection{Go back to the Original AST}\label{subsec:going-back-to-the-original-ast}
+\subsection{Go Back to the Original AST}\label{subsec:going-back-to-the-original-ast}
 
 After we have performed the renaming we can go back to the original, simpler, AST\@.
 For most nodes this is as simple as removing the scope property.
