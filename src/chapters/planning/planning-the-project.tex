@@ -39,18 +39,10 @@ This means that we can still run into the same issues as we would in a JavaScrip
 
 \subsection{Language Choice Conclusion}\label{subsec:langauge-choice-conclusion}
 
-%Since TypeScript would enable us to perform type-checks on templates, as well as making it possible to perform safe renamings we will in this project opt to go for TypeScript as our choice of language.
-
 There has previously been done research into dynamic variants of PT, where the PT transformations have been done mostly at run-time, so it is certainly a possibility for us to also write a dynamic variant of PT for JavaScript.
 However, as we discussed above, Package Templates has a lot of properties that are designed around strong typing, and we would therefore benefit from hosting PT in a strongly typed language like TypeScript.
 This will likely also prove to be more interesting research, as we could rather focus on TypeScript's structural type system, than focusing on creating another dynamic variant of PT\@.
 Because of these reasons we will in this thesis look at how Package Templates can be implemented into TypeScript.
-
-%Package Templates has a lot of properties that are designed around strong typing, as we have discussed in the previous sections.
-%However, there has previously been done research into dynamic variants of PT where the PT transformations have been done at run-time, so it is certainly possible for us to also write a dynamic variant of PT for JavaScript.
-%Even though it would be possible it will likely be more beneficial for the language with a strong type system.
-%This might also prove to be more interesting research, as we could rather focus on TypeScript's structural type system, than focusing on creating another dynamic variant of PT\@.
-% TODO kanskje litt mer her
 
 \section{What Do We Need?}\label{sec:what-do-we-need}
 
@@ -66,7 +58,6 @@ In addition to these we would also like to look for some other desirable traits 
 
 \begin{itemize}
     \item Loosely coupled implementation
-    %\item Mer? % TODO
 \end{itemize}
 
 Having a loosely coupled implementation might mean different things in different approaches.
@@ -140,8 +131,6 @@ However, as we have seen, going the plugin/transform route also requires us to f
 That being said it will probably be a lot easier to do semantic analysis in a fork of the TypeScript compiler vs in a plugin/transform.
 
 \subsection{Making a Custom Compiler}\label{subsec:making-a-custom-compiler}
-
-% TODO: utover hva "target" skal være, så svarer du vel egentlig ikke på dette i resten av avsnittet.
 
 Making a custom compiler for PTS might seem like a hard task, but let us dig deeper into what this entails.
 Firstly we need to consider what the target should be.
