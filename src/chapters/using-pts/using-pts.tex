@@ -106,7 +106,8 @@ React is a web framework developed by Facebook\footnote{\url{https://www.faceboo
 It aims to make creating scalable web projects easier to handle, through enabling the programmer to modularize collections of elements into \emph{components}.
 These components are often created to make re-use of common elements easier, such as creating a styled button with certain features, or we could create a component to represent the entire web application.
 
-Components can be made either through creating a function that returns some JSX\footnote{JSX is a syntax extension to JavaScript which resembles HTML, but in reality is just syntactic sugar for creating React elements. See~\url{https://reactjs.org/docs/introducing-jsx.html}.}, which we call functional components, or through creating a class that extends the \codeword{Component} class, which we call class components.
+Components can be made either through creating a function that returns some \emph{JSX}, which we call functional components, or through creating a class that extends the \codeword{Component} class, which we call class components.
+JSX is a syntax extension to JavaScript which resembles HTML, but in reality is just syntactic sugar for creating React elements.
 We will in this example create class components, as PT has a lot of useful functionality for adapting classes.
 Class components most important method is the \codeword{render} method.
 The \codeword{render} method works essentially the same way as a functional components, where you return some piece of JSX, which is what will be displayed when the component is used.
