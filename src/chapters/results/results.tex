@@ -4,6 +4,7 @@ This thesis has explored how TypeScript can be extended with the language mechan
 The resulting language from this extension was Package Template Scripts, or just PTS for short.
 PTS helps the programmer further modularize their code into collections of classes, which can at a later stage be re-used and adopted to a domain of interest.
 We have also looked at how a project like this can be approached, where we examined all the viable approaches to find the most beneficial approach for our problem.
+With a decision made for the approach of the project we implemented a compiler for our language using this approach, and we have looked at how this implementation was carried out.
 In the previous chapter we evaluated our implementation and discussed the consequences of having a structurally typed language as the host of PT, opposed to a nominally typed language.
 We will in this chapter conclude this work by returning to our initial research questions and try to answer these with the knowledge we have accumulated through the span of this thesis.
 After this we will have a look at what could have been done differently in retrospect, and finish off with proposing future works within the field.
@@ -12,7 +13,7 @@ After this we will have a look at what could have been done differently in retro
 \section{Addressing Research Questions}\label{sec:adressing-research-questions}
 
 
-\subsubsection{RQ1: How does the language mechanism, Package Templates, fit into TypeScript?}
+\subsection*{RQ1: How does the language mechanism, Package Templates, fit into TypeScript?}
 
 Package Templates benefits greatly from TypeScript's ecosystem.
 Having access to npm makes the compiler for PTS as easily accessible as the TypeScript compiler, which makes trying out the language mechanism easy.
@@ -29,7 +30,7 @@ It could possibly be viable to change the grammar of TypeScript further to disal
 However, doing this would greatly take away from the overall appeal of the language.
 It might just be better to let the programmer have the choice of using interfaces for these problematic inline-types if they so chooses.
 
-\subsubsection{RQ2: Does structural typing change how the core of Package Templates works?}
+\subsection*{RQ2: Does structural typing change how the core of Package Templates works?}
 
 Most of the functionality of Package Template stay the same in a structurally typed language as they do in a nominally typed language.
 The most notable deviation is the renaming mechanism.
@@ -46,7 +47,7 @@ A variable in a structurally typed language might be typed with a structure that
 However, this conformity might break after a renaming has been applied to the class.
 In these cases we will not be able to rename the variables type, nor any of the variables references to the possibly renamed attributes, since these do not have the same explicit relation to the class.
 
-\subsubsection{RQ3: Will having PT in a structurally typed language have any notable advantages or disadvantages over having it in a nominally typed language?}
+\subsection*{RQ3: Will having PT in a structurally typed language have any notable advantages or disadvantages over having it in a nominally typed language?}
 
 As we discussed in section~\vref{subsec:which-better-fits-pt?} there are some benefits of hosting PT in a structurally typed language.
 Structural typing does fit nicely in with the theme of Package Templates, namely re-use.
