@@ -95,17 +95,41 @@ The most common use of TypeScript is to create web applications.
 Let us look at how PTS can help make this task easier for the programmer.
 We will try to create a simple web application for displaying a Pokémon.
 To do this we will use one of the most popular web frameworks, React\footnote{\url{https://reactjs.org/}}.
+We could of course just display some information about a predetermined Pokémon, however, we would like to make something re-usable.
+We will utilize React to create something re-usable, which we can use to display information about any Pokémon.
+We do not want to have to write down information about all Pokémon, so we will fetch this information from an API, more specifically the PokéAPI\footnote{\url{https://pokeapi.co/}}.
+This API lets us fetch data about all Pokémon.
+
+\subsection{Short Introduction to React}\label{subsec:short-introduction-to-react}
 
 React is a web framework developed by Facebook\footnote{\url{https://www.facebook.com/}}.
 It aims to make creating scalable web projects easier to handle, through enabling the programmer to modularize collections of elements into \emph{components}.
 These components are often created to make re-use of common elements easier, such as creating a styled button with certain features, or we could create a component to represent the entire web application.
 
-Displaying one specific Pokémon can be pretty simple, however we would like to create a React component that can display information and a picture of any Pokémon.
-We do not want to have to write down information about all Pokémon, so we will fetch this information from an API, more specifically the PokéAPI\footnote{\url{https://pokeapi.co/}}.
-This API lets us fetch data about all Pokémon.
+Components can be made either through creating a function that returns some JSX\footnote{JSX is a syntax extension to JavaScript which resembles HTML, but in reality is just syntactic sugar for creating React elements. See~\url{https://reactjs.org/docs/introducing-jsx.html}.}, which we call functional components, or through creating a class that extends the \codeword{Component} class, which we call class components.
+We will in this example create class components, as PT has a lot of useful functionality for adapting classes.
+Class components most important method is the \codeword{render} method.
+The \codeword{render} method works essentially the same way as a functional components, where you return some piece of JSX, which is what will be displayed when the component is used.
+
+A component essentially has two sources of data, its \emph{state} and its \emph{props}.
+Props, short for properties, is data passed to a component from its parents.
+An example of this can be \codeword{<SomeComponent text="some text" />}, where the component \codeword{SomeComponent} got some text from its parents.
+This can be accessed by the component through the \codeword{props} attribute.
+The other source of data for components is the component's state.
+State is a piece of data connected to the component, which similar to props can be accessed through the \codeword{state} attribute.
+Unlike props, state is entirely controlled by the component itself.
+The state can be updated through using the \codeword{setState} method of the \codeword{Component} class, which will also trigger a re-render of the component.
+
+Except for the \codeword{render} method, class components also has methods for lifecycle events, such as \codeword{componentDidMount}, which is called after the initial render of the component has finished, and \codeword{componentDidUpdate}, which is called after the state of the component is updated.
+These lifecycle methods are very useful for reacting to state changes, or to perform some asynchronous actions.
+For a more thorough introduction to React I refer the reader to the React documentation\footnote{\url{https://reactjs.org/docs/getting-started.html}}.
+
+\subsection{The \codeword{FetchJSON} Template}\label{subsec:the-fetchjson-template}
 
 We will start off with the task of fetching data.
-As this is something you commonly want to do in web applications it might be a good idea to separate this logic into a separate template:
+As this is something you commonly want to do in web applications it might be a good idea to separate this logic into a separate template.
+Fetching data is commonly done after a component has been mounted, so we use the \codeword{componentDidMount} lifecycle method for this.
+For fetching the data we use the \codeword{fetch} function from the WebAPI\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API}}.
 
 \begin{minted}{typescript}
     template FetchJSON {
@@ -123,8 +147,10 @@ As this is something you commonly want to do in web applications it might be a g
     }
 \end{minted}
 
-The component we see above will fetch whatever URL we pass to it in its props and update the state with the results of the fetch.
+The \codeword{FetchJSON} component we will fetch whatever URL we pass to it in its props and update the state with the results of the fetch.
 If we for some reason should fail to fetch the data we will instead update the state with the error message we got.
+
+\subsection{The \codeword{StateLogger} Template}\label{subsec:the-statelogger-template}
 
 In addition to fetching data, it might be useful to have a logger, which will log all state changes to the console.
 This is often useful when working with React components as we are able to see when they update, and what the state was at the time of the update.
@@ -140,7 +166,9 @@ Such a logger could then also be separated into its own template, like the follo
     }
 \end{minted}
 
-Finally we would like to combine these into our Pokémon component, and add some logic for displaying the information.
+\subsection{Creating the \codeword{Pokemon} Component}\label{subsec:creating-the-pokemon-component}
+
+Finally we would like to combine these templates into our Pokémon component, and add some logic for displaying the information.
 We will do this inside of a package, so that this will produce an output:
 
 \begin{minted}{typescript}
@@ -194,7 +222,8 @@ We could then use our Pokémon component in our application by supplying a URL f
     }
 \end{minted}
 
+\subsection{How the Example Benefited From PT}\label{subsec:how-the-example-benefited-from-pt}
+
 In this example PT helped us split up our component into several smaller modules.
 This enables us to later re-use these common pieces of functionality, fetching data and logging, in other components, which will make our project more scalable, and aids in shortening development time.
 Modularizing these concepts also helped make the implementation of our Pokémon component less cluttered, which makes the readability of the code better.
-
