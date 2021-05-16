@@ -21,7 +21,7 @@ The system is not fully implemented and there exists a number of proposals for e
 
 In this section we will look at the syntax of Package Templates (further referred to as \emph{PT}) in a Java-like language as proposed in~\cite{jot}, with the extensions of required types as proposed in~\cite{requiredtypes}.
 
-\subsubsection{Defining packages and package templates}
+\subsubsection{Defining Packages and Package Templates}
 
 \emph{Packages} are defined by a set of classes similar to a normal Java package.
 \emph{Package templates} (later just \emph{templates} for short), are defined similarly except for using the keyword \codeword{template} instead of \codeword{package}.
@@ -39,7 +39,7 @@ The contents of a package can be used as you would with a normal Java package.
     }
 \end{code}
 
-\subsubsection{Instantiating templates}\label{subsubsec:inst}
+\subsubsection{Instantiating Templates}\label{subsubsec:inst}
 Instantiating is what really makes PT useful.
 When defining packages and templates, PT allows for including already defined templates through instantiating.
 Instantiation is done inside the body of a package (or a template) with the use of an \codeword{inst}-clause.
@@ -146,7 +146,7 @@ package P {
 }
 \end{code}
 
-\subsubsection{Additions to a class}\label{subsubsec:additions}
+\subsubsection{Additions to a Class}\label{subsubsec:additions}
 
 When instantiating a template you can also add attributes to the classes of the template, as well as extending the class' implemented interfaces.
 These additions will only apply to the currently instantiated copy.
@@ -209,7 +209,7 @@ You can also achieve the same functionality through class merging, which we will
 \end{code}
 
 
-\subsubsection{Merging classes}\label{subsubsec:merging-classes}
+\subsubsection{Merging Classes}\label{subsubsec:merging-classes}
 
 If two or more classes in the same or in different instantiations in one package share the same name they will be merged into one class.
 Through this mechanism PT achieves a form of multiple inheritance.

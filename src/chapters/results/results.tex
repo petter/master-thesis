@@ -10,8 +10,20 @@ After this we will have a look at what could have been done differently in retro
 
 \subsubsection{RQ1: How does the language mechanism, Package Templates, fit into TypeScript?}
 
-\red{Tenker at dette spørsmålet blir litt for bredt, og at svaret fort blir litt for subjektivt, så tenker nok å fjerne dette spørsmålet. Web bruker jo for tiden også særdeles lite klasser, da de fleste heller velger å uttrykke seg gjennom den funksjonelle delen av JS/TS, så det passer kanskje egentlig ikke så bra inn heller.}
+Package Templates benefits greatly from TypeScript's ecosystem.
+Having access to npm makes the compiler for PTS as easily accessible as the TypeScript compiler, which makes trying out the language mechanism easy.
+Publishing packages to npm is openly available for anyone.
+This means that anyone could utilize npm to create and publish PT modules, which greatly enforces the overall theme of PT, namely re-use.
+For instance, if someone writes a great graph template implementation, this template could then be published to npm, and others would be able to install this template and re-use it in their PTS projects (given a more complete implementation of the compiler which would allow multi-file projects).
 
+It is worth noting, as we discussed in section~\vref{subsec:which-better-fits-pt?}, the problem of renaming in TypeScript is something that, at least for our proposal of PTS, did not fit too nicely.
+Since types that a class conform to are not necessarily tied to the class, this makes what would have been explicit references to attributes in a nominally typed language, not necessarily be explicit references in a structurally typed language.
+The consequence of this is that we could end up in situations where renaming an attribute of a class could break the type-safety of a program, since we would not be able to rename all "references" to the classes attributes, as they would essentially not be references.
+As we touched upon in the aforementioned section, it is possible to end up in similar situations in nominally typed languages, however in these scenarios it is also possible to give an informative error to the programmer, while in structurally typed languages, we might not be able to do the same.
+
+It could possibly be viable to change the grammar of TypeScript further to disallow inline types, so we could at least fix these issues when we stumble upon them through performing renamings on the types as well.
+However, doing this would greatly take away from the overall appeal of the language.
+It might just be better to let the programmer have the choice of using interfaces for these problematic inline-types if they so chooses.
 
 \subsubsection{RQ2: Does structural typing change how the core of Package Templates works?}
 
@@ -43,7 +55,10 @@ In a nominally typed language we might have to alter our implementation to expli
 It might at worst not even be possible if the graph utility library has typed their input with classes instead of interfaces.
 This is of course one of the strengths of PT in the first place, being able to add implementing interfaces to a class without altering the original implementation or merging classes if possible, however the fact that we would not have to perform this step in a structurally typed language could arguably be seen as a benefit.
 
-% TODO skriv om disadvantages også
+The disadvantage of having PT in a structurally typed language is as we have mentioned earlier, the problem of renaming.
+However, I would argue that the advantages that structurally typed languages bring to PT, outweighs the disadvantage.
+The problem of renaming is mostly the problem of occasionally getting into situations where it is harder to inform the programmer about the error that has been made.
+For these scenarios it is still possible for the programmer to work their way around it through using interfaces instead of inline-types, while the advantage of greater re-use is not something that can be as easily gained in a nominally typed language.
 
 \section{In Retrospect}\label{sec:in-retrospect}
 
@@ -59,8 +74,8 @@ Greater changes to the language might of course still give us some merge conflic
 
 \subsection{Finishing the PTS Compiler}\label{subsec:finishing-the-pts-compiler}
 
-As detailed in section~\vref{sec:completing-the-implementation} the implementation of the compiler was not completed, and requires some further work to complete.
-The majority of the work will presumably lie in performing more advanced semantic analysis in order to correctly identify all references.
+As detailed in section~\vref{sec:completing-the-implementation} we have a working compiler for PTS, however the implementation is not complete.
+The majority of the work of completing the implementation will presumably lie in performing more advanced semantic analysis in order to correctly identify all references.
 This could as we have pointed out either be attempted in a fork of the TypeScript compiler, or as a continuation of this compiler.
 If one is to continue on with this implementation it could be worth looking into if it is possible to use the TypeScript compiler API in order to identify references.
 
