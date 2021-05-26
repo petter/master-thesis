@@ -4,30 +4,20 @@ import ReactDOM from 'react-dom';
 import {
   FlexBox,
   Heading,
-  SpectacleLogo,
-  UnorderedList,
-  CodeSpan,
-  OrderedList,
-  ListItem,
   FullScreen,
   Progress,
-  Appear,
   Slide,
   Deck,
-  Text,
-  Grid,
   Box,
-  Image,
-  CodePane,
-  MarkdownSlide,
-  MarkdownSlideSet,
-  Notes
 } from 'spectacle';
 import Background from './background';
+import Conclusion from './Conclusion';
+import EvaluationDiscussion from './EvaluationDiscussion';
+import Implementation from './Implementation';
 import Introduction from './Introduction';
-
-const formidableLogo =
-  'https://avatars2.githubusercontent.com/u/5078602?s=280&v=4';
+import Planning from './Planning';
+import TheLanguage from './TheLanguage';
+import Usage from './Usage';
 
 // SPECTACLE_CLI_THEME_START
 const theme = {
@@ -66,6 +56,12 @@ const Presentation = () => (
     </Slide>
     <Introduction />
     <Background />
+    <TheLanguage />
+    <Planning />
+    <Implementation />
+    <Usage />
+    <EvaluationDiscussion />
+    <Conclusion />
   </Deck>
 );
 
