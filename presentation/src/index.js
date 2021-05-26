@@ -10,6 +10,7 @@ import {
   Deck,
   Box,
 } from 'spectacle';
+import Agenda from './Agenda';
 import Background from './background';
 import Conclusion from './Conclusion';
 import EvaluationDiscussion from './EvaluationDiscussion';
@@ -54,6 +55,7 @@ const Presentation = () => (
           <Heading fontSize="3em" fontWeight="normal">An Implementation of Package Templates in TypeScript</Heading>
       </FlexBox>
     </Slide>
+    <Agenda />
     <Introduction />
     <Background />
     <TheLanguage />

@@ -1,11 +1,10 @@
 import React from 'react';
 import { Slide, Heading } from 'spectacle';
+import Evaluation from './Evaluation';
 
 const EvaluationDiscussion = () => (
     <>
-        <Slide>
-            <Heading>EvaluationDiscussion</Heading>
-        </Slide>
+        <Evaluation />
     </>
 );
 
