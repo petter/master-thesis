@@ -1,7 +1,13 @@
 import React from 'react'
-import { Slide, Heading} from "spectacle";
-import Code from '../../components/Code';
+import { Slide, Heading } from "spectacle";
 
+import Code from '../../components/Code';
+import Additions from './Additions';
+import InstantiationSlide from './InstantiationSlide';
+import Merging from './Merging';
+import OpenClosed from './OpenClosed';
+import Renaming from './Renaming';
+import RequiredTypes from './RequiredTypes';
 
 const PackageTemplates = () => (
     <>
@@ -18,6 +24,12 @@ const PackageTemplates = () => (
                 }
             `}</Code>
         </Slide>
+        <InstantiationSlide />
+        <Renaming />
+        <Additions />
+        <Merging />
+        <RequiredTypes />
+        <OpenClosed />
     </>
 )
 
