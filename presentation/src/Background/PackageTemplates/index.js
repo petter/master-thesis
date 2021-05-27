@@ -1,5 +1,5 @@
 import React from 'react'
-import { Slide, Heading } from "spectacle";
+import { Slide, Heading, FlexBox } from "spectacle";
 
 import Code from '../../components/Code';
 import Additions from './Additions';
@@ -11,6 +11,11 @@ import RequiredTypes from './RequiredTypes';
 
 const PackageTemplates = () => (
     <>
+        <Slide>
+            <FlexBox height="100%" flexDirection="column">
+                <Heading>Package Templates</Heading>
+            </FlexBox>
+        </Slide>
         <Slide>
             <Heading>Defining Packages and Package Templates</Heading>
             <Code language="java">{`
