@@ -48,7 +48,7 @@ const template = () => (
 // SPECTACLE_CLI_TEMPLATE_END
 
 const Presentation = () => (
-  <Deck theme={theme} template={template}>
+  <Deck theme={theme}>
     <Slide>
       <FlexBox height="100%" flexDirection="column">
           <Heading>Package Template Script</Heading>
