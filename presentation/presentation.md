@@ -52,6 +52,8 @@ JavaScript was created to solve this, by NetScape.
 IE reacted and created a similar language JScript.
 Feature war mellom IE og NetScape Navigator.
 
+JavaScript har prototype-basert OO.
+
 #### ECMAScript
 
 JavaScript was inteded as an interpreted language, so the feature war meant that websites would not necessarily work across browsers, as the intended JavaScript might work differently in different browsers.
