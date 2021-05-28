@@ -300,6 +300,42 @@ Yes, this is done in the type-check stage of the compiler as discussed previousl
 
 ## Discussion - structural vs nominal
 
+### Advantages of Nominal
+
+#### Subtypes
+
+Subtype relations are trivial to check, as all subtype relations are explcititly stated, while in structural type systems this has to be structurally checked for each subtype relation.
+
+#### Runtime type-checking
+
+Often runtime-object in nominall typed langauges are tagged with their type.
+This makes it cheap to do instanceof checks or upcasts.
+
+### Advantages of Structural
+
+#### Arguably tidier and more elegant
+
+Types contain all information needed to understand it, while nominal types are just names in a global collection of names.
+
+#### More general functions/classes
+
+Malayeri and Aldrich's study showed that by utilizing structural typing in some common open source Java projects the typed could become more general, where the average structural type contained 3.5 methods, while the average nominal type contained 37.8 methods.
+
+### Disadvantage of Structural
+
+#### Spurious subsumption
+
+Since structural types are not confined to explicit relations we could potentially get unwanted functionality by using a type-safe value in a context it is not intended to be used.
+
+### Which better fits PT?
+
+Both have strong use cases.
+Structural typing might fit better with the overall theme of re-use, however it also has some disadvantages in PT such as with renaming.
+
+Nominal PT as of now leads to a less problematic language mechanism, where you at least are able to "fix" all errors made during renaming.
+Nominal PT has been researched more than structural PT, so it is expected that it would have a more complete feature set.
+Further research into structural PT could potentially fix some of the quirks we have seen now.
+
 ## Contributions
 
 We have contributed:
@@ -313,4 +349,33 @@ We have contributed:
 
 ### Research questions
 
+#### RQ1:
+
+PT benefits from TS's ecosystem.
+
+- npm
+
+There are also some disadvantages such as the renaming quirks we have talked about.
+
+#### RQ2:
+
+While renames of all references to classes and attributes are still performed, the references are not necessarily the same.
+Since objects in structurally typed languages not necessarily have the same explicit relation to the classes it was constructed from, they might also not be references.
+This results in renaming of objects possibly breaking a program.
+
+Code example
+
+#### RQ3:
+
+- Structural typing fits nicely fit the overall theme of PT.
+- Structural typing gives the programmer more flexability than with nominal typing.
+
+### In retrospect
+
+We should probably have opted to go for TS compiler fork as our approach, as it might seem that correctly identifying all references will require quite a lot of semantic analysis, which we would have gotten for free in a fork of the TS compiler.
+
 ### Future works
+
+- Finishing the PTS compiler
+- Improve compiler error messages
+- Make syntax highlighting for PTS
