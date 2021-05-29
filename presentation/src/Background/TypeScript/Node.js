@@ -1,5 +1,5 @@
 import React from "react";
-import { Slide, Heading } from "spectacle";
+import { Slide, Heading, Text } from "spectacle";
 
 const Node = () => (
   <>

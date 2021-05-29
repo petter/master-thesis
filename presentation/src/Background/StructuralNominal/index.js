@@ -1,16 +1,16 @@
-import React from 'react';
-import { Slide, Heading } from 'spectacle';
-import Nominal from './Nominal';
-import Structural from './Structural';
+import React from "react";
+import { Slide, Heading } from "spectacle";
+import Nominal from "./Nominal";
+import Structural from "./Structural";
 
 const StructuralNominal = () => (
-    <>
-        <Slide>
-            <Heading>Structural and nominal type systems</Heading>
-        </Slide>
-        <Structural />
-        <Nominal />
-    </>
+  <>
+    <Slide>
+      <Heading>Nominal and structural type systems</Heading>
+    </Slide>
+    <Nominal />
+    <Structural />
+  </>
 );
 
 export default StructuralNominal;
