@@ -23,9 +23,9 @@ const RequiredTypes = () => (
         Can be constrained by giving both nominal and structural types
       </Text>
       <Code language="java">{`
-                required type R implements Runnable { }
+                required type R extends Runnable { }
                 required type R { void f(); }
-                required type R implements Runnable { void f(); }
+                required type R extends Runnable { void f(); }
             `}</Code>
     </Slide>
     <Slide>
