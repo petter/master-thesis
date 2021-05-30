@@ -4,6 +4,10 @@ import { Slide, Heading, UnorderedList, ListItem, Appear } from "spectacle";
 import TypeScriptVSJavaScript from "./TypeScriptVSJavaScript";
 import Requirements from "./Requirements";
 import InternalDSL from "./InternalDSL";
+import Preprocesor from "./Preprocesor";
+import TSFork from "./TSFork";
+import CustomCompiler from "./CustomCompiler";
+import Plugin from "./Plugin";
 
 const Planning = () => (
   <>
@@ -33,6 +37,10 @@ const Planning = () => (
       </UnorderedList>
     </Slide>
     <InternalDSL />
+    <Preprocesor />
+    <Plugin />
+    <TSFork />
+    <CustomCompiler />
   </>
 );
 
