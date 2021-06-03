@@ -41,6 +41,35 @@ const Planning = () => (
     <Plugin />
     <TSFork />
     <CustomCompiler />
+    <Slide>
+      <Heading>Approach conclusion</Heading>
+      <UnorderedList>
+        <Appear>
+          <ListItem>Internal DSL: We are not able to rename properly</ListItem>
+        </Appear>
+        <Appear>
+          <ListItem>
+            Preprocessor: Won't be able to perform safe renamings
+          </ListItem>
+        </Appear>
+        <Appear>
+          <ListItem>
+            Compiler plugin: Either not access to parser or compile time
+            transformations at all
+          </ListItem>
+        </Appear>
+        <Appear>
+          <ListItem>
+            TypeScript compiler fork: A task better fit for two or more people
+          </ListItem>
+        </Appear>
+        <Appear>
+          <ListItem fontWeight="bold">
+            Custom compiler: Seemingly the only viable option
+          </ListItem>
+        </Appear>
+      </UnorderedList>
+    </Slide>
   </>
 );
 

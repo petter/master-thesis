@@ -133,15 +133,15 @@ Since we need to do semantic analysis in order to perform safe renaming we can't
 
 Would probably be best as we would get a loosely coupled implementaiton.
 
-##### Babel
-
-Babel is a transpiler build around plugins.
-However, the plugins do not have access to tokenizer/parser, so we can't add custom syntax, making this approach not viable.
-
 ##### TS Compiler
 
 Only supports plugins altering the editing experience, so this will not be a viable approach.
 If the TS compiler later enables compile time plugins this might be a viable approach as we could potentially get a loosely coupled implementation, and still have access to most of the TypeScript compilers features, such as semantic analysis, etc.
+
+##### Babel
+
+Babel is a transpiler built around plugins.
+However, the plugins do not have access to tokenizer/parser, so we can't add custom syntax, making this approach not viable.
 
 #### Making a fork of TS compiler
 
