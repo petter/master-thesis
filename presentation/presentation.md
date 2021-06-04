@@ -325,6 +325,8 @@ Malayeri and Aldrich's study showed that by utilizing structural typing in some 
 
 ### Disadvantage of Structural
 
+Kan sikkert kutte dette
+
 #### Spurious subsumption
 
 Since structural types are not confined to explicit relations we could potentially get unwanted functionality by using a type-safe value in a context it is not intended to be used.
