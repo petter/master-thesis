@@ -5,6 +5,8 @@ import CompilerArchitechture from "./CompilerArchitechture";
 import ParseTreeToAST from "./ParseTreeToAST";
 import ClosingTemplates from "./ClosingTemplates";
 import TypeCheck from "./TypeCheck";
+import CodeGeneration from "./CodeGeneration";
+import CompletingImplementation from "./CompletingImplementation";
 
 const Implementation = () => (
   <>
@@ -16,6 +18,8 @@ const Implementation = () => (
     <ParseTreeToAST />
     <ClosingTemplates />
     <TypeCheck />
+    <CodeGeneration />
+    <CompletingImplementation />
   </>
 );
 
