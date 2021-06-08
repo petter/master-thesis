@@ -1,6 +1,7 @@
 import React from "react";
-import { Slide, Heading, Text } from "spectacle";
+import { Slide, Heading, Text, FlexBox } from "spectacle";
 import Code from '../components/Code'
+import Pokemon from './Pokemon'
 
 const Usage = () => (
   <>
@@ -82,6 +83,12 @@ const Usage = () => (
           }
         }
       `}</Code>
+    </Slide>
+    <Slide>
+      {/* <Heading>The resulting Pokémon component</Heading> */}
+      <FlexBox height="100%">
+        <Pokemon url="https://pokeapi.co/api/v2/pokemon/ditto" />
+      </FlexBox>
     </Slide>
   </>
 );
