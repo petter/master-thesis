@@ -8,8 +8,8 @@ import Node from './Node';
 const TypeScript = () => (
     <>
         <JavaScript />
-        <ECMAScript />
-        <Node />
+        {/* <ECMAScript />
+        <Node /> */}
         <TypeScriptSlide />
     </>
 );

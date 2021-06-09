@@ -52,7 +52,7 @@ const OpenClosed = () => (
                 }
             `}</Code>
         </Slide>
-        <Slide>
+        {/* <Slide>
             <Heading>Can't contain cyclic instantiations - transitive</Heading>
             <Code language="java">{`
                 template T1 {
@@ -67,7 +67,7 @@ const OpenClosed = () => (
                     inst T1;
                 }
             `}</Code>
-        </Slide>
+        </Slide> */}
     </>
 );
 

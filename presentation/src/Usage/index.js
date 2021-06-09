@@ -28,21 +28,6 @@ const Usage = () => (
       <Heading>Using PTS (in a more complete implementation)</Heading>
       <Code language="typescript">{`
         template StateLogger {
-          class FetchJSON extends Component {
-            componentDidMount() {
-              fetch(this.props.url)
-                .then(response => response.json())
-                .then(data => this.setState(state => ({...state, data})))
-                .catch(error => this.setState(state => ({...state, error})));
-            }
-          }
-        } 
-      `}</Code>
-    </Slide>
-    <Slide>
-      <Heading>Using PTS (in a more complete implementation)</Heading>
-      <Code language="typescript">{`
-        template StateLogger {
           class StateLogger extends Component {
             componentDidUpdate() {
               console.log("State updated!", this.state);
