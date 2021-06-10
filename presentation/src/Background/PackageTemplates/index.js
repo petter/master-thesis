@@ -35,7 +35,7 @@ const PackageTemplates = () => (
     <Renaming />
     <Additions />
     <Merging />
-    <RequiredTypes />
+    {/* <RequiredTypes /> */}
     <OpenClosed />
   </>
 );

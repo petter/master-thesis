@@ -8,7 +8,7 @@ const Agenda = () => (
             <ListItem>Introduction</ListItem>
             <ListItem>Background</ListItem>
             <ListItem>The PTS langauge</ListItem>
-            <ListItem>Project planning</ListItem>
+            {/* <ListItem>Project planning</ListItem> */}
             <ListItem>Implementation</ListItem>
             <ListItem>Evaluation and discussion</ListItem>
             <ListItem>Concluding remarks</ListItem>

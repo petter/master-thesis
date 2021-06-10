@@ -61,7 +61,7 @@ const Presentation = () => (
     <Introduction />
     <Background />
     <TheLanguage />
-    <Planning />
+    {/* <Planning /> */}
     <Implementation />
     <Usage />
     <EvaluationDiscussion />
