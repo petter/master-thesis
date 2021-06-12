@@ -3,14 +3,14 @@ import { Slide, Heading, UnorderedList, ListItem } from "spectacle";
 
 const JavaScript = () => (
   <>
-    <Slide>
+    {/* <Slide>
       <Heading>JavaScript - history</Heading>
       <UnorderedList>
         <ListItem>Reaction to the 90s static websites</ListItem>
       </UnorderedList>
-    </Slide>
+    </Slide> */}
     <Slide>
-      <Heading>JavaScript - technical</Heading>
+      <Heading>JavaScript</Heading>
       <UnorderedList>
         <ListItem>Multi paradigm</ListItem>
         <ListItem>Dynamically typed</ListItem>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Slide, Heading, UnorderedList, Appear, ListItem } from "spectacle";
+import { Slide, Heading, UnorderedList, Appear, ListItem, Notes } from "spectacle";
 
 const Discussion = () => (
   <>
@@ -30,6 +30,13 @@ const Discussion = () => (
           <ListItem>More general functions/classes</ListItem>
         </Appear>
       </UnorderedList>
+      <Notes>
+        <ul>
+          <li>Malayeri og Aldrich</li> 
+          <li>Gjennomsnittlig strukturell type: 3.5 metoder</li> 
+          <li>Gjennomsnittlig nominell type: 37.8 metoder</li> 
+        </ul>
+      </Notes>
     </Slide>
     <Slide>
       <Heading>Which better fits PT?</Heading>

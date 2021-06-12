@@ -15,7 +15,7 @@ const Implementation = () => (
     </Slide>
     <CompilerArchitechture />
     <Parser />
-    <ParseTreeToAST />
+    {/* <ParseTreeToAST /> */}
     <ClosingTemplates />
     <TypeCheck />
     <CodeGeneration />
