@@ -13,7 +13,7 @@ const Conclusion = () => (
     <ResearchQuestions />
     <InRetrospect />
     <Contribution />
-    <FutureWorks />
+    {/* <FutureWorks /> */}
   </>
 );
 

@@ -7,7 +7,7 @@ import Node from './Node';
 
 const TypeScript = () => (
     <>
-        <JavaScript />
+        {/* <JavaScript /> */}
         {/* <ECMAScript />
         <Node /> */}
         <TypeScriptSlide />

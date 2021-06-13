@@ -13,7 +13,7 @@ const CompletingImplementation = () => (
         <ListItem>Supporting multi file programs</ListItem>
       </UnorderedList>
     </Slide>
-    <Slide>
+    {/* <Slide>
       <Heading>
         <CodeSpan>addto</CodeSpan> statements
       </Heading>
@@ -34,7 +34,7 @@ const CompletingImplementation = () => (
       <UnorderedList>
         <ListItem>Could likeley be done by a simple preprocessor</ListItem>
       </UnorderedList>
-    </Slide>
+    </Slide> */}
   </>
 );
 

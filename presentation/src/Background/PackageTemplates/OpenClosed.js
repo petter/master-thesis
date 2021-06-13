@@ -1,12 +1,13 @@
 import React from 'react';
-import { Slide, Heading, Text } from 'spectacle';
+import { Slide, Heading, Text, Appear } from 'spectacle';
 import Code from '../../components/Code';
 
 const OpenClosed = () => (
     <>
         <Slide>
             <Heading>Open and closed templates</Heading>
-            <Text>Closed = No instantiation or addition statements</Text>
+            <Appear><Text>Closed = No instantiation or addition statements</Text></Appear>
+            <Appear><Text>Open = Contains at least one instantiation/addition statements</Text></Appear>
         </Slide>
         <Slide>
             <Heading>Closed template</Heading>
@@ -19,23 +20,23 @@ const OpenClosed = () => (
         <Slide>
             <Heading>Open template</Heading>
             <Code language="java">{`
-                template T1 {
+                template T {
                     class A { ... } 
                 }
 
-                template T2 {
-                    inst T1;
+                template OpenT {
+                    inst T;
                 }
             `}</Code>
         </Slide>
         <Slide>
             <Heading>Open template - now closed</Heading>
             <Code language="java">{`
-                template T1 {
+                template T {
                     class A { ... } 
                 }
 
-                template T2 {
+                template OpenT {
                     class A { ... } 
                 }
             `}</Code>

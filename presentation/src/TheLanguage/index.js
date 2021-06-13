@@ -14,17 +14,20 @@ const TheLanguage = () => (
   <>
     <Slide>
       <Heading>The PTS programming language</Heading>
-      <Appear>
-        <Text>Need syntax for the following:</Text>
+      <UnorderedList>
+        <Appear><ListItem>A superset of TypeScript</ListItem></Appear>
+      <Appear><ListItem>
+        <Text>Adds functionality for:</Text>
         <UnorderedList>
           <ListItem>Defining packages and templates</ListItem>
           <ListItem>Instantiating templates</ListItem>
           <ListItem>Renaming</ListItem>
           <ListItem>Additions</ListItem>
         </UnorderedList>
-      </Appear>
+      </ListItem></Appear>
+      </UnorderedList>
     </Slide>
-    <Slide>
+    {/* <Slide>
       <Heading>PTS - defining packages and templates</Heading>
       <UnorderedList>
         <Appear>
@@ -90,7 +93,7 @@ const TheLanguage = () => (
           <CodeSpan>addto</CodeSpan> - OK
         </ListItem>
       </UnorderedList>
-    </Slide>
+    </Slide> */}
     <Slide>
       <Heading>PTS - example program</Heading>
       <Code language="typescript">{`

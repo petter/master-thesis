@@ -73,8 +73,7 @@ const Evaluation = () => (
         </Slide>
         <Slide>
             <Heading>Evaluation conclusion</Heading>
-            <Text>Not a complete implementation of PT</Text>
-            <UnorderedList></UnorderedList>
+            <Text>Supports the most essential parts of PT, but still some parts unfinished</Text>
         </Slide>
     </>
 );

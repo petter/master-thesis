@@ -16,7 +16,7 @@ const Parser = () => (
         <Appear><ListItem>Allows for extending grammars</ListItem></Appear>
       </UnorderedList>
     </Slide>
-    <Slide>
+    {/* <Slide>
       <Heading>Tree-sitter</Heading>
       <Code language="javascript" highlightRanges={[[1,1], [6,6]]}>{`
         module.exports = grammar(require('tree-sitter-typescript/...'), {
@@ -29,7 +29,7 @@ const Parser = () => (
           }
         });
       `}</Code>
-    </Slide>
+    </Slide> */}
   </>
 );
 
